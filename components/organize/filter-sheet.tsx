@@ -106,12 +106,6 @@ export function FilterSheet({ value, onApply, onClose }: Props) {
         </div>
 
         <OptionGroup
-          title="题目类型"
-          options={questionTypes}
-          selected={draft.types}
-          onToggle={(t) => setDraft((d) => ({ ...d, types: toggleItem(d.types, t) }))}
-        />
-        <OptionGroup
           title="解决状态"
           options={resolveStatuses}
           selected={draft.statuses}
@@ -122,6 +116,12 @@ export function FilterSheet({ value, onApply, onClose }: Props) {
           options={difficulties}
           selected={draft.difficulties}
           onToggle={(x) => setDraft((d) => ({ ...d, difficulties: toggleItem(d.difficulties, x) }))}
+        />
+        <OptionGroup
+          title="题目类型"
+          options={questionTypes}
+          selected={draft.types}
+          onToggle={(t) => setDraft((d) => ({ ...d, types: toggleItem(d.types, t) }))}
         />
 
         <div className="mt-8 flex gap-3">
