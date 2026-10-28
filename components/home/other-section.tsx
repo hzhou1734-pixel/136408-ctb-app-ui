@@ -5,12 +5,12 @@ const posters = [
   {
     title: '错题统计',
     src: '/images/home/stats-card.png',
-    card: 'from-[#E6EEFF] to-white',
+    card: 'from-[#E6F3FF] to-white',
   },
   {
     title: '清零报告',
     src: '/images/home/report-card.png',
-    card: 'from-[#EFE8FF] to-white',
+    card: 'from-[#E6F3FF] to-white',
   },
 ]
 

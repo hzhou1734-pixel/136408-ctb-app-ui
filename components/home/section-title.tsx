@@ -16,7 +16,7 @@ export function SectionTitle({
         {children}
       </h2>
       {moreHref && (
-        <a href={moreHref} className="text-[13px] text-[#2F8CFF]">
+        <a href={moreHref} className="text-[13px] text-[#1E88F5]">
           {'更多>'}
         </a>
       )}

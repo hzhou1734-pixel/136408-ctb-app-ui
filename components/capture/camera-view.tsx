@@ -52,10 +52,10 @@ export function CameraView({ title, onClose, onShoot }: CameraViewProps) {
             </div>
 
             <span aria-hidden="true" className="pointer-events-none absolute inset-4">
-              <span className="absolute left-0 top-0 size-8 rounded-tl-[12px] border-l-[3px] border-t-[3px] border-[#5B9BFF]" />
-              <span className="absolute right-0 top-0 size-8 rounded-tr-[12px] border-r-[3px] border-t-[3px] border-[#5B9BFF]" />
-              <span className="absolute bottom-0 left-0 size-8 rounded-bl-[12px] border-b-[3px] border-l-[3px] border-[#5B9BFF]" />
-              <span className="absolute bottom-0 right-0 size-8 rounded-br-[12px] border-b-[3px] border-r-[3px] border-[#5B9BFF]" />
+              <span className="absolute left-0 top-0 size-8 rounded-tl-[12px] border-l-[3px] border-t-[3px] border-[#4AA8FF]" />
+              <span className="absolute right-0 top-0 size-8 rounded-tr-[12px] border-r-[3px] border-t-[3px] border-[#4AA8FF]" />
+              <span className="absolute bottom-0 left-0 size-8 rounded-bl-[12px] border-b-[3px] border-l-[3px] border-[#4AA8FF]" />
+              <span className="absolute bottom-0 right-0 size-8 rounded-br-[12px] border-b-[3px] border-r-[3px] border-[#4AA8FF]" />
             </span>
 
             <div

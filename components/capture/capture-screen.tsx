@@ -42,7 +42,7 @@ export function CaptureScreen() {
               className={cn(
                 'h-9 w-28 rounded-full text-[14px] font-semibold transition-colors',
                 active
-                  ? 'bg-[linear-gradient(135deg,#3B8BFF,#6B6BFF)] text-white shadow-[0_4px_10px_rgba(59,107,255,0.3)]'
+                  ? 'bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] text-white shadow-[0_4px_10px_rgba(30,136,245,0.3)]'
                   : 'text-[#6B7280] hover:text-[#1F2937]',
               )}
             >

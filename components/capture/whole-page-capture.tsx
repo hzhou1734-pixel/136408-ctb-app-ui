@@ -39,10 +39,10 @@ export function WholePageCapture() {
             </div>
           )}
           <span aria-hidden="true" className="pointer-events-none absolute inset-5">
-            <span className="absolute left-0 top-0 size-6 rounded-tl-[10px] border-l-[3px] border-t-[3px] border-[#5B9BFF]" />
-            <span className="absolute right-0 top-0 size-6 rounded-tr-[10px] border-r-[3px] border-t-[3px] border-[#5B9BFF]" />
-            <span className="absolute bottom-0 left-0 size-6 rounded-bl-[10px] border-b-[3px] border-l-[3px] border-[#5B9BFF]" />
-            <span className="absolute bottom-0 right-0 size-6 rounded-br-[10px] border-b-[3px] border-r-[3px] border-[#5B9BFF]" />
+            <span className="absolute left-0 top-0 size-6 rounded-tl-[10px] border-l-[3px] border-t-[3px] border-[#4AA8FF]" />
+            <span className="absolute right-0 top-0 size-6 rounded-tr-[10px] border-r-[3px] border-t-[3px] border-[#4AA8FF]" />
+            <span className="absolute bottom-0 left-0 size-6 rounded-bl-[10px] border-b-[3px] border-l-[3px] border-[#4AA8FF]" />
+            <span className="absolute bottom-0 right-0 size-6 rounded-br-[10px] border-b-[3px] border-r-[3px] border-[#4AA8FF]" />
           </span>
           {submitted && (
             <p role="status" className="absolute inset-x-6 bottom-8 rounded-full bg-white/95 py-2 text-center text-[13px] font-medium text-[#1F2937]">
@@ -66,7 +66,7 @@ export function WholePageCapture() {
               onClick={() => setSubmitted(true)}
               disabled={submitted}
               aria-label="确认上传"
-              className="flex size-[72px] items-center justify-center rounded-full bg-[linear-gradient(135deg,#3B8BFF,#6B6BFF)] text-white shadow-[0_6px_18px_rgba(59,107,255,0.35)] transition-transform active:scale-95 disabled:opacity-60"
+              className="flex size-[72px] items-center justify-center rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] text-white shadow-[0_6px_18px_rgba(30,136,245,0.35)] transition-transform active:scale-95 disabled:opacity-60"
             >
               <Check className="size-8" strokeWidth={2.6} />
             </button>
@@ -79,13 +79,13 @@ export function WholePageCapture() {
               type="button"
               onClick={() => cameraRef.current?.click()}
               aria-label="拍照"
-              className="flex size-[72px] items-center justify-center rounded-full bg-[linear-gradient(135deg,#3B8BFF,#6B6BFF)] p-1 shadow-[0_6px_18px_rgba(59,107,255,0.35)] transition-transform active:scale-95"
+              className="flex size-[72px] items-center justify-center rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] p-1 shadow-[0_6px_18px_rgba(30,136,245,0.35)] transition-transform active:scale-95"
             >
               <span className="size-full rounded-full border-[3px] border-white bg-white/20" />
             </button>
             <button type="button" onClick={() => galleryRef.current?.click()} className="flex w-14 flex-col items-center gap-1 text-[12px] text-[#6B7280]">
-              <span className="flex size-11 items-center justify-center rounded-[12px] bg-[linear-gradient(135deg,#E6EFFF,#EEEBFF)]">
-                <ImageIcon aria-hidden="true" className="size-5 text-[#2F6BFF]" />
+              <span className="flex size-11 items-center justify-center rounded-[12px] bg-[linear-gradient(135deg,#E6F3FF,#E3F2FF)]">
+                <ImageIcon aria-hidden="true" className="size-5 text-[#1E88F5]" />
               </span>
               相册
             </button>

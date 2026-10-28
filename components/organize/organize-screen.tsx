@@ -67,7 +67,7 @@ export function OrganizeScreen() {
         <h1 className="text-[17px] font-bold text-[#1F2937]">错题整理</h1>
         <button
           type="button"
-          className="absolute right-4 flex items-center gap-1 text-[14px] font-semibold text-[#3B7BFF]"
+          className="absolute right-4 flex items-center gap-1 text-[14px] font-semibold text-[#1E88F5]"
         >
           <SlidersHorizontal className="size-4" />
           筛选
@@ -84,7 +84,7 @@ export function OrganizeScreen() {
             aria-haspopup="listbox"
             aria-expanded={classOpen}
             onClick={() => setClassOpen((o) => !o)}
-            className="flex h-10 w-full items-center justify-center gap-1 rounded-xl bg-[#EEF3FF] px-1.5 text-[13px] font-semibold text-[#2C5BDB]"
+            className="flex h-10 w-full items-center justify-center gap-1 rounded-xl bg-[#EEF7FF] px-1.5 text-[13px] font-semibold text-[#1677E0]"
           >
             <BookOpen className="size-4 shrink-0" />
             <span className="truncate">{className}</span>
@@ -115,7 +115,7 @@ export function OrganizeScreen() {
                     }}
                     className={cn(
                       'flex h-9 w-full items-center rounded-lg px-3 text-[13px] font-semibold',
-                      c === className ? 'bg-[#EEF3FF] text-[#2C5BDB]' : 'text-[#4B5563] hover:bg-[#F5F7FC]',
+                      c === className ? 'bg-[#EEF7FF] text-[#1677E0]' : 'text-[#4B5563] hover:bg-[#F5F7FC]',
                     )}
                   >
                     {c}
@@ -139,7 +139,7 @@ export function OrganizeScreen() {
                     onClick={() => setStudent(name)}
                     className={cn(
                       'w-full truncate rounded-lg px-2 py-2 text-center text-[13px] font-semibold transition-colors',
-                      active ? 'bg-[#F3F6FF] text-[#2C5BDB]' : 'text-[#6B7280] hover:bg-[#F7F8FC]',
+                      active ? 'bg-[#F3F6FF] text-[#1677E0]' : 'text-[#6B7280] hover:bg-[#F7F8FC]',
                     )}
                   >
                     {name}
@@ -169,7 +169,7 @@ export function OrganizeScreen() {
                   className={cn(
                     'h-9 shrink-0 rounded-xl px-3 text-[14px] font-semibold transition-colors',
                     active
-                      ? 'bg-[linear-gradient(135deg,#3B8BFF,#6B6BFF)] text-white shadow-[0_4px_10px_rgba(59,107,255,0.3)]'
+                      ? 'bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] text-white shadow-[0_4px_10px_rgba(30,136,245,0.3)]'
                       : 'text-[#6B7280] hover:text-[#1F2937]',
                   )}
                 >
@@ -221,7 +221,7 @@ export function OrganizeScreen() {
             <button
               type="button"
               disabled={count === 0}
-              className="pointer-events-auto h-11 rounded-full bg-[linear-gradient(135deg,#3B8BFF,#6B6BFF)] px-5 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(59,107,255,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
+              className="pointer-events-auto h-11 rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-5 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
             >
               导出错题本（已选 {count}）
             </button>

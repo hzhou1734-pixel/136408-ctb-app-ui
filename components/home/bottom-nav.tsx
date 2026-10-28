@@ -19,7 +19,7 @@ export function BottomNav() {
               height={76}
               className="absolute -top-[50px] size-[44px] rounded-full"
             />
-            <span className="text-[10px] text-[#2F8CFF]">首页</span>
+            <span className="text-[10px] text-[#1E88F5]">首页</span>
           </a>
         </li>
         {tabs.map((tab) => (
