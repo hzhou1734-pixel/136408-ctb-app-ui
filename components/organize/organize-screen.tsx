@@ -4,6 +4,7 @@ import { BookOpen, ChevronDown, ChevronLeft, SlidersHorizontal } from 'lucide-re
 import { useMemo, useState } from 'react'
 import { buildGroups, students, subjects, type Student, type Subject } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
+import { countFilters, emptyFilters, FilterSheet, type Filters } from './filter-sheet'
 import { QuestionCard } from './question-card'
 import { SelectCircle } from './select-circle'
 
@@ -18,15 +19,31 @@ export function OrganizeScreen() {
   const [deleted, setDeleted] = useState<Set<string>>(new Set())
   const [resolvedOverrides, setResolvedOverrides] = useState<Record<string, boolean>>({})
 
+  const [filters, setFilters] = useState<Filters>(emptyFilters)
+  const [filterOpen, setFilterOpen] = useState(false)
+  const filterCount = countFilters(filters)
+
   const toggleResolved = (id: string, current: boolean) =>
     setResolvedOverrides((prev) => ({ ...prev, [id]: !current }))
 
   const groups = useMemo(
     () =>
       buildGroups(student ?? students[0], subject)
-        .map((g) => ({ ...g, questions: g.questions.filter((q) => !deleted.has(q.id)) }))
+        .map((g) => ({
+          ...g,
+          questions: g.questions.filter((q) => {
+            if (deleted.has(q.id)) return false
+            if (filters.types.length && !filters.types.includes(q.type)) return false
+            if (filters.difficulties.length && !filters.difficulties.includes(q.difficulty)) return false
+            if (filters.statuses.length) {
+              const resolved = resolvedOverrides[q.id] ?? q.resolved
+              if (!filters.statuses.includes(resolved ? '已解决' : '待解决')) return false
+            }
+            return true
+          }),
+        }))
         .filter((g) => g.questions.length > 0),
-    [student, subject, deleted],
+    [student, subject, deleted, filters, resolvedOverrides],
   )
 
   const toggle = (id: string) =>
@@ -71,10 +88,18 @@ export function OrganizeScreen() {
         <h1 className="text-[17px] font-bold text-[#1F2937]">错题整理</h1>
         <button
           type="button"
+          aria-haspopup="dialog"
+          aria-expanded={filterOpen}
+          onClick={() => setFilterOpen(true)}
           className="absolute right-4 flex items-center gap-1 text-[14px] font-semibold text-[#1E88F5]"
         >
           <SlidersHorizontal className="size-4" />
           筛选
+          {filterCount > 0 && (
+            <span className="ml-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#1E88F5] px-1 text-[10px] font-bold text-white">
+              {filterCount}
+            </span>
+          )}
         </button>
       </header>
 
@@ -193,7 +218,9 @@ export function OrganizeScreen() {
 
         <div className="mt-3 min-h-0 flex-1 overflow-y-auto pb-28 [scrollbar-width:none]">
           {groups.length === 0 ? (
-            <p className="mt-16 text-center text-[13px] text-[#9AA3B2]">暂无错题</p>
+            <p className="mt-16 text-center text-[13px] text-[#9AA3B2]">
+              {filterCount > 0 ? '没有符合筛选条件的错题' : '暂无错题'}
+            </p>
           ) : (
             groups.map((group) => {
               const ids = group.questions.map((q) => q.id)
@@ -244,6 +271,17 @@ export function OrganizeScreen() {
           </div>
         </div>
       </div>
+
+      {filterOpen && (
+        <FilterSheet
+          value={filters}
+          onClose={() => setFilterOpen(false)}
+          onApply={(next) => {
+            setFilters(next)
+            setFilterOpen(false)
+          }}
+        />
+      )}
     </div>
   )
 }

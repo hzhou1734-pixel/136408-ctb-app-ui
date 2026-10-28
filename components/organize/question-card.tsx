@@ -1,6 +1,12 @@
 import { Check, Trash2 } from 'lucide-react'
-import type { Question } from '@/lib/organize-data'
+import type { Difficulty, Question } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
+
+const difficultyStyles: Record<Difficulty, string> = {
+  简单: 'bg-[#E8F7F5] text-[#0F9D8A]',
+  中等: 'bg-[#FFF3E8] text-[#E07B1F]',
+  困难: 'bg-[#FFECEC] text-[#E5484D]',
+}
 
 type Props = {
   question: Question
@@ -56,8 +62,13 @@ export function QuestionCard({ question, selected, onToggle, onDelete, resolved,
           selected && 'pr-6',
         )}
       >
-        <span className="inline-flex rounded-md bg-[#FFF1EC] px-1.5 py-0.5 text-[11px] font-medium text-[#F26B4A]">
-          {question.tag}
+        <span
+          className={cn(
+            'inline-flex rounded-md px-1.5 py-0.5 text-[11px] font-medium',
+            difficultyStyles[question.difficulty],
+          )}
+        >
+          {question.difficulty}
         </span>
 
         {showStatus && !selected && (
