@@ -4,14 +4,14 @@ import { SectionTitle } from '@/components/home/section-title'
 
 const posters = [
   {
-    title: '班级错题统计',
-    src: '/images/home/illus-class-stats-v3.png',
+    title: '错题统计',
+    src: '/images/home/illus-stats-v4.png',
     card: 'from-[#E6EEFF] to-white',
     arrow: 'bg-[#3B6CF6]',
   },
   {
-    title: '错题清零报告',
-    src: '/images/home/illus-clear-report-v3.png',
+    title: '清零报告',
+    src: '/images/home/illus-report-v4.png',
     card: 'from-[#EFE8FF] to-white',
     arrow: 'bg-[#7B5CF0]',
   },
@@ -38,7 +38,7 @@ export function OtherSection() {
               </span>
             </span>
             <span className="relative size-[64px] shrink-0 overflow-hidden mix-blend-multiply">
-              <Image src={poster.src} alt="" fill sizes="60px" className="scale-[1.45] object-cover" />
+              <Image src={poster.src} alt="" fill sizes="60px" className="scale-[1.3] object-cover" />
             </span>
           </button>
         ))}
