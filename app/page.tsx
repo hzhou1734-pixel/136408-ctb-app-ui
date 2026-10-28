@@ -1,8 +1,7 @@
 import { BottomNav } from '@/components/home/bottom-nav'
 import { HeroCarousel } from '@/components/home/hero-carousel'
 import { HomeHeader } from '@/components/home/home-header'
-import { NoticeBar } from '@/components/home/notice-bar'
-import { OtherSection } from '@/components/home/other-section'
+import { RecentNotebooks } from '@/components/home/recent-notebooks'
 import { StatusBar } from '@/components/home/status-bar'
 import { ToolboxGrid } from '@/components/home/toolbox-grid'
 
@@ -13,12 +12,11 @@ export default function Page() {
         <div aria-hidden="true" className="pointer-events-none absolute -right-20 top-40 size-64 rounded-full bg-[#DCD3FF]/60 blur-3xl" />
         <div aria-hidden="true" className="pointer-events-none absolute -left-24 top-[420px] size-56 rounded-full bg-[#CFE0FF]/70 blur-3xl" />
         <StatusBar />
-        <main className="relative flex flex-1 flex-col gap-5 overflow-y-auto pb-32 [scrollbar-width:none]">
+        <main className="relative flex flex-1 flex-col gap-6 overflow-y-auto pb-32 [scrollbar-width:none]">
           <HomeHeader />
           <HeroCarousel />
-          <NoticeBar />
           <ToolboxGrid />
-          <OtherSection />
+          <RecentNotebooks />
         </main>
         <BottomNav />
       </div>
