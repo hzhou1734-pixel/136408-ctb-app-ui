@@ -74,10 +74,10 @@ export function OrganizeScreen() {
         </button>
       </header>
 
-      <div className="mt-1 flex min-h-0 flex-1 gap-2 px-4">
+      <div className="mt-1 flex min-h-0 flex-1 gap-2 px-4 pb-6">
         <aside
           aria-label="班级与学生"
-          className="relative flex w-[92px] shrink-0 flex-col self-start rounded-2xl bg-white p-1.5 shadow-[0_4px_14px_rgba(70,90,160,0.08)]"
+          className="relative flex w-[92px] shrink-0 flex-col self-stretch rounded-2xl bg-white p-1.5 shadow-[0_4px_14px_rgba(70,90,160,0.08)]"
         >
           <button
             type="button"
@@ -127,7 +127,7 @@ export function OrganizeScreen() {
 
           <div className="mx-2 my-2 h-px bg-[#EEF1F7]" aria-hidden="true" />
 
-          <nav aria-label="学生">
+          <nav aria-label="学生" className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:none]">
           <ul className="flex flex-col gap-0.5">
             {students.map((name) => {
               const active = name === student
@@ -151,7 +151,7 @@ export function OrganizeScreen() {
           </nav>
         </aside>
 
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="relative flex min-w-0 flex-1 flex-col">
           <div
             role="tablist"
             aria-label="科目"
@@ -216,17 +216,17 @@ export function OrganizeScreen() {
             })
           )}
         </div>
-        </div>
-      </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center bg-[linear-gradient(180deg,rgba(239,241,253,0)_0%,#EFF1FD_45%)] pb-8 pt-10">
-        <button
-          type="button"
-          disabled={count === 0}
-          className="pointer-events-auto h-12 w-60 rounded-full bg-[linear-gradient(135deg,#3B8BFF,#6B6BFF)] text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(59,107,255,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
-        >
-          导出错题本（已选 {count}）
-        </button>
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-end bg-[linear-gradient(180deg,rgba(239,241,253,0)_0%,#EFF1FD_50%)] pt-10">
+            <button
+              type="button"
+              disabled={count === 0}
+              className="pointer-events-auto h-11 rounded-full bg-[linear-gradient(135deg,#3B8BFF,#6B6BFF)] px-5 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(59,107,255,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
+            >
+              导出错题本（已选 {count}）
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   )
