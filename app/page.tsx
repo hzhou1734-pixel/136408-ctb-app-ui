@@ -2,7 +2,7 @@ import { BottomNav } from '@/components/home/bottom-nav'
 import { HeroCarousel } from '@/components/home/hero-carousel'
 import { HomeHeader } from '@/components/home/home-header'
 import { NoticeBar } from '@/components/home/notice-bar'
-import { RecentNotebooks } from '@/components/home/recent-notebooks'
+import { OtherSection } from '@/components/home/other-section'
 import { StatusBar } from '@/components/home/status-bar'
 import { ToolboxGrid } from '@/components/home/toolbox-grid'
 
@@ -18,7 +18,7 @@ export default function Page() {
           <HeroCarousel />
           <NoticeBar />
           <ToolboxGrid />
-          <RecentNotebooks />
+          <OtherSection />
         </main>
         <BottomNav />
       </div>
