@@ -1,6 +1,7 @@
 'use client'
 
 import { BookOpen, ChevronDown, ChevronLeft, SlidersHorizontal } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { buildGroups, students, subjects, type Student, type Subject } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
@@ -19,6 +20,7 @@ export function OrganizeScreen() {
   const [deleted, setDeleted] = useState<Set<string>>(new Set())
   const [resolvedOverrides, setResolvedOverrides] = useState<Record<string, boolean>>({})
 
+  const router = useRouter()
   const [filters, setFilters] = useState<Filters>(emptyFilters)
   const [filterOpen, setFilterOpen] = useState(false)
   const filterCount = countFilters(filters)
@@ -264,6 +266,14 @@ export function OrganizeScreen() {
             <button
               type="button"
               disabled={count === 0}
+              onClick={() => {
+                const params = new URLSearchParams({
+                  student: student ?? students[0],
+                  subject,
+                  ids: [...selected].join(','),
+                })
+                router.push(`/export?${params}`)
+              }}
               className="pointer-events-auto h-11 rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-5 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
             >
               导出错题本（已选 {count}）
