@@ -23,10 +23,10 @@ export function OtherSection() {
           <button
             key={poster.title}
             type="button"
-            className="relative aspect-[4/3] overflow-hidden rounded-[18px] text-left shadow-[0_4px_16px_rgba(80,110,200,0.12)] transition-transform active:scale-[0.97]"
+            className="relative flex aspect-[2/1] items-center overflow-hidden rounded-[16px] text-left shadow-[0_4px_16px_rgba(80,110,200,0.12)] transition-transform active:scale-[0.97]"
           >
             <Image src={poster.src} alt="" fill sizes="180px" className="scale-[1.14] object-cover" />
-            <span className="relative flex flex-col gap-0.5 p-3">
+            <span className="relative flex flex-col gap-0.5 px-3">
               <span className="text-[15px] font-bold text-white drop-shadow-sm">{poster.title}</span>
               <span className="text-[11px] text-white/85">{poster.desc}</span>
             </span>
