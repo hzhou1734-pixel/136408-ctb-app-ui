@@ -60,7 +60,7 @@ export function QuestionCard({ question, selected, onToggle, onDelete, resolved,
           {question.tag}
         </span>
 
-        {showStatus && (
+        {showStatus && !selected && (
           <button
             type="button"
             aria-pressed={resolved}
