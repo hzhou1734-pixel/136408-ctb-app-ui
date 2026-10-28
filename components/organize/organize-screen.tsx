@@ -1,6 +1,6 @@
 'use client'
 
-import { BookOpen, ChevronDown, ChevronLeft, SlidersHorizontal, UserRound } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, SlidersHorizontal } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { buildGroups, students, subjects, type Student, type Subject } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
@@ -128,7 +128,7 @@ export function OrganizeScreen() {
           <div className="mx-2 my-2 h-px bg-[#EEF1F7]" aria-hidden="true" />
 
           <nav aria-label="学生">
-          <ul className="flex flex-col gap-1">
+          <ul className="flex flex-col gap-0.5">
             {students.map((name) => {
               const active = name === student
               return (
@@ -138,18 +138,10 @@ export function OrganizeScreen() {
                     aria-current={active ? 'true' : undefined}
                     onClick={() => setStudent(name)}
                     className={cn(
-                      'flex w-full flex-col items-center gap-1 rounded-xl py-2.5 text-[12px] font-semibold transition-colors',
+                      'w-full truncate rounded-lg px-2 py-2 text-center text-[13px] font-semibold transition-colors',
                       active ? 'bg-[#F3F6FF] text-[#2C5BDB]' : 'text-[#6B7280] hover:bg-[#F7F8FC]',
                     )}
                   >
-                    <span
-                      className={cn(
-                        'flex size-8 items-center justify-center rounded-full',
-                        active ? 'bg-[#E3EBFF] text-[#3B7BFF]' : 'bg-[#F3F4F8] text-[#9AA3B2]',
-                      )}
-                    >
-                      <UserRound className="size-4" />
-                    </span>
                     {name}
                   </button>
                 </li>
