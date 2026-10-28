@@ -3,12 +3,14 @@
 import { ImagePlus, X } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { CameraView } from './camera-view'
 
 const parts = ['第一部分', '第二部分', '第三部分']
 
 export function CrossPageCapture() {
   const [images, setImages] = useState<(string | null)[]>([null, null, null])
   const [status, setStatus] = useState<'idle' | 'merging' | 'done'>('idle')
+  const [shootingIndex, setShootingIndex] = useState<number | null>(null)
   const uploadedCount = images.filter(Boolean).length
   const canMerge = uploadedCount >= 2 && status !== 'merging'
 
@@ -22,12 +24,6 @@ export function CrossPageCapture() {
     setStatus('idle')
   }
 
-  function handleFile(index: number, event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    event.target.value = ''
-    if (file) setImage(index, URL.createObjectURL(file))
-  }
-
   function merge() {
     setStatus('merging')
     setTimeout(() => setStatus('done'), 1200)
@@ -38,13 +34,14 @@ export function CrossPageCapture() {
       <ul className="flex min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-5 pb-4 pt-5 [scrollbar-width:none]">
         {parts.map((part, index) => {
           const image = images[index]
-          const inputId = `cross-part-${index}`
           return (
             <li key={part} className="relative">
-              <label
-                htmlFor={inputId}
+              <button
+                type="button"
+                onClick={() => setShootingIndex(index)}
+                aria-label={image ? `重新拍摄题干${part}` : `拍摄或上传题干的${part}`}
                 className={cn(
-                  'flex h-[150px] cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-[15px] bg-white transition-transform active:scale-[0.98]',
+                  'flex h-[150px] w-full items-center justify-center gap-3 overflow-hidden rounded-[15px] bg-white transition-transform active:scale-[0.98]',
                   !image && 'border-[1.5px] border-dashed border-[#C9D6F5]',
                 )}
               >
@@ -59,15 +56,7 @@ export function CrossPageCapture() {
                     <span className="text-[14px] font-medium text-[#1F2937]">拍摄或上传题干的{part}</span>
                   </>
                 )}
-              </label>
-              <input
-                id={inputId}
-                type="file"
-                accept="image/*"
-                capture="environment"
-                className="sr-only"
-                onChange={(event) => handleFile(index, event)}
-              />
+              </button>
               {image && (
                 <>
                   <span className="absolute left-3 top-3 rounded-full bg-[#1E2433]/70 px-2.5 py-0.5 text-[12px] text-white">{part}</span>
@@ -103,6 +92,17 @@ export function CrossPageCapture() {
           {status === 'merging' ? '拼接中…' : '拼接题目'}
         </button>
       </div>
+
+      {shootingIndex !== null && (
+        <CameraView
+          title={`拍摄题干${parts[shootingIndex]}`}
+          onClose={() => setShootingIndex(null)}
+          onConfirm={(url) => {
+            setImage(shootingIndex, url)
+            setShootingIndex(null)
+          }}
+        />
+      )}
     </div>
   )
 }
