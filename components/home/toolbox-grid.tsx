@@ -7,7 +7,7 @@ const tools = [
   { label: '举一反三', icon: 'tool-3.png' },
   { label: '作业批改', icon: 'tool-5.png' },
   { label: '作文批阅', icon: 'tool-6.png' },
-  { label: '错题组卷', icon: 'tool-7.png', cropped: true },
+  { label: '智能组卷', icon: 'tool-7.png', cropped: true },
 ]
 
 export function ToolboxGrid() {
