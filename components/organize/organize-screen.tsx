@@ -233,7 +233,7 @@ export function OrganizeScreen() {
           )}
         </div>
 
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-end bg-[linear-gradient(180deg,rgba(239,241,253,0)_0%,#EFF1FD_50%)] pt-10">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-end bg-[linear-gradient(180deg,rgba(239,241,253,0)_0%,#EFF1FD_50%)] pt-10">
             <button
               type="button"
               disabled={count === 0}

@@ -50,7 +50,12 @@ export function QuestionCard({ question, selected, onToggle, onDelete, resolved,
         </div>
       </div>
 
-      <div className="pointer-events-none relative mt-2.5 flex items-center justify-between gap-2 pr-6">
+      <div
+        className={cn(
+          'pointer-events-none relative mt-2.5 flex items-center justify-between gap-2',
+          selected && 'pr-6',
+        )}
+      >
         <span className="inline-flex rounded-md bg-[#FFF1EC] px-1.5 py-0.5 text-[11px] font-medium text-[#F26B4A]">
           {question.tag}
         </span>
