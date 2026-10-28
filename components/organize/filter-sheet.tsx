@@ -48,7 +48,7 @@ function OptionGroup<T extends string>({
   return (
     <fieldset className="mt-5">
       <legend className="text-[14px] font-bold text-[#1F2937]">{title}</legend>
-      <div className="mt-2.5 flex flex-wrap gap-2.5">
+      <div className="mt-2.5 grid grid-cols-4 gap-2">
         {options.map((opt) => {
           const active = selected.includes(opt)
           return (
@@ -58,7 +58,7 @@ function OptionGroup<T extends string>({
               aria-pressed={active}
               onClick={() => onToggle(opt)}
               className={cn(
-                'h-9 min-w-[84px] rounded-full px-4 text-[13px] font-medium ring-1 transition-colors',
+                'h-9 w-full whitespace-nowrap rounded-full px-1 text-[13px] font-medium ring-1 transition-colors',
                 active
                   ? 'bg-[#EEF6FF] text-[#1677E0] ring-[#1E88F5]'
                   : 'bg-[#F5F7FB] text-[#4B5563] ring-transparent hover:bg-[#EEF1F7]',
