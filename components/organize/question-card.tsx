@@ -14,13 +14,13 @@ export function QuestionCard({ question, selected, onToggle, onDelete }: Props) 
   return (
     <li
       className={cn(
-        'relative rounded-[14px] bg-white px-3 pb-3 pt-2.5 ring-1 transition-shadow',
+        'relative rounded-[14px] bg-white px-3 pb-3 pt-2 ring-1 transition-shadow',
         selected
           ? 'shadow-[0_6px_16px_rgba(30,136,245,0.14)] ring-[#1E88F5]/50'
           : 'shadow-[0_4px_12px_rgba(70,90,160,0.06)] ring-transparent',
       )}
     >
-      <div className="flex items-center gap-1.5 pr-8">
+      <div className="flex items-start gap-1.5 pr-8">
         <button
           type="button"
           role="checkbox"
@@ -31,12 +31,13 @@ export function QuestionCard({ question, selected, onToggle, onDelete }: Props) 
         >
           <SelectCircle checked={selected} />
         </button>
-        <span className="text-[12px] font-semibold text-[#1E88F5]">第 {question.no} 题</span>
+        <button type="button" onClick={onToggle} className="min-w-0 flex-1 pt-1 text-left">
+          <p className="line-clamp-2 text-[13px] leading-5 text-[#1F2937]">{question.stem}</p>
+        </button>
       </div>
 
-      <button type="button" onClick={onToggle} className="mt-1 block w-full text-left">
-        <p className="line-clamp-2 text-[13px] leading-5 text-[#1F2937]">{question.stem}</p>
-        <div className="mt-2.5 flex flex-col gap-1.5" aria-hidden="true">
+      <button type="button" onClick={onToggle} className="mt-2 block w-full text-left">
+        <div className="flex flex-col gap-1.5" aria-hidden="true">
           <span className="h-1.5 w-full rounded-full bg-[#EEF1F7]" />
           <span className="h-1.5 w-3/4 rounded-full bg-[#EEF1F7]" />
         </div>

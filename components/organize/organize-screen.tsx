@@ -198,8 +198,7 @@ export function OrganizeScreen() {
                   >
                     <SelectCircle checked={allSelected} partial={picked > 0} />
                     <span className="text-[14px] font-bold text-[#1F2937]">{group.date}</span>
-                    <span className="text-[12px] text-[#9AA3B2]">{ids.length} 题</span>
-                  </button>
+                                    </button>
                   <ul className="mt-1.5 flex flex-col gap-3">
                     {group.questions.map((q) => (
                       <QuestionCard
