@@ -40,7 +40,7 @@ export default function RootLayout({
     <html lang="zh-CN">
       <body className="bg-[#E9ECF3] antialiased">
         <div className="lg:flex lg:min-h-dvh lg:items-start lg:justify-center lg:gap-16 lg:px-10">
-          <div className="lg:sticky lg:top-0 lg:shrink-0">{children}</div>
+          <div className="lg:sticky lg:top-0 lg:w-[400px] lg:shrink-0">{children}</div>
           <PageSwitcher />
         </div>
         {process.env.NODE_ENV === 'production' && <Analytics />}
