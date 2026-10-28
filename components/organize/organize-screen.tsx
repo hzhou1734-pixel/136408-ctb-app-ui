@@ -1,13 +1,17 @@
 'use client'
 
-import { BookOpen, ChevronLeft, SlidersHorizontal, UserRound } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, SlidersHorizontal, UserRound } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { buildGroups, students, subjects, type Student, type Subject } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
 import { QuestionCard } from './question-card'
 import { SelectCircle } from './select-circle'
 
+const classes = ['星辰班', '启明班', '晨曦班']
+
 export function OrganizeScreen() {
+  const [className, setClassName] = useState(classes[0])
+  const [classOpen, setClassOpen] = useState(false)
   const [subject, setSubject] = useState<Subject>('数学')
   const [student, setStudent] = useState<Student>('曹小明')
   const [selected, setSelected] = useState<Set<string>>(new Set())
@@ -70,38 +74,61 @@ export function OrganizeScreen() {
         </button>
       </header>
 
-      <div className="mx-4 mt-1 flex shrink-0 items-center gap-2 rounded-2xl bg-white p-1.5 shadow-[0_4px_14px_rgba(70,90,160,0.08)]">
-        <span className="flex shrink-0 items-center gap-1.5 rounded-xl bg-[#EEF3FF] px-2.5 py-2 text-[13px] font-semibold text-[#2C5BDB]">
-          <BookOpen className="size-4" />
-          星辰班
-        </span>
-        <div role="tablist" aria-label="科目" className="flex min-w-0 flex-1 gap-1 overflow-x-auto [scrollbar-width:none]">
-          {subjects.map((s) => {
-            const active = s === subject
-            return (
-              <button
-                key={s}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                onClick={() => setSubject(s)}
-                className={cn(
-                  'h-9 shrink-0 rounded-xl px-3.5 text-[14px] font-semibold transition-colors',
-                  active
-                    ? 'bg-[linear-gradient(135deg,#3B8BFF,#6B6BFF)] text-white shadow-[0_4px_10px_rgba(59,107,255,0.3)]'
-                    : 'text-[#6B7280] hover:text-[#1F2937]',
-                )}
-              >
-                {s}
-              </button>
-            )
-          })}
-        </div>
-      </div>
+      <div className="mt-1 flex min-h-0 flex-1 gap-2 px-4">
+        <aside
+          aria-label="班级与学生"
+          className="relative flex w-[92px] shrink-0 flex-col self-start rounded-2xl bg-white p-1.5 shadow-[0_4px_14px_rgba(70,90,160,0.08)]"
+        >
+          <button
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded={classOpen}
+            onClick={() => setClassOpen((o) => !o)}
+            className="flex h-10 w-full items-center justify-center gap-1 rounded-xl bg-[#EEF3FF] px-1.5 text-[13px] font-semibold text-[#2C5BDB]"
+          >
+            <BookOpen className="size-4 shrink-0" />
+            <span className="truncate">{className}</span>
+            <ChevronDown
+              className={cn('size-3.5 shrink-0 transition-transform', classOpen && 'rotate-180')}
+              strokeWidth={2.4}
+            />
+          </button>
 
-      <div className="mt-3 flex min-h-0 flex-1">
-        <nav aria-label="学生" className="w-[84px] shrink-0 overflow-y-auto pl-4 [scrollbar-width:none]">
-          <ul className="flex flex-col gap-2">
+          {classOpen && (
+            <div aria-hidden="true" className="fixed inset-0 z-10" onClick={() => setClassOpen(false)} />
+          )}
+          {classOpen && (
+            <ul
+              role="listbox"
+              aria-label="选择班级"
+              className="absolute left-1.5 top-[52px] z-20 w-[140px] rounded-xl bg-white p-1 shadow-[0_10px_28px_rgba(40,60,130,0.18)]"
+            >
+              {classes.map((c) => (
+                <li key={c}>
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={c === className}
+                    onClick={() => {
+                      setClassName(c)
+                      setClassOpen(false)
+                    }}
+                    className={cn(
+                      'flex h-9 w-full items-center rounded-lg px-3 text-[13px] font-semibold',
+                      c === className ? 'bg-[#EEF3FF] text-[#2C5BDB]' : 'text-[#4B5563] hover:bg-[#F5F7FC]',
+                    )}
+                  >
+                    {c}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div className="mx-2 my-2 h-px bg-[#EEF1F7]" aria-hidden="true" />
+
+          <nav aria-label="学生">
+          <ul className="flex flex-col gap-1">
             {students.map((name) => {
               const active = name === student
               return (
@@ -112,15 +139,13 @@ export function OrganizeScreen() {
                     onClick={() => setStudent(name)}
                     className={cn(
                       'flex w-full flex-col items-center gap-1 rounded-xl py-2.5 text-[12px] font-semibold transition-colors',
-                      active
-                        ? 'bg-white text-[#2C5BDB] shadow-[0_4px_12px_rgba(70,90,160,0.1)]'
-                        : 'text-[#6B7280] hover:bg-white/60',
+                      active ? 'bg-[#F3F6FF] text-[#2C5BDB]' : 'text-[#6B7280] hover:bg-[#F7F8FC]',
                     )}
                   >
                     <span
                       className={cn(
                         'flex size-8 items-center justify-center rounded-full',
-                        active ? 'bg-[#EEF3FF] text-[#3B7BFF]' : 'bg-white/70 text-[#9AA3B2]',
+                        active ? 'bg-[#E3EBFF] text-[#3B7BFF]' : 'bg-[#F3F4F8] text-[#9AA3B2]',
                       )}
                     >
                       <UserRound className="size-4" />
@@ -131,9 +156,38 @@ export function OrganizeScreen() {
               )
             })}
           </ul>
-        </nav>
+          </nav>
+        </aside>
 
-        <div className="min-w-0 flex-1 overflow-y-auto pb-28 pl-2 pr-4 [scrollbar-width:none]">
+        <div className="flex min-w-0 flex-1 flex-col">
+          <div
+            role="tablist"
+            aria-label="科目"
+            className="flex shrink-0 gap-1 overflow-x-auto rounded-2xl bg-white p-1.5 shadow-[0_4px_14px_rgba(70,90,160,0.08)] [scrollbar-width:none]"
+          >
+            {subjects.map((s) => {
+              const active = s === subject
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setSubject(s)}
+                  className={cn(
+                    'h-9 shrink-0 rounded-xl px-3 text-[14px] font-semibold transition-colors',
+                    active
+                      ? 'bg-[linear-gradient(135deg,#3B8BFF,#6B6BFF)] text-white shadow-[0_4px_10px_rgba(59,107,255,0.3)]'
+                      : 'text-[#6B7280] hover:text-[#1F2937]',
+                  )}
+                >
+                  {s}
+                </button>
+              )
+            })}
+          </div>
+
+        <div className="mt-3 min-h-0 flex-1 overflow-y-auto pb-28 [scrollbar-width:none]">
           {groups.length === 0 ? (
             <p className="mt-16 text-center text-[13px] text-[#9AA3B2]">暂无错题</p>
           ) : (
@@ -169,6 +223,7 @@ export function OrganizeScreen() {
               )
             })
           )}
+        </div>
         </div>
       </div>
 
