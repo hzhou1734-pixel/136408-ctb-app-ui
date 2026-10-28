@@ -1,6 +1,7 @@
 import { BottomNav } from '@/components/home/bottom-nav'
 import { HeroCarousel } from '@/components/home/hero-carousel'
 import { HomeHeader } from '@/components/home/home-header'
+import { NoticeBar } from '@/components/home/notice-bar'
 import { RecentNotebooks } from '@/components/home/recent-notebooks'
 import { StatusBar } from '@/components/home/status-bar'
 import { ToolboxGrid } from '@/components/home/toolbox-grid'
@@ -15,6 +16,7 @@ export default function Page() {
         <main className="relative flex flex-1 flex-col gap-6 overflow-y-auto pb-28 [scrollbar-width:none]">
           <HomeHeader />
           <HeroCarousel />
+          <NoticeBar />
           <ToolboxGrid />
           <RecentNotebooks />
         </main>
