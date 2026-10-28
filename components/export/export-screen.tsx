@@ -4,6 +4,7 @@ import { ChevronDown, ChevronLeft, Minus, Plus, Sparkles, Trash2 } from 'lucide-
 import { useState } from 'react'
 import type { Question } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
+import { FileNameSheet, Mask, StudentSheet } from './export-sheets'
 
 type Layout = 'single' | 'double'
 
@@ -19,6 +20,8 @@ export function ExportScreen({ student, subject, date, questions }: Props) {
   const [layout, setLayout] = useState<Layout>('double')
   const [numbered, setNumbered] = useState(true)
   const [panelOpen, setPanelOpen] = useState(true)
+  const [step, setStep] = useState<'students' | 'filename' | null>(null)
+  const [targets, setTargets] = useState<string[]>([student])
 
   const setLines = (id: string, delta: number) =>
     setItems((prev) =>
@@ -156,12 +159,36 @@ export function ExportScreen({ student, subject, date, questions }: Props) {
         <button
           type="button"
           disabled={items.length === 0}
-          onClick={() => window.print()}
+          onClick={() => setStep('students')}
           className="mt-5 h-12 w-full rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
         >
           导出生成PDF文件
         </button>
       </section>
+
+      {step && <Mask onClick={() => setStep(null)} />}
+      {step === 'students' && (
+        <StudentSheet
+          initial={targets}
+          onConfirm={(selected) => {
+            setTargets(selected)
+            setStep('filename')
+          }}
+        />
+      )}
+      {step === 'filename' && (
+        <FileNameSheet
+          defaultName={`原题错题本-${subject}-${targets.length > 1 ? `${targets[0]}等${targets.length}人` : targets[0]}-${date.replaceAll('-', '')}`}
+          onClose={() => setStep(null)}
+          onConfirm={(fileName) => {
+            setStep(null)
+            const prevTitle = document.title
+            document.title = fileName
+            window.print()
+            document.title = prevTitle
+          }}
+        />
+      )}
     </div>
   )
 }
