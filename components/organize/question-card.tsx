@@ -6,6 +6,7 @@ const difficultyStyles: Record<Difficulty, string> = {
   简单: 'bg-[#E8F7F5] text-[#0F9D8A]',
   中等: 'bg-[#FFF3E8] text-[#E07B1F]',
   困难: 'bg-[#FFECEC] text-[#E5484D]',
+  超难: 'bg-[#F3ECFF] text-[#7C3AED]',
 }
 
 type Props = {
