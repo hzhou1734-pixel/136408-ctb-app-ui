@@ -13,7 +13,7 @@ export type DateGroup = {
 export const subjects = ['数学', '英语', '语文', '物理', '化学'] as const
 export type Subject = (typeof subjects)[number]
 
-export const students = ['曹小明', '园园', '大帆'] as const
+export const students = ['曹小明', '园园', '大帆', '李若溪', '王子涵', '陈一鸣', '张可欣', '刘浩然', '赵思琪', '周博文', '吴雨桐', '孙铭泽', '郑佳怡', '黄子轩'] as const
 export type Student = (typeof students)[number]
 
 const stems: Record<Subject, { stem: string; tag: string }[]> = {

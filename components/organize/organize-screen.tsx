@@ -89,7 +89,7 @@ export function OrganizeScreen() {
               setClassOpen((o) => !o)
             }}
             className={cn(
-              'flex h-10 w-full items-center justify-center gap-1 rounded-xl px-1.5 text-[13px] font-semibold transition-colors',
+              'flex h-10 w-full items-center justify-center gap-1 rounded-xl px-1.5 text-[13px] font-normal transition-colors',
               student === null ? 'bg-[#EEF7FF] text-[#1677E0]' : 'text-[#4B5563] hover:bg-[#F7F8FC]',
             )}
           >
@@ -147,7 +147,7 @@ export function OrganizeScreen() {
                     onClick={() => setStudent(name)}
                     className={cn(
                       'w-full truncate rounded-lg px-2 py-2 text-center text-[13px] font-semibold transition-colors',
-                      active ? 'bg-[#F3F6FF] text-[#1677E0]' : 'text-[#6B7280] hover:bg-[#F7F8FC]',
+                      active ? 'bg-[#F3F6FF] text-[#1677E0]' : 'text-[#1F2937] hover:bg-[#F7F8FC]',
                     )}
                   >
                     {name}
