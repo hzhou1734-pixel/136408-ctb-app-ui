@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export function SectionTitle({
   id,
   children,
@@ -9,15 +11,12 @@ export function SectionTitle({
 }) {
   return (
     <div className="flex items-center justify-between px-5">
-      <h2 id={id} className="flex items-center gap-2 text-[19px] font-semibold text-[#1E2A5A]">
-        <span aria-hidden="true" className="relative block h-4 w-5">
-          <span className="absolute bottom-0 left-0 h-3 w-4 -rotate-12 rounded-[3px] bg-gradient-to-br from-[#C4B5FD] to-[#7C6CF2]" />
-          <span className="absolute bottom-0.5 left-1.5 h-3 w-3.5 rotate-6 rounded-[3px] bg-gradient-to-br from-[#E0EAFF] to-[#A5C4FF] shadow-sm" />
-        </span>
+      <h2 id={id} className="flex items-center gap-1.5 text-[16px] font-bold text-[#1F2937]">
+        <Image src="/images/home/book.png" alt="" width={24} height={24} className="size-[18px] mix-blend-multiply" />
         {children}
       </h2>
       {moreHref && (
-        <a href={moreHref} className="text-[15px] text-[#2F8CFF]">
+        <a href={moreHref} className="text-[13px] text-[#2F8CFF]">
           {'更多>'}
         </a>
       )}

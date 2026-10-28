@@ -1,46 +1,35 @@
-'use client'
-
-import { useState } from 'react'
-import { Box, Home, Smile, SquarePlus } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import Image from 'next/image'
 
 const tabs = [
-  { label: '首页', icon: Home },
-  { label: '错题本', icon: SquarePlus },
-  { label: '应用', icon: Box },
-  { label: '我的', icon: Smile },
+  { label: '错题本', icon: '/images/home/nav-2.png' },
+  { label: '应用', icon: '/images/home/nav-3.png' },
+  { label: '我的', icon: '/images/home/nav-4.png' },
 ]
 
 export function BottomNav() {
-  const [active, setActive] = useState(0)
-
   return (
-    <nav aria-label="主导航" className="absolute inset-x-5 bottom-6 z-20">
-      <ul className="flex h-[76px] items-end rounded-full bg-[#2B3448] px-2 pb-2.5 shadow-[0_12px_28px_rgba(30,42,90,0.35)]">
-        {tabs.map(({ label, icon: Icon }, i) => {
-          const isActive = i === active
-          return (
-            <li key={label} className="flex-1">
-              <button
-                type="button"
-                onClick={() => setActive(i)}
-                aria-current={isActive ? 'page' : undefined}
-                className="relative flex w-full flex-col items-center gap-1.5"
-              >
-                {isActive ? (
-                  <span className="absolute -top-14 flex size-[68px] items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-[#3FA0FF] to-[#2F7CFF] shadow-[0_6px_14px_rgba(47,124,255,0.45)]">
-                    <Icon className="size-7 fill-white text-white" strokeWidth={2.2} aria-hidden="true" />
-                  </span>
-                ) : (
-                  <Icon className="size-7 fill-[#8E98B0] text-[#2B3448]" strokeWidth={2} aria-hidden="true" />
-                )}
-                <span className={cn('text-[13px]', isActive ? 'mt-[34px] font-medium text-[#3FA0FF]' : 'text-[#B7BFD2]')}>
-                  {label}
-                </span>
-              </button>
-            </li>
-          )
-        })}
+    <nav aria-label="主导航" className="absolute inset-x-5 bottom-4 z-20">
+      <ul className="flex h-[67px] items-end rounded-full bg-[#2E394F] pb-2">
+        <li className="flex-1">
+          <a href="#" aria-current="page" className="relative flex flex-col items-center">
+            <Image
+              src="/images/home/home.png"
+              alt=""
+              width={76}
+              height={76}
+              className="absolute -top-[66px] size-[57px] rounded-full"
+            />
+            <span className="text-[11px] text-[#2F8CFF]">首页</span>
+          </a>
+        </li>
+        {tabs.map((tab) => (
+          <li key={tab.label} className="flex-1">
+            <a href="#" className="flex flex-col items-center gap-1">
+              <Image src={tab.icon} alt="" width={32} height={32} className="size-6" />
+              <span className="text-[11px] text-[#9AA3B8]">{tab.label}</span>
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   )

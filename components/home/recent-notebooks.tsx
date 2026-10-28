@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Download, Forward, Trash2 } from 'lucide-react'
 import { SectionTitle } from './section-title'
 
@@ -9,33 +10,30 @@ const notebooks = [
 
 export function RecentNotebooks() {
   return (
-    <section aria-labelledby="recent-title" className="flex flex-col gap-3">
+    <section aria-labelledby="recent-title" className="flex flex-col gap-4">
       <SectionTitle id="recent-title" moreHref="#">
         最近生成的错题本
       </SectionTitle>
-      <ul className="flex flex-col gap-4 px-5">
+      <ul className="flex flex-col gap-3.5 px-5">
         {notebooks.map((item) => (
           <li
             key={item.title}
-            className="flex items-center gap-4 overflow-hidden rounded-[20px] border-l-4 border-[#FFAE9E] bg-white py-5 pl-4 pr-4 shadow-[0_4px_16px_rgba(80,110,200,0.08)]"
+            className="flex items-center gap-3 overflow-hidden rounded-[15px] border-l-[3px] border-[#FDAFA3] bg-white py-4 pl-3.5 pr-4"
           >
-            <span className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-[14px] bg-gradient-to-br from-[#FFB4A5] to-[#FF8E7A]">
-              <span aria-hidden="true" className="absolute -bottom-2 -right-2 size-8 rotate-12 rounded-md bg-white/20" />
-              <span className="relative text-[15px] font-semibold text-white">原题</span>
-            </span>
+            <Image src="/images/home/thumb.png" alt="" width={56} height={56} className="size-[42px] shrink-0" />
             <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-              <h3 className="truncate text-[16px] font-semibold text-[#1F2937]">{item.title}</h3>
+              <h3 className="truncate text-[13px] font-semibold text-[#1F2937]">{item.title}</h3>
               <div className="flex items-center justify-between">
-                <span className="text-[13px] text-[#9CA3AF]">{item.time}</span>
+                <span className="text-[11px] text-[#9CA3AF]">{item.time}</span>
                 <span className="flex items-center gap-4">
                   <button type="button" aria-label="下载">
-                    <Download className="size-5 text-[#2F8CFF]" strokeWidth={1.8} aria-hidden="true" />
+                    <Download className="size-[18px] text-[#2F8CFF]" strokeWidth={1.8} aria-hidden="true" />
                   </button>
                   <button type="button" aria-label="分享">
-                    <Forward className="size-5 text-[#9CA3AF]" strokeWidth={1.8} aria-hidden="true" />
+                    <Forward className="size-[18px] text-[#9CA3AF]" strokeWidth={1.8} aria-hidden="true" />
                   </button>
                   <button type="button" aria-label="删除">
-                    <Trash2 className="size-5 text-[#9CA3AF]" strokeWidth={1.8} aria-hidden="true" />
+                    <Trash2 className="size-[18px] text-[#9CA3AF]" strokeWidth={1.8} aria-hidden="true" />
                   </button>
                 </span>
               </div>
