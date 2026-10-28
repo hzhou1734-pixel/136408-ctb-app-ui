@@ -13,13 +13,13 @@ export function OrganizeScreen() {
   const [className, setClassName] = useState(classes[0])
   const [classOpen, setClassOpen] = useState(false)
   const [subject, setSubject] = useState<Subject>('数学')
-  const [student, setStudent] = useState<Student>('曹小明')
+  const [student, setStudent] = useState<Student | null>(null)
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [deleted, setDeleted] = useState<Set<string>>(new Set())
 
   const groups = useMemo(
     () =>
-      buildGroups(student, subject)
+      buildGroups(student ?? students[0], subject)
         .map((g) => ({ ...g, questions: g.questions.filter((q) => !deleted.has(q.id)) }))
         .filter((g) => g.questions.length > 0),
     [student, subject, deleted],
@@ -83,8 +83,15 @@ export function OrganizeScreen() {
             type="button"
             aria-haspopup="listbox"
             aria-expanded={classOpen}
-            onClick={() => setClassOpen((o) => !o)}
-            className="flex h-10 w-full items-center justify-center gap-1 rounded-xl bg-[#EEF7FF] px-1.5 text-[13px] font-semibold text-[#1677E0]"
+            aria-current={student === null ? 'true' : undefined}
+            onClick={() => {
+              setStudent(null)
+              setClassOpen((o) => !o)
+            }}
+            className={cn(
+              'flex h-10 w-full items-center justify-center gap-1 rounded-xl px-1.5 text-[13px] font-semibold transition-colors',
+              student === null ? 'bg-[#EEF7FF] text-[#1677E0]' : 'text-[#4B5563] hover:bg-[#F7F8FC]',
+            )}
           >
             <BookOpen className="size-4 shrink-0" />
             <span className="truncate">{className}</span>
@@ -111,6 +118,7 @@ export function OrganizeScreen() {
                     aria-selected={c === className}
                     onClick={() => {
                       setClassName(c)
+                      setStudent(null)
                       setClassOpen(false)
                     }}
                     className={cn(
