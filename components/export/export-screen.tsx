@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronDown, ChevronLeft, Minus, Plus, Trash2 } from 'lucide-react'
+import { ChevronDown, ChevronLeft, Minus, Plus, Sparkles, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import type { Question } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
@@ -39,11 +39,20 @@ export function ExportScreen({ student, subject, date, questions }: Props) {
         <h1 className="text-[17px] font-bold text-[#1F2937]">设置及排版</h1>
       </header>
 
-      <div className="mx-4 mt-1 min-h-0 flex-1 overflow-y-auto rounded-t-2xl bg-white shadow-[0_4px_14px_rgba(70,90,160,0.08)] [scrollbar-width:none]">
+      <div className="mt-1 min-h-0 flex-1 overflow-y-auto border-t-[6px] border-[#F1F3F7] bg-white [scrollbar-width:none]">
         <article aria-label="错题本预览" className={cn('px-4 pt-4', panelOpen ? 'pb-72' : 'pb-28')}>
           <div className="flex items-center gap-3 border-b border-[#EEF1F7] pb-3 text-[12px] text-[#4B5563]">
-            <span className="rounded-md bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-1.5 py-0.5 text-[10px] font-bold text-white">
-              Max
+            <span className="flex shrink-0 items-center gap-1" aria-label="Max AI错题宝">
+              <span
+                aria-hidden="true"
+                className="flex size-5 items-center justify-center rounded-[5px] bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)]"
+              >
+                <Sparkles className="size-3 text-white" strokeWidth={2.4} />
+              </span>
+              <span aria-hidden="true" className="flex flex-col leading-none">
+                <span className="text-[8px] font-bold text-[#1E88F5]">Max AI</span>
+                <span className="mt-0.5 text-[7px] font-medium text-[#5B9BEA]">错题宝</span>
+              </span>
             </span>
             <span className="truncate">姓名：{student}</span>
             <span className="truncate">学科：{subject}</span>
