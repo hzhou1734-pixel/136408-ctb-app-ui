@@ -16,6 +16,10 @@ export function OrganizeScreen() {
   const [student, setStudent] = useState<Student | null>(null)
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [deleted, setDeleted] = useState<Set<string>>(new Set())
+  const [resolvedOverrides, setResolvedOverrides] = useState<Record<string, boolean>>({})
+
+  const toggleResolved = (id: string, current: boolean) =>
+    setResolvedOverrides((prev) => ({ ...prev, [id]: !current }))
 
   const groups = useMemo(
     () =>
@@ -208,15 +212,20 @@ export function OrganizeScreen() {
                     <span className="text-[14px] font-bold text-[#1F2937]">{group.date}</span>
                                     </button>
                   <ul className="mt-1.5 flex flex-col gap-3">
-                    {group.questions.map((q) => (
-                      <QuestionCard
-                        key={q.id}
-                        question={q}
-                        selected={selected.has(q.id)}
-                        onToggle={() => toggle(q.id)}
-                        onDelete={() => remove(q.id)}
-                      />
-                    ))}
+                    {group.questions.map((q) => {
+                      const resolved = resolvedOverrides[q.id] ?? q.resolved
+                      return (
+                        <QuestionCard
+                          key={q.id}
+                          question={q}
+                          selected={selected.has(q.id)}
+                          onToggle={() => toggle(q.id)}
+                          onDelete={() => remove(q.id)}
+                          resolved={student ? resolved : undefined}
+                          onToggleResolved={student ? () => toggleResolved(q.id, resolved) : undefined}
+                        />
+                      )
+                    })}
                   </ul>
                 </section>
               )

@@ -3,6 +3,7 @@ export type Question = {
   no: number
   stem: string
   tag: string
+  resolved: boolean
 }
 
 export type DateGroup = {
@@ -64,6 +65,7 @@ export function buildGroups(student: Student, subject: Subject): DateGroup[] {
           no: i + 1,
           stem: item.stem,
           tag: item.tag,
+          resolved: (i + offset + groupIndex) % 3 === 1,
         }
       }),
     }
