@@ -46,6 +46,13 @@ const groups: PageGroup[] = [
       { href: '/export?push=ai&sheet=done', label: 'AI推送·导出成功' },
     ],
   },
+  {
+    title: '作业批改',
+    pages: [
+      { href: '/grading', label: '批改列表' },
+      { href: '/grading?sheet=class', label: '切换班级' },
+    ],
+  },
 ]
 
 const totalPages = groups.reduce((sum, group) => sum + group.pages.length, 0)
