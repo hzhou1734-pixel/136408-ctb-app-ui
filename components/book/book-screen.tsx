@@ -242,9 +242,11 @@ export function BookScreen() {
                       <p className="text-[11px] text-[#A0A8B8]">{book.time}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 pl-0.5">
-                    <ResolveStatus total={book.total} solved={book.solved} />
-                    <div className="ml-auto flex shrink-0 items-center gap-3">
+                  <div className="flex items-center justify-between gap-1.5 pl-0.5">
+                    <div className="flex min-w-0 flex-1">
+                      <ResolveStatus total={book.total} solved={book.solved} />
+                    </div>
+                    <div className="grid shrink-0 grid-cols-4 gap-1.5">
                     <IconAction label="举一反三" onClick={() => notify('已生成举一反三练习')}>
                       <BulbIcon className={book.practiced ? 'text-[#F59E0B]' : 'text-[#4B5563]'} />
                     </IconAction>
@@ -286,14 +288,14 @@ export function BookScreen() {
 function ResolveStatus({ total, solved }: { total: number; solved: number }) {
   if (solved >= total) {
     return (
-      <span className="flex shrink-0 items-center gap-1 rounded-full bg-[#E8F8F0] px-2 py-0.5 text-[11px] font-medium text-[#16A34A]">
-        <CircleCheck className="size-3" strokeWidth={2.4} aria-hidden="true" />
-        已全部解决
+      <span className="flex min-w-0 items-center gap-1 rounded-full bg-[#E8F8F0] px-2 py-0.5 text-[11px] font-medium text-[#16A34A]">
+        <CircleCheck className="size-3 shrink-0" strokeWidth={2.4} aria-hidden="true" />
+        <span className="truncate">已全部解决</span>
       </span>
     )
   }
   return (
-    <span className="shrink-0 rounded-full bg-[#F3F5F9] px-2 py-0.5 text-[11px] tabular-nums text-[#8A93A6]">
+    <span className="min-w-0 truncate rounded-full bg-[#F3F5F9] px-2 py-0.5 text-[11px] tabular-nums text-[#8A93A6]">
       已解决 {solved}/{total}
     </span>
   )
@@ -323,7 +325,7 @@ function IconAction({ label, onClick, children }: { label: string; onClick: () =
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="flex size-8 items-center justify-center rounded-full transition-colors hover:bg-[#F3F6FB]"
+      className="flex size-7 items-center justify-center rounded-full transition-colors hover:bg-[#F3F6FB]"
     >
       {children}
     </button>
