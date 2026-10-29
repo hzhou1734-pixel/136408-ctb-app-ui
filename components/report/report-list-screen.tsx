@@ -91,7 +91,6 @@ export function ReportListScreen() {
               const totals = reportTotals(report)
               const color = avatarColors[index % avatarColors.length]
               const rate = Math.round(((totals.retrained + totals.extended) / totals.total) * 100)
-              const cleared = totals.remaining === 0
               return (
                 <li key={report.id} className="relative">
                   <span
@@ -112,16 +111,7 @@ export function ReportListScreen() {
                         {report.student.slice(0, 1)}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[15px] font-bold text-[#1F2937]">{report.student}</span>
-                          <span
-                            className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${
-                              cleared ? 'bg-[#E8F7EE] text-[#16A34A]' : 'bg-[#FFF4E8] text-[#F08A24]'
-                            }`}
-                          >
-                            {cleared ? '已清零' : '待巩固'}
-                          </span>
-                        </div>
+                        <span className="block text-[15px] font-bold text-[#1F2937]">{report.student}</span>
                         <p className="mt-1 truncate text-[12px] text-[#8A93A6]">
                           {report.date}，{report.student}同学的错题清零报告
                         </p>
