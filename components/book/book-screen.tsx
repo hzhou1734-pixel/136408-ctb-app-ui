@@ -1,12 +1,21 @@
 'use client'
 
-import { ChevronDown, Download, ListFilter, Search, Trash2 } from 'lucide-react'
+import { ChevronDown, CircleCheck, Download, ListFilter, Search, Trash2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 type BookType = 'origin' | 'ai' | 'bank'
 type Subject = '数学' | '语文' | '英语'
-type Book = { id: string; type: BookType; subject: Subject; student: string; time: string; practiced?: boolean }
+type Book = {
+  id: string
+  type: BookType
+  subject: Subject
+  student: string
+  time: string
+  practiced?: boolean
+  total: number
+  solved: number
+}
 
 const classes = ['星辰班', '启航班', '晨曦班']
 const students = ['曹小明', '园园', '贺泽轩']
@@ -24,14 +33,14 @@ const typeMeta: Record<BookType, { badge: string[]; name: string; className: str
   bank: { badge: ['题库', '推送'], name: '题库推送本', className: 'bg-[linear-gradient(135deg,#9BE8C8_0%,#5ED1A1_100%)]' },
 }
 
-const timeline: { type: BookType; time: string; practiced?: boolean }[] = [
-  { type: 'origin', time: '2026-10-17 11:11:42', practiced: true },
-  { type: 'origin', time: '2026-09-11 16:16:39' },
-  { type: 'origin', time: '2026-09-02 16:58:58' },
-  { type: 'ai', time: '2026-08-28 15:23:19' },
-  { type: 'bank', time: '2026-08-28 15:14:46' },
-  { type: 'origin', time: '2026-08-20 09:32:05' },
-  { type: 'ai', time: '2026-08-12 18:04:51' },
+const timeline: { type: BookType; time: string; practiced?: boolean; total: number; solved: number }[] = [
+  { type: 'origin', time: '2026-10-17 11:11:42', practiced: true, total: 12, solved: 12 },
+  { type: 'origin', time: '2026-09-11 16:16:39', total: 8, solved: 5 },
+  { type: 'origin', time: '2026-09-02 16:58:58', total: 10, solved: 10 },
+  { type: 'ai', time: '2026-08-28 15:23:19', total: 6, solved: 2 },
+  { type: 'bank', time: '2026-08-28 15:14:46', total: 9, solved: 9 },
+  { type: 'origin', time: '2026-08-20 09:32:05', total: 7, solved: 0 },
+  { type: 'ai', time: '2026-08-12 18:04:51', total: 5, solved: 5 },
 ]
 
 const initialBooks: Book[] = students.flatMap((student) =>
@@ -233,7 +242,9 @@ export function BookScreen() {
                       <p className="text-[11px] text-[#A0A8B8]">{book.time}</p>
                     </div>
                   </div>
-                  <div className="flex justify-end gap-3 pr-0.5">
+                  <div className="flex items-center justify-between gap-2 pl-0.5 pr-0.5">
+                    <ResolveStatus total={book.total} solved={book.solved} />
+                    <div className="flex gap-3">
                     <IconAction label="举一反三" onClick={() => notify('已生成举一反三练习')}>
                       <BulbIcon className={book.practiced ? 'text-[#F59E0B]' : 'text-[#4B5563]'} />
                     </IconAction>
@@ -252,6 +263,7 @@ export function BookScreen() {
                     >
                       <Trash2 className="size-[18px] text-[#A0A8B8]" strokeWidth={1.6} />
                     </IconAction>
+                    </div>
                   </div>
                 </li>
               )
@@ -268,6 +280,22 @@ export function BookScreen() {
         )}
       </div>
     </div>
+  )
+}
+
+function ResolveStatus({ total, solved }: { total: number; solved: number }) {
+  if (solved >= total) {
+    return (
+      <span className="flex shrink-0 items-center gap-1 rounded-full bg-[#E8F8F0] px-2 py-0.5 text-[11px] font-medium text-[#16A34A]">
+        <CircleCheck className="size-3" strokeWidth={2.4} aria-hidden="true" />
+        已全部解决
+      </span>
+    )
+  }
+  return (
+    <span className="shrink-0 rounded-full bg-[#F3F5F9] px-2 py-0.5 text-[11px] tabular-nums text-[#8A93A6]">
+      已解决 {solved}/{total}
+    </span>
   )
 }
 
