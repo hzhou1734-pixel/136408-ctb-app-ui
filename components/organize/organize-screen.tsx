@@ -287,7 +287,7 @@ export function OrganizeScreen({
           )}
         </div>
 
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex items-center gap-2.5 bg-[linear-gradient(180deg,rgba(239,241,253,0)_0%,#EFF1FD_50%)] pt-10">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex items-center gap-2 bg-[linear-gradient(180deg,rgba(239,241,253,0)_0%,#EFF1FD_50%)] pt-10">
             {isPractice ? (
               <>
                 <button
@@ -297,7 +297,7 @@ export function OrganizeScreen({
                     setPushMode('bank')
                     setAssignStep('students')
                   }}
-                  className="pointer-events-auto h-11 min-w-0 flex-1 truncate rounded-full border border-[#1E88F5] bg-white px-2 text-[14px] font-bold text-[#1E88F5] transition-opacity disabled:opacity-50"
+                  className="pointer-events-auto h-11 min-w-0 flex-1 whitespace-nowrap rounded-full border border-[#1E88F5] bg-white px-1 text-[13px] tracking-tight font-bold text-[#1E88F5] transition-opacity disabled:opacity-50"
                 >
                   题库推送（已选 {count}）
                 </button>
@@ -308,7 +308,7 @@ export function OrganizeScreen({
                     setPushMode('ai')
                     setAssignStep('students')
                   }}
-                  className="pointer-events-auto h-11 min-w-0 flex-1 truncate rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-2 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
+                  className="pointer-events-auto h-11 min-w-0 flex-1 whitespace-nowrap rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-1 text-[13px] tracking-tight font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
                 >
                   AI推送（已选 {count}）
                 </button>
