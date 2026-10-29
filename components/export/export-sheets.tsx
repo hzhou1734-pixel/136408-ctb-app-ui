@@ -57,7 +57,7 @@ export function StudentSheet({
           <span aria-hidden="true" className="shrink-0 text-[14px] font-medium text-[#374151]">
             是否含答案：
           </span>
-          <div className="flex flex-1 gap-2">
+          <div className="flex flex-1 items-center gap-6">
             {[
               { value: true, label: '含答案' },
               { value: false, label: '不含答案' },
@@ -70,14 +70,18 @@ export function StudentSheet({
                   role="radio"
                   aria-checked={active}
                   onClick={() => setWithAnswer(opt.value)}
-                  className={cn(
-                    'h-9 flex-1 rounded-full border text-[13px] font-medium transition-colors',
-                    active
-                      ? 'border-[#1E88F5] bg-[#EAF4FF] text-[#1E88F5]'
-                      : 'border-[#E3E7EF] bg-[#F7F8FC] text-[#374151] hover:border-[#C9D6EA]',
-                  )}
+                  className="flex items-center gap-2 text-[14px] text-[#374151]"
                 >
-                  {opt.label}
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      'flex size-[18px] items-center justify-center rounded-full border transition-colors',
+                      active ? 'border-[#1E88F5]' : 'border-[#C5CCD8]',
+                    )}
+                  >
+                    {active && <span className="size-[10px] rounded-full bg-[#1E88F5]" />}
+                  </span>
+                  <span className={active ? 'text-[#1E88F5]' : undefined}>{opt.label}</span>
                 </button>
               )
             })}
