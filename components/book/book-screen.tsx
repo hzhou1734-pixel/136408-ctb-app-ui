@@ -70,7 +70,16 @@ export function BookScreen() {
   <h1 className="text-[17px] font-bold text-[#1F2937]">错题本</h1>
   <p role="status" className="absolute right-4 top-1/2 flex -translate-y-1/2 flex-col items-end text-right leading-tight">
   <span className="text-[13px] font-semibold tabular-nums text-[#2F80ED]">0/3</span>
-  <span className="text-[11px] text-[#6B7280]">AI解析生成中</span>
+  <span className="flex items-end text-[11px] text-[#6B7280]">
+    AI解析生成中
+    <span aria-hidden="true" className="inline-flex w-[1.2em] justify-start">
+      {[0, 1, 2].map((i) => (
+        <span key={i} className="loading-dot" style={{ animationDelay: `${i * 0.2}s` }}>
+          .
+        </span>
+      ))}
+    </span>
+  </span>
   </p>
   </header>
 

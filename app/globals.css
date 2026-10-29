@@ -161,3 +161,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes loading-dot {
+  0%, 20% { opacity: 0; }
+  40%, 100% { opacity: 1; }
+}
+
+.loading-dot {
+  opacity: 0;
+  animation: loading-dot 1.4s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-dot {
+    animation: none;
+    opacity: 1;
+  }
+}
