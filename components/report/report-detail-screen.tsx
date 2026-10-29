@@ -1,55 +1,81 @@
 'use client'
 
-import { ChevronLeft, Sparkles } from 'lucide-react'
+import Link from 'next/link'
+import { ChevronLeft, Download } from 'lucide-react'
 import { useState } from 'react'
-import { reportTotals, type ClearReport } from '@/lib/report-data'
+import { periods, type Period } from '@/lib/stats-data'
+import {
+  getSubjectStats,
+  getTrend,
+  reportPeriodLabels,
+  stageSubjects,
+  type ClearReport,
+} from '@/lib/report-data'
 
-function BigRing({ rate }: { rate: number }) {
-  const radius = 34
-  const circumference = 2 * Math.PI * radius
+function TrendChart({ points }: { points: number[] }) {
+  const width = 320
+  const height = 190
+  const left = 28
+  const right = 12
+  const top = 12
+  const bottom = 28
+  const max = Math.max(10, Math.ceil(Math.max(...points) / 2) * 2)
+  const ticks = Array.from({ length: max / 2 + 1 }, (_, i) => i * 2)
+  const plotW = width - left - right
+  const plotH = height - top - bottom
+  const step = plotW / points.length
+  const x = (i: number) => left + step * (i + 0.5)
+  const y = (v: number) => top + plotH * (1 - v / max)
+  const line = points.map((v, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${y(v)}`).join(' ')
+  const area = `${line} L${x(points.length - 1)},${y(0)} L${x(0)},${y(0)} Z`
+
   return (
-    <div className="relative size-[84px] shrink-0">
-      <svg viewBox="0 0 80 80" className="size-full -rotate-90" aria-hidden="true">
-        <circle cx="40" cy="40" r={radius} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="7" />
-        <circle
-          cx="40"
-          cy="40"
-          r={radius}
-          fill="none"
-          stroke="#FFFFFF"
-          strokeWidth="7"
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          strokeDashoffset={circumference * (1 - Math.min(rate, 100) / 100)}
-        />
-      </svg>
-      <span className="absolute inset-0 flex flex-col items-center justify-center leading-none text-white">
-        <span className="text-[20px] font-bold tabular-nums">{rate}%</span>
-        <span className="mt-1 text-[10px] text-white/80">清零率</span>
-      </span>
-    </div>
+    <svg viewBox={`0 0 ${width} ${height}`} className="h-auto w-full" role="img" aria-label={`各周错题数量：${points.join('、')}`}>
+      <defs>
+        <linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#1E88F5" stopOpacity="0.22" />
+          <stop offset="100%" stopColor="#1E88F5" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      {ticks.map((t) => (
+        <g key={t}>
+          <line x1={left} x2={width - right} y1={y(t)} y2={y(t)} stroke="#EEF1F6" strokeDasharray={t === 0 ? undefined : '3 3'} />
+          <text x={left - 8} y={y(t) + 4} textAnchor="end" fontSize="10" fill="#8A93A6">
+            {t}
+          </text>
+        </g>
+      ))}
+      <path d={area} fill="url(#trend-fill)" />
+      <path d={line} fill="none" stroke="#1E88F5" strokeWidth="2.2" strokeLinejoin="round" strokeLinecap="round" />
+      {points.map((v, i) => (
+        <g key={i}>
+          <circle cx={x(i)} cy={y(v)} r="3.5" fill="#FFFFFF" stroke="#1E88F5" strokeWidth="2" />
+          <text x={x(i)} y={y(v) - 8} textAnchor="middle" fontSize="10" fontWeight="600" fill="#1E88F5">
+            {v}
+          </text>
+          <text x={x(i)} y={height - 8} textAnchor="middle" fontSize="10" fill="#8A93A6">
+            第{i + 1}周
+          </text>
+        </g>
+      ))}
+    </svg>
   )
 }
 
 export function ReportDetailScreen({ report }: { report: ClearReport }) {
-  const [subjectName, setSubjectName] = useState(report.subjects[0]?.subject)
-  const totals = reportTotals(report)
-  const totalRate = Math.round(((totals.retrained + totals.extended) / totals.total) * 100)
-  const subject = report.subjects.find((s) => s.subject === subjectName) ?? report.subjects[0]
-  const remaining = subject.total - subject.retrained - subject.extended
+  const [period, setPeriod] = useState<Period>(report.period)
+  const subjects = stageSubjects[report.stage]
+  const [subject, setSubject] = useState(subjects[0])
+  const stats = getSubjectStats(report.student, period, subject)
+  const trend = getTrend(report.student, period, subject)
+  const unit = period.endsWith('周') ? '周' : '月'
+  const periodWord = period.slice(0, 1) === '上' ? `上${unit}` : `本${unit}`
 
-  const summary = [
-    { label: `${report.period}错题`, value: totals.total },
-    { label: '原题重练解决', value: totals.retrained },
-    { label: '举一反三强化', value: totals.extended },
-    { label: '剩余错题', value: totals.remaining },
-  ]
-
-  const steps = [
-    { label: '错题数量', value: subject.total, color: '#1F2937', note: '本期新增' },
-    { label: '原题重练解决', value: subject.retrained, color: '#1E88F5', note: '重做正确' },
-    { label: '举一反三解决', value: subject.extended, color: '#7B61FF', note: '同类题通过' },
-    { label: '剩余错题', value: remaining, color: '#E5533D', note: remaining === 0 ? '已全部清零' : '待继续巩固' },
+  const items = [
+    { label: `${periodWord}错题数量`, value: stats.total, color: '#1F2937' },
+    { label: '原题重练解决', value: stats.retrained, color: '#1E88F5' },
+    { label: '举一反三强化', value: stats.extended, color: '#7B61FF' },
+    { label: '剩余错题数量', value: stats.remaining, color: '#E5533D' },
   ]
 
   return (
@@ -65,93 +91,88 @@ export function ReportDetailScreen({ report }: { report: ClearReport }) {
         <h1 className="truncate text-[17px] font-bold text-[#1F2937]">{report.student}的错题清零报告</h1>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-8 [scrollbar-width:none]">
-        <section className="mt-1 overflow-hidden rounded-3xl bg-[linear-gradient(135deg,#3DA9FF_0%,#1E6FF2_60%,#5B5CF0_100%)] p-4 text-white shadow-[0_10px_24px_rgba(30,111,242,0.28)]">
-          <div className="flex items-center gap-3">
-            <div className="min-w-0 flex-1">
-              <p className="text-[12px] text-white/80 tabular-nums">发送于 {report.sentAt}</p>
-              <p className="mt-1 text-[20px] font-bold">{report.student}</p>
-              <p className="mt-1 text-[12px] leading-relaxed text-white/85">
-                {totals.remaining === 0
-                  ? `${report.period}错题已全部清零，表现很棒！`
-                  : `${report.period}还剩 ${totals.remaining} 道错题待巩固`}
-              </p>
-            </div>
-            <BigRing rate={totalRate} />
+      <div role="tablist" aria-label="时间段" className="flex shrink-0 gap-6 px-5">
+        {periods.map((p) => {
+          const active = p === period
+          return (
+            <button
+              key={p}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => setPeriod(p)}
+              className={`relative pb-2.5 pt-1 text-[15px] transition-colors ${
+                active ? 'font-bold text-[#1F2937]' : 'text-[#8A93A6]'
+              }`}
+            >
+              {p}
+              {active && (
+                <span className="absolute inset-x-1 bottom-0 h-[3px] rounded-full bg-[#1E88F5]" aria-hidden="true" />
+              )}
+            </button>
+          )
+        })}
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 [scrollbar-width:none]">
+        <p className="mt-3 text-[13px] text-[#5B6478]">
+          报告时间：<span className="tabular-nums text-[#1F2937]">{reportPeriodLabels[period]}</span>
+        </p>
+
+        <section className="mt-3 rounded-2xl bg-white p-4 shadow-[0_6px_18px_rgba(30,64,140,0.06)]">
+          <div role="tablist" aria-label="科目" className="-mx-1 flex gap-1 overflow-x-auto pb-1 [scrollbar-width:none]">
+            {subjects.map((s) => {
+              const active = s === subject
+              const count = getSubjectStats(report.student, period, s).total
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setSubject(s)}
+                  className={`flex min-w-[50px] shrink-0 flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 transition-colors ${
+                    active ? 'bg-[#E8F2FF] text-[#1E88F5]' : 'text-[#5B6478]'
+                  }`}
+                >
+                  <span className={`text-[14px] ${active ? 'font-bold' : ''}`}>{s}</span>
+                  <span className={`text-[12px] tabular-nums ${active ? '' : 'text-[#8A93A6]'}`}>({count})</span>
+                </button>
+              )
+            })}
           </div>
-          <dl className="mt-4 grid grid-cols-4 rounded-2xl bg-white/15 py-2.5 text-center">
-            {summary.map((item) => (
-              <div key={item.label} className="flex flex-col-reverse gap-1">
-                <dt className="text-[10px] text-white/80">{item.label}</dt>
-                <dd className="text-[18px] font-bold leading-none tabular-nums">{item.value}</dd>
+
+          <dl className="mt-3 grid grid-cols-2 gap-2.5 border-t border-[#EEF1F6] pt-3">
+            {items.map((item) => (
+              <div key={item.label} className="flex flex-col-reverse gap-1 rounded-xl bg-[#F7F9FC] px-3 py-2.5">
+                <dt className="text-[12px] text-[#8A93A6]">{item.label}</dt>
+                <dd className="text-[22px] font-bold leading-none tabular-nums" style={{ color: item.color }}>
+                  {item.value}
+                  <span className="ml-0.5 text-[12px] font-normal text-[#8A93A6]">道</span>
+                </dd>
               </div>
             ))}
           </dl>
         </section>
 
-        <div role="tablist" aria-label="科目" className="mt-5 flex gap-5 overflow-x-auto px-1 [scrollbar-width:none]">
-          {report.subjects.map((s) => {
-            const active = s.subject === subject.subject
-            return (
-              <button
-                key={s.subject}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                onClick={() => setSubjectName(s.subject)}
-                className={`relative shrink-0 pb-2 text-[15px] transition-colors ${
-                  active ? 'font-bold text-[#1F2937]' : 'text-[#8A93A6]'
-                }`}
-              >
-                {s.subject}
-                <span className="ml-0.5 text-[12px] tabular-nums">({s.total})</span>
-                {active && (
-                  <span className="absolute inset-x-2 bottom-0 h-[3px] rounded-full bg-[#1E88F5]" aria-hidden="true" />
-                )}
-              </button>
-            )
-          })}
-        </div>
-
         <section className="mt-3 rounded-2xl bg-white p-4 shadow-[0_6px_18px_rgba(30,64,140,0.06)]">
-          <h2 className="text-[15px] font-bold text-[#1F2937]">{subject.subject}清零过程</h2>
-          <ol className="relative mt-3 flex flex-col">
-            {steps.map((step, index) => (
-              <li key={step.label} className="relative flex gap-3 pb-4 last:pb-0">
-                {index < steps.length - 1 && (
-                  <span className="absolute bottom-0 left-[13px] top-7 w-px bg-[#E3E8F0]" aria-hidden="true" />
-                )}
-                <span
-                  className="flex size-[27px] shrink-0 items-center justify-center rounded-full text-[12px] font-bold text-white"
-                  style={{ backgroundColor: step.color }}
-                  aria-hidden="true"
-                >
-                  {index + 1}
-                </span>
-                <div className="flex min-w-0 flex-1 items-center justify-between rounded-xl bg-[#F7F9FC] px-3 py-2.5">
-                  <div>
-                    <p className="text-[14px] font-semibold text-[#1F2937]">{step.label}</p>
-                    <p className="mt-0.5 text-[11px] text-[#8A93A6]">{step.note}</p>
-                  </div>
-                  <span className="text-[22px] font-bold tabular-nums" style={{ color: step.color }}>
-                    {step.value}
-                    <span className="ml-0.5 text-[12px] font-normal text-[#8A93A6]">道</span>
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <h2 className="text-[15px] font-bold text-[#1F2937]">
+            {trend.month}月份【{subject}】错题数量趋势
+          </h2>
+          <div className="mt-3">
+            <TrendChart points={trend.points} />
+          </div>
         </section>
+      </div>
 
-        <section className="mt-3 rounded-2xl border border-[#E4E1FF] bg-[#F7F6FF] p-4">
-          <p className="flex items-center gap-1.5 text-[14px] font-bold text-[#5B5CF0]">
-            <span className="flex size-6 items-center justify-center rounded-lg bg-[#5B5CF0] text-white">
-              <Sparkles className="size-3.5" aria-hidden="true" />
-            </span>
-            AI结论
-          </p>
-          <p className="mt-2 text-[13px] leading-relaxed text-[#4B5568]">{subject.conclusion}</p>
-        </section>
+      <div className="shrink-0 px-4 pb-5 pt-2">
+        <Link
+          href="/export?sheet=filename"
+          className="flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-[linear-gradient(90deg,#3DA9FF,#1E6FF2)] text-[16px] font-bold text-white shadow-[0_8px_20px_rgba(30,111,242,0.3)] transition-transform active:scale-[0.98]"
+        >
+          <Download className="size-[18px]" aria-hidden="true" />
+          下载{period}错题本
+        </Link>
       </div>
     </div>
   )
