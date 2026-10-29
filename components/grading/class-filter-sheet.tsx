@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { CalendarCheck, Check, X } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
-import { classes, gradingSubjects, studentsByClass } from '@/lib/grading-data'
+import { classes, gradingSubjects } from '@/lib/grading-data'
 
 export type GradingFilter = {
   className: string
@@ -89,7 +89,6 @@ export function ClassFilterSheet({
   onConfirm: (filter: GradingFilter) => void
 }) {
   const [draft, setDraft] = useState(value)
-  const students = studentsByClass[draft.className] ?? []
 
   const reset = () =>
     setDraft({ className: classes[0], student: null, subject: null, startDate: '', endDate: '' })
@@ -133,20 +132,6 @@ export function ClassFilterSheet({
           </Field>
 
           <div className="flex flex-col gap-5">
-            <Field label="姓名">
-              <div role="radiogroup" aria-label="姓名" className="flex flex-wrap gap-4">
-                {students.map((name) => (
-                  <Chip
-                    key={name}
-                    active={draft.student === name}
-                    onClick={() => setDraft((d) => ({ ...d, student: d.student === name ? null : name }))}
-                  >
-                    {name}
-                  </Chip>
-                ))}
-              </div>
-            </Field>
-
             <div role="radiogroup" aria-label="学科" className="grid grid-cols-3 gap-5">
               {gradingSubjects.map((subject) => {
                 const active = draft.subject === subject.name
