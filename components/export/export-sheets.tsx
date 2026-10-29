@@ -33,17 +33,22 @@ function Sheet({ label, children }: { label: string; children: React.ReactNode }
 export function StudentSheet({
   initial,
   onConfirm,
+  title = '选择学生，导出错题本',
+  subtitle,
 }: {
   initial: string[]
   onConfirm: (selected: string[]) => void
+  title?: string
+  subtitle?: React.ReactNode
 }) {
   const [selected, setSelected] = useState<string[]>(initial)
   const toggle = (name: string) =>
     setSelected((prev) => (prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]))
 
   return (
-    <Sheet label="选择学生，导出错题本">
-      <h2 className="text-center text-[16px] font-bold text-[#1F2937]">选择学生，导出错题本</h2>
+    <Sheet label={title}>
+      <h2 className="text-center text-[16px] font-bold text-[#1F2937]">{title}</h2>
+      {subtitle && <p className="mt-1 text-center text-[12px] text-[#8A93A6]">{subtitle}</p>}
       <div className="mt-4 grid max-h-[260px] grid-cols-3 gap-2.5 overflow-y-auto [scrollbar-width:none]">
         {students.map((name) => {
           const active = selected.includes(name)
@@ -88,7 +93,15 @@ export function StudentSheet({
   )
 }
 
-export function SuccessDialog({ count, onBack }: { count: number; onBack: () => void }) {
+export function SuccessDialog({
+  count,
+  onBack,
+  message,
+}: {
+  count: number
+  onBack: () => void
+  message?: React.ReactNode
+}) {
   return (
     <div className="absolute inset-x-0 bottom-0 top-12 z-50 flex items-center justify-center px-6">
       <section
@@ -105,9 +118,13 @@ export function SuccessDialog({ count, onBack }: { count: number; onBack: () => 
           导出成功
         </h2>
         <p id="export-success-desc" className="mt-2 text-[14px] text-[#4B5563]">
-          {'已完成 '}
-          <span className="font-bold text-[#1E88F5]">{count}</span>
-          {' 位同学的错题本导出！'}
+          {message ?? (
+            <>
+              {'已完成 '}
+              <span className="font-bold text-[#1E88F5]">{count}</span>
+              {' 位同学的错题本导出！'}
+            </>
+          )}
         </p>
         <div className="mt-6 flex gap-3">
           <button

@@ -24,6 +24,8 @@ const groups: PageGroup[] = [
     pages: [
       { href: '/organize', label: '错题整理' },
       { href: '/organize?sheet=filter', label: '筛选弹窗' },
+      { href: '/organize?sheet=assign', label: '导出给学生' },
+      { href: '/organize?sheet=assigned', label: '导入错题库成功' },
       { href: '/export', label: '设置及排版' },
       { href: '/export?sheet=students', label: '选择学生导出' },
       { href: '/export?sheet=filename', label: '导出PDF' },

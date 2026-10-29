@@ -15,7 +15,11 @@ export default async function OrganizePage({ searchParams }: { searchParams: Pro
         <div aria-hidden="true" className="pointer-events-none absolute -right-20 top-40 size-64 rounded-full bg-[#CDE6FF]/60 blur-3xl" />
         <div aria-hidden="true" className="pointer-events-none absolute -left-24 top-[420px] size-56 rounded-full bg-[#CCE6FF]/70 blur-3xl" />
         <StatusBar />
-        <OrganizeScreen initialFilterOpen={sheet === 'filter'} key={sheet ?? 'none'} />
+        <OrganizeScreen
+          initialFilterOpen={sheet === 'filter'}
+          initialAssignStep={sheet === 'assign' ? 'students' : sheet === 'assigned' ? 'done' : 'none'}
+          key={sheet ?? 'none'}
+        />
       </div>
     </div>
   )

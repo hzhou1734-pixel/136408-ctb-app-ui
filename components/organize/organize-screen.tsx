@@ -5,18 +5,34 @@ import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { buildGroups, students, subjects, type Student, type Subject } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
+import { Mask, StudentSheet, SuccessDialog } from '@/components/export/export-sheets'
 import { countFilters, emptyFilters, FilterSheet, type Filters } from './filter-sheet'
 import { QuestionCard } from './question-card'
 import { SelectCircle } from './select-circle'
 
 const classes = ['星辰班', '启明班', '晨曦班']
 
-export function OrganizeScreen({ initialFilterOpen = false }: { initialFilterOpen?: boolean }) {
+type AssignStep = 'none' | 'students' | 'done'
+
+const previewSelection = () =>
+  new Set(buildGroups(students[0], '数学')[0]?.questions.slice(0, 3).map((q) => q.id) ?? [])
+
+export function OrganizeScreen({
+  initialFilterOpen = false,
+  initialAssignStep = 'none',
+}: {
+  initialFilterOpen?: boolean
+  initialAssignStep?: AssignStep
+}) {
   const [className, setClassName] = useState(classes[0])
   const [classOpen, setClassOpen] = useState(false)
   const [subject, setSubject] = useState<Subject>('数学')
   const [student, setStudent] = useState<Student | null>(null)
-  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [selected, setSelected] = useState<Set<string>>(() =>
+    initialAssignStep === 'none' ? new Set() : previewSelection(),
+  )
+  const [assignStep, setAssignStep] = useState<AssignStep>(initialAssignStep)
+  const [assignedStudents, setAssignedStudents] = useState(initialAssignStep === 'done' ? 3 : 0)
   const [deleted, setDeleted] = useState<Set<string>>(new Set())
   const [resolvedOverrides, setResolvedOverrides] = useState<Record<string, boolean>>({})
 
@@ -262,7 +278,15 @@ export function OrganizeScreen({ initialFilterOpen = false }: { initialFilterOpe
           )}
         </div>
 
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-end bg-[linear-gradient(180deg,rgba(239,241,253,0)_0%,#EFF1FD_50%)] pt-10">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex items-center gap-2.5 bg-[linear-gradient(180deg,rgba(239,241,253,0)_0%,#EFF1FD_50%)] pt-10">
+            <button
+              type="button"
+              disabled={count === 0}
+              onClick={() => setAssignStep('students')}
+              className="pointer-events-auto h-11 shrink-0 rounded-full border border-[#1E88F5] bg-white px-3.5 text-[14px] font-bold text-[#1E88F5] transition-opacity disabled:opacity-50"
+            >
+              导出给学生
+            </button>
             <button
               type="button"
               disabled={count === 0}
@@ -274,7 +298,7 @@ export function OrganizeScreen({ initialFilterOpen = false }: { initialFilterOpe
                 })
                 router.push(`/export?${params}`)
               }}
-              className="pointer-events-auto h-11 rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-5 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
+              className="pointer-events-auto h-11 min-w-0 flex-1 truncate rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-4 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
             >
               导出错题本（已选 {count}）
             </button>
@@ -291,6 +315,42 @@ export function OrganizeScreen({ initialFilterOpen = false }: { initialFilterOpe
             setFilterOpen(false)
           }}
         />
+      )}
+
+      {assignStep === 'students' && (
+        <>
+          <Mask onClick={() => setAssignStep('none')} />
+          <StudentSheet
+            title="选择学生，导出到错题库"
+            subtitle={`已选 ${count} 道题目，将加入所选学生的错题库`}
+            initial={[]}
+            onConfirm={(names) => {
+              setAssignedStudents(names.length)
+              setAssignStep('done')
+            }}
+          />
+        </>
+      )}
+      {assignStep === 'done' && (
+        <>
+          <Mask onClick={() => setAssignStep('none')} />
+          <SuccessDialog
+            count={assignedStudents}
+            onBack={() => {
+              setAssignStep('none')
+              setSelected(new Set())
+            }}
+            message={
+              <>
+                {'已将 '}
+                <span className="font-bold text-[#1E88F5]">{count}</span>
+                {' 道题目导出到 '}
+                <span className="font-bold text-[#1E88F5]">{assignedStudents}</span>
+                {' 位同学的错题库！'}
+              </>
+            }
+          />
+        </>
       )}
     </div>
   )
