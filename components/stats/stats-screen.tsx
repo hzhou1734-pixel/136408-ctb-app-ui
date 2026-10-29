@@ -1,6 +1,6 @@
 'use client'
 
-import { BookOpen, Camera, ChevronLeft, FileText, GraduationCap, Layers, Lightbulb, SlidersHorizontal, Sparkles, Target } from 'lucide-react'
+import { BookOpen, Camera, ChevronLeft, FileText, Layers, Lightbulb, SlidersHorizontal, Sparkles, Target } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { classes } from '@/lib/grading-data'
 import {
@@ -10,16 +10,17 @@ import {
   periods,
   statSubjects,
   subjectCount,
-  type Attribution,
+  type ErrorCause,
   type Period,
   type StatSubject,
 } from '@/lib/stats-data'
 import { StatsFilterSheet, type StatsFilter } from '@/components/stats/stats-filter-sheet'
 
-const sourceStyle: Record<Attribution['source'], { icon: typeof BookOpen; color: string; bg: string; name: string }> = {
-  教材: { icon: BookOpen, color: '#1E88F5', bg: '#EAF4FF', name: 'AI教材' },
-  错题: { icon: Layers, color: '#F08A24', bg: '#FFF3E6', name: '错题' },
-  考试试卷: { icon: GraduationCap, color: '#7B61FF', bg: '#F1EEFF', name: '学校考试试卷' },
+const causeStyle: Record<ErrorCause, { color: string; bg: string }> = {
+  概念不清: { color: '#E5533D', bg: '#FFF1EE' },
+  方法不当: { color: '#7B61FF', bg: '#F1EEFF' },
+  粗心失误: { color: '#F08A24', bg: '#FFF3E6' },
+  审题不清: { color: '#1E88F5', bg: '#EAF4FF' },
 }
 
 function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
@@ -243,29 +244,49 @@ export function StatsScreen({ initialFilterOpen = false }: { initialFilterOpen?:
               <CardTitle icon={Layers} ai>
                 班级错题归因
               </CardTitle>
-              <ul className="mt-3 flex flex-col gap-2.5">
-                {insight.attributions.map((item) => {
-                  const style = sourceStyle[item.source]
-                  const Icon = style.icon
-                  return (
-                    <li key={item.source} className="flex items-center gap-3">
-                      <span
-                        className="flex size-9 shrink-0 items-center justify-center rounded-lg"
-                        style={{ backgroundColor: style.bg, color: style.color }}
-                      >
-                        <Icon className="size-4" strokeWidth={2.2} aria-hidden="true" />
-                      </span>
-                      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                        <span className="text-[13px] font-semibold text-[#1F2937]">{style.name}</span>
-                        <span className="truncate text-[12px] text-[#8A93A6]">{item.label}</span>
-                      </div>
-                      <span className="shrink-0 text-[15px] font-bold tabular-nums" style={{ color: style.color }}>
-                        {item.percent}%
-                      </span>
-                    </li>
-                  )
-                })}
+              <p className="mt-2 text-[12px] text-[#8A93A6]">按知识点分析全班常见错误原因</p>
+              <ul className="mt-3 flex flex-col gap-3">
+                {insight.attributions.map((item) => (
+                  <li key={item.point} className="flex flex-col gap-2.5 rounded-xl border border-[#EEF1F6] p-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-[14px] font-semibold text-[#1F2937]">{item.point}</h3>
+                      <span className="text-[12px] tabular-nums text-[#8A93A6]">共 {item.errors} 题</span>
+                    </div>
+                    <div className="flex h-2 gap-0.5 overflow-hidden rounded-full" aria-hidden="true">
+                      {item.causes.map((c) => (
+                        <div
+                          key={c.cause}
+                          className="h-full"
+                          style={{ width: `${c.percent}%`, backgroundColor: causeStyle[c.cause].color }}
+                        />
+                      ))}
+                    </div>
+                    <ul className="flex flex-col gap-2">
+                      {item.causes.map((c) => {
+                        const style = causeStyle[c.cause]
+                        return (
+                          <li key={c.cause} className="flex items-center gap-2 text-[13px]">
+                            <span
+                              className="shrink-0 rounded px-1.5 py-0.5 text-[11px] font-semibold"
+                              style={{ backgroundColor: style.bg, color: style.color }}
+                            >
+                              {c.cause}
+                            </span>
+                            <span className="min-w-0 flex-1 truncate text-[#4B5568]">{c.detail}</span>
+                            <span className="shrink-0 font-bold tabular-nums" style={{ color: style.color }}>
+                              {c.percent}%
+                            </span>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </li>
+                ))}
               </ul>
+              <p className="mt-3 flex items-center gap-1 text-[11px] text-[#A0A8B8]">
+                <BookOpen className="size-3" aria-hidden="true" />
+                分析依据：AI教材 · 班级错题 · 学校考试试卷
+              </p>
             </Card>
           </div>
         ) : (

@@ -34,7 +34,9 @@ export function subjectCount(period: Period, subject: StatSubject) {
 
 export type KnowledgePoint = { name: string; errors: number; rate: number }
 export type StudyTip = { point: string; mistake: string; method: string }
-export type Attribution = { source: '教材' | '错题' | '考试试卷'; label: string; percent: number }
+export type ErrorCause = '概念不清' | '审题不清' | '粗心失误' | '方法不当'
+export type CauseItem = { cause: ErrorCause; detail: string; percent: number }
+export type Attribution = { point: string; errors: number; causes: CauseItem[] }
 
 export type SubjectInsight = {
   summary: string
@@ -65,9 +67,24 @@ export const insights: Partial<Record<StatSubject, SubjectInsight>> = {
       },
     ],
     attributions: [
-      { source: '教材', label: '人教版七上 3.2 解一元一次方程', percent: 48 },
-      { source: '错题', label: '同类错题在 3 位同学中重复出现', percent: 32 },
-      { source: '考试试卷', label: '10 月月考第 18 题失分率 46%', percent: 20 },
+      {
+        point: '一元一次方程·移项',
+        errors: 9,
+        causes: [
+          { cause: '概念不清', detail: '不理解等式性质，移项不变号', percent: 56 },
+          { cause: '粗心失误', detail: '抄错符号或漏移部分项', percent: 33 },
+          { cause: '审题不清', detail: '未看清题目要求检验', percent: 11 },
+        ],
+      },
+      {
+        point: '四则混合运算顺序',
+        errors: 7,
+        causes: [
+          { cause: '方法不当', detail: '习惯从左到右，忽略先乘除', percent: 57 },
+          { cause: '粗心失误', detail: '中间结果计算错误', percent: 29 },
+          { cause: '概念不清', detail: '括号作用理解不到位', percent: 14 },
+        ],
+      },
     ],
   },
   英语: {
@@ -85,9 +102,22 @@ export const insights: Partial<Record<StatSubject, SubjectInsight>> = {
       },
     ],
     attributions: [
-      { source: '教材', label: '外研版 Module 7 过去时', percent: 52 },
-      { source: '错题', label: '近两周重复错题 5 道', percent: 30 },
-      { source: '考试试卷', label: '单元测第二大题失分较多', percent: 18 },
+      {
+        point: '不规则动词过去式',
+        errors: 6,
+        causes: [
+          { cause: '概念不清', detail: '不规则变化未记牢，套用 -ed', percent: 67 },
+          { cause: '粗心失误', detail: '拼写错误，如 thougth', percent: 33 },
+        ],
+      },
+      {
+        point: '时间介词 in/on/at',
+        errors: 4,
+        causes: [
+          { cause: '方法不当', detail: '凭语感选择，未按时间范围区分', percent: 50 },
+          { cause: '概念不清', detail: '具体某天上午用 on 不清楚', percent: 50 },
+        ],
+      },
     ],
   },
   语文: {
@@ -105,9 +135,23 @@ export const insights: Partial<Record<StatSubject, SubjectInsight>> = {
       },
     ],
     attributions: [
-      { source: '教材', label: '七上第三单元古诗四首', percent: 45 },
-      { source: '错题', label: '默写类错题占比最高', percent: 35 },
-      { source: '考试试卷', label: '期中模拟默写题失分率 38%', percent: 20 },
+      {
+        point: '古诗文默写易错字',
+        errors: 8,
+        causes: [
+          { cause: '概念不清', detail: '不理解字义，形近字混淆', percent: 50 },
+          { cause: '粗心失误', detail: '漏字、添字、顺序颠倒', percent: 38 },
+          { cause: '审题不清', detail: '情境默写对应句子选错', percent: 12 },
+        ],
+      },
+      {
+        point: '修辞手法辨析',
+        errors: 5,
+        causes: [
+          { cause: '概念不清', detail: '比喻与拟人特征区分不清', percent: 60 },
+          { cause: '方法不当', detail: '只看关键词“像”就判断比喻', percent: 40 },
+        ],
+      },
     ],
   },
   物理: {
@@ -125,9 +169,23 @@ export const insights: Partial<Record<StatSubject, SubjectInsight>> = {
       },
     ],
     attributions: [
-      { source: '教材', label: '八上 1.3 运动的快慢', percent: 50 },
-      { source: '错题', label: '计算类错题重复率较高', percent: 30 },
-      { source: '考试试卷', label: '周测第 12 题失分率 40%', percent: 20 },
+      {
+        point: '速度单位换算',
+        errors: 6,
+        causes: [
+          { cause: '方法不当', detail: '死记数字，乘除方向弄反', percent: 50 },
+          { cause: '粗心失误', detail: '结果漏写或写错单位', percent: 33 },
+          { cause: '审题不清', detail: '未注意题目要求的单位', percent: 17 },
+        ],
+      },
+      {
+        point: '平均速度计算',
+        errors: 5,
+        causes: [
+          { cause: '概念不清', detail: '用速度平均值代替总路程÷总时间', percent: 60 },
+          { cause: '审题不清', detail: '遗漏中途停留时间', percent: 40 },
+        ],
+      },
     ],
   },
   化学: {
@@ -145,9 +203,23 @@ export const insights: Partial<Record<StatSubject, SubjectInsight>> = {
       },
     ],
     attributions: [
-      { source: '教材', label: '九上第四单元 化学式与化合价', percent: 55 },
-      { source: '错题', label: '书写类错题集中出现', percent: 25 },
-      { source: '考试试卷', label: '单元测填空题失分较多', percent: 20 },
+      {
+        point: '化合价判断',
+        errors: 4,
+        causes: [
+          { cause: '概念不清', detail: '忽略化合价代数和为零', percent: 50 },
+          { cause: '方法不当', detail: '原子团化合价未整体看待', percent: 25 },
+          { cause: '粗心失误', detail: '正负号标错', percent: 25 },
+        ],
+      },
+      {
+        point: '化学式书写',
+        errors: 3,
+        causes: [
+          { cause: '方法不当', detail: '未用“正前负后、交叉约简”', percent: 67 },
+          { cause: '粗心失误', detail: '角标大小写不规范', percent: 33 },
+        ],
+      },
     ],
   },
 }
