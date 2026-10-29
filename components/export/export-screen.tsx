@@ -2,7 +2,7 @@
 
 import { ChevronDown, ChevronLeft, Minus, Plus, Sparkles, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import type { Question } from '@/lib/organize-data'
+import { students, type Question } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
 import { Mask, ProgressSheet, StudentSheet } from './export-sheets'
 
@@ -22,7 +22,7 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
   const [numbered, setNumbered] = useState(true)
   const [panelOpen, setPanelOpen] = useState(true)
   const [step, setStep] = useState<'students' | 'filename' | null>(initialStep)
-  const [targets, setTargets] = useState<string[]>([student])
+  const [targets, setTargets] = useState<string[]>(() => [student, ...students.filter((n) => n !== student).slice(0, 3)])
 
   const setLines = (id: string, delta: number) =>
     setItems((prev) =>
