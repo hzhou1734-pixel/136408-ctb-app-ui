@@ -53,6 +53,10 @@ const groups: PageGroup[] = [
       { href: '/grading?sheet=class', label: '切换班级' },
     ],
   },
+  {
+    title: '作文批阅',
+    pages: [{ href: '/essay', label: '作文列表' }],
+  },
 ]
 
 const totalPages = groups.reduce((sum, group) => sum + group.pages.length, 0)
