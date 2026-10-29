@@ -12,7 +12,7 @@ import {
   type ClearReport,
 } from '@/lib/report-data'
 
-function TrendChart({ points }: { points: number[] }) {
+function TrendChart({ points, labels }: { points: number[]; labels: string[] }) {
   const width = 320
   const height = 190
   const left = 28
@@ -30,7 +30,7 @@ function TrendChart({ points }: { points: number[] }) {
   const area = `${line} L${x(points.length - 1)},${y(0)} L${x(0)},${y(0)} Z`
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="h-auto w-full" role="img" aria-label={`各周错题数量：${points.join('、')}`}>
+    <svg viewBox={`0 0 ${width} ${height}`} className="h-auto w-full" role="img" aria-label={`错题数量趋势：${points.map((v, i) => `${labels[i]} ${v}`).join('、')}`}>
       <defs>
         <linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#1E88F5" stopOpacity="0.22" />
@@ -54,7 +54,7 @@ function TrendChart({ points }: { points: number[] }) {
             {v}
           </text>
           <text x={x(i)} y={height - 8} textAnchor="middle" fontSize="10" fill="#8A93A6">
-            第{i + 1}周
+            {labels[i]}
           </text>
         </g>
       ))}
@@ -102,7 +102,7 @@ export function ReportDetailScreen({ report }: { report: ClearReport }) {
               aria-selected={active}
               onClick={() => setPeriod(p)}
               className={`relative pb-2.5 pt-1 text-[15px] transition-colors ${
-                active ? 'font-bold text-[#1F2937]' : 'text-[#8A93A6]'
+                active ? 'font-bold text-[#1E88F5]' : 'text-[#8A93A6]'
               }`}
             >
               {p}
@@ -157,10 +157,10 @@ export function ReportDetailScreen({ report }: { report: ClearReport }) {
 
         <section className="mt-3 rounded-2xl bg-white p-4 shadow-[0_6px_18px_rgba(30,64,140,0.06)]">
           <h2 className="text-[15px] font-bold text-[#1F2937]">
-            {trend.month}月份【{subject}】错题数量趋势
+            {trend.title}
           </h2>
           <div className="mt-3">
-            <TrendChart points={trend.points} />
+            <TrendChart points={trend.points} labels={trend.labels} />
           </div>
         </section>
       </div>

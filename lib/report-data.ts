@@ -65,12 +65,24 @@ export function getSubjectStats(student: string, period: Period, subject: string
 
 export function getTrend(student: string, period: Period, subject: string) {
   const month = period === '上月' ? 9 : 10
-  const weeks = 5
-  if (student === '张小明' && month === 10 && subject === '数学') {
-    return { month, points: [4, 9, 2, 6, 8] }
+  const isMonthly = period === '本月' || period === '上月'
+
+  if (isMonthly) {
+    const months = Array.from({ length: 6 }, (_, i) => month - 5 + i)
+    const labels = months.map((m) => `${m}月`)
+    const points =
+      student === '张小明' && subject === '数学' && month === 10
+        ? [18, 24, 15, 21, 12, 9]
+        : months.map((m) => 6 + (hash(`${student}${m}${subject}m`) % 22))
+    return { title: `近6个月【${subject}】错题数量趋势`, labels, points }
   }
-  const points = Array.from({ length: weeks }, (_, i) => hash(`${student}${month}${subject}${i}`) % 11)
-  return { month, points }
+
+  const labels = Array.from({ length: 5 }, (_, i) => `第${i + 1}周`)
+  const points =
+    student === '张小明' && month === 10 && subject === '数学'
+      ? [4, 9, 2, 6, 8]
+      : labels.map((_, i) => hash(`${student}${month}${subject}${i}`) % 11)
+  return { title: `${month}月份【${subject}】错题数量趋势`, labels, points }
 }
 
 export function reportsForPeriod(period: Period) {
