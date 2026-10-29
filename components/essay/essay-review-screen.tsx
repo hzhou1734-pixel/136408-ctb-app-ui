@@ -3,8 +3,50 @@
 import { ChevronLeft, Plus, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { classes, studentsByClass } from '@/lib/grading-data'
+import { cn } from '@/lib/utils'
 
 const TITLE_MAX = 20
+
+function ChipGroup({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string
+  options: string[]
+  value: string
+  onChange: (v: string) => void
+}) {
+  return (
+    <div role="radiogroup" aria-label={label} className="mt-3 flex items-start gap-3">
+      <span className="w-8 shrink-0 pt-1.5 text-[14px] text-[#6B7280]">{label}</span>
+      <div className="flex flex-1 flex-wrap gap-2">
+        {options.map((opt) => {
+          const active = opt === value
+          return (
+            <button
+              key={opt}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              onClick={() => onChange(opt)}
+              className={cn(
+                'h-8 rounded-lg border px-3.5 text-[14px] transition-colors',
+                active
+                  ? 'border-[#1E88F5] bg-[#EAF4FF] font-medium text-[#1E88F5]'
+                  : 'border-transparent bg-[#F6F8FB] text-[#374151] hover:bg-[#EEF2F8]',
+              )}
+            >
+              {opt}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 const IMAGE_MAX = 4
 
 type UploadedImage = { id: string; url: string; name: string }
@@ -15,6 +57,8 @@ export function EssayReviewScreen() {
   const [images, setImages] = useState<UploadedImage[]>([])
   const [tip, setTip] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [klass, setKlass] = useState(classes[0])
+  const [student, setStudent] = useState('')
   const fileInput = useRef<HTMLInputElement>(null)
   const tipTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   const imagesRef = useRef(images)
@@ -53,9 +97,15 @@ export function EssayReviewScreen() {
     })
   }
 
+  function selectClass(next: string) {
+    setKlass(next)
+    setStudent('')
+  }
+
   function handleSubmit() {
     if (!title.trim()) return showTip('请输入作文标题')
     if (images.length === 0) return showTip('请上传作文图片')
+    if (!student) return showTip('请选择学生')
     setSubmitting(true)
     showTip('提交成功，正在批改')
     setTimeout(() => router.push('/essay'), 1200)
@@ -141,6 +191,12 @@ export function EssayReviewScreen() {
               e.target.value = ''
             }}
           />
+
+          <div className="mt-5 border-t border-[#EEF1F6] pt-4">
+            <h2 className="text-[17px] font-medium text-[#1F2937]">班级-学生</h2>
+            <ChipGroup label="班级" options={classes} value={klass} onChange={selectClass} />
+            <ChipGroup label="学生" options={studentsByClass[klass] ?? []} value={student} onChange={setStudent} />
+          </div>
         </section>
 
         <button
