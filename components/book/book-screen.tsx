@@ -1,7 +1,7 @@
 'use client'
 
 import { ChevronDown, CircleCheck, Download, ListFilter, Search, Trash2 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 type BookType = 'origin' | 'ai' | 'bank'
@@ -59,6 +59,33 @@ export function BookScreen() {
   const [keyword, setKeyword] = useState('')
   const [books, setBooks] = useState(initialBooks)
   const [toast, setToast] = useState('')
+  const [taskTotal, setTaskTotal] = useState(2)
+  const [counterPulse, setCounterPulse] = useState(0)
+  const [flyers, setFlyers] = useState<Flight[]>([])
+  const containerRef = useRef<HTMLDivElement>(null)
+  const counterRef = useRef<HTMLSpanElement>(null)
+
+  function launchPractice(source: HTMLElement) {
+    const container = containerRef.current
+    const counter = counterRef.current
+    if (!container || !counter) return
+    const box = container.getBoundingClientRect()
+    const scale = box.width / container.offsetWidth || 1
+    const center = (el: HTMLElement) => {
+      const rect = el.getBoundingClientRect()
+      return {
+        x: (rect.left + rect.width / 2 - box.left) / scale,
+        y: (rect.top + rect.height / 2 - box.top) / scale,
+      }
+    }
+    setFlyers((list) => [...list, { id: Date.now() + Math.random(), from: center(source), to: center(counter) }])
+  }
+
+  function landFlight(id: number) {
+    setFlyers((list) => list.filter((item) => item.id !== id))
+    setTaskTotal((total) => total + 1)
+    setCounterPulse((n) => n + 1)
+  }
 
   const visibleBooks = useMemo(() => {
     const query = keyword.trim()
@@ -74,11 +101,17 @@ export function BookScreen() {
   }
 
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col">
+    <div ref={containerRef} className="relative flex min-h-0 flex-1 flex-col">
   <header className="relative flex h-11 shrink-0 items-center justify-center">
   <h1 className="text-[17px] font-bold text-[#1F2937]">错题本</h1>
   <p role="status" className="absolute right-4 top-1/2 flex -translate-y-1/2 flex-col items-end text-right leading-tight">
-  <span className="text-[13px] font-semibold tabular-nums text-[#2F80ED]">0/3</span>
+  <span
+    key={counterPulse}
+    ref={counterRef}
+    className={cn('text-[13px] font-semibold tabular-nums text-[#2F80ED]', counterPulse > 0 && 'counter-pulse')}
+  >
+    0/{taskTotal}
+  </span>
   <span className="flex items-end text-[11px] text-[#6B7280]">
     AI解析生成中
     <span aria-hidden="true" className="inline-flex w-[1.2em] justify-start">
@@ -247,7 +280,7 @@ export function BookScreen() {
                       <ResolveStatus total={book.total} solved={book.solved} />
                     </div>
                     <div className="grid shrink-0 grid-cols-4 gap-1.5">
-                    <IconAction label="举一反三" onClick={() => notify('已生成举一反三练习')}>
+                    <IconAction label="举一反三" onClick={(event) => launchPractice(event.currentTarget)}>
                       <BulbIcon className={book.practiced ? 'text-[#F59E0B]' : 'text-[#4B5563]'} />
                     </IconAction>
                     <IconAction label="下载" onClick={() => notify('开始下载 PDF')}>
@@ -273,6 +306,10 @@ export function BookScreen() {
           </ul>
         </section>
       </div>
+
+      {flyers.map((flight) => (
+        <FlyingBulb key={flight.id} flight={flight} onLand={() => landFlight(flight.id)} />
+      ))}
 
       <div role="status" aria-live="polite" className="pointer-events-none absolute inset-x-0 top-1/2 z-40 flex justify-center">
         {toast && (
@@ -319,7 +356,52 @@ function ShareIcon({ className }: { className?: string }) {
   )
 }
 
-function IconAction({ label, onClick, children }: { label: string; onClick: () => void; children: React.ReactNode }) {
+type Flight = { id: number; from: { x: number; y: number }; to: { x: number; y: number } }
+
+function FlyingBulb({ flight, onLand }: { flight: Flight; onLand: () => void }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const landRef = useRef(onLand)
+  landRef.current = onLand
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const { from, to } = flight
+    const peakX = from.x + (to.x - from.x) * 0.35
+    const peakY = Math.min(from.y, to.y) - 60
+    const animation = el.animate(
+      [
+        { transform: `translate(${from.x}px, ${from.y}px) translate(-50%, -50%) scale(0.6)`, opacity: 0 },
+        { transform: `translate(${from.x}px, ${from.y - 16}px) translate(-50%, -50%) scale(1.15)`, opacity: 1, offset: 0.12 },
+        { transform: `translate(${peakX}px, ${peakY}px) translate(-50%, -50%) scale(1)`, opacity: 1, offset: 0.55 },
+        { transform: `translate(${to.x}px, ${to.y}px) translate(-50%, -50%) scale(0.35)`, opacity: 0.2 },
+      ],
+      { duration: 850, easing: 'cubic-bezier(0.45, 0, 0.25, 1)', fill: 'forwards' },
+    )
+    animation.onfinish = () => landRef.current()
+    return () => animation.cancel()
+  }, [flight])
+
+  return (
+    <span
+      ref={ref}
+      aria-hidden="true"
+      className="pointer-events-none absolute left-0 top-0 z-50 flex size-8 items-center justify-center rounded-full bg-[#1E88F5] text-white opacity-0 shadow-[0_6px_16px_rgba(30,136,245,0.45)]"
+    >
+      <BulbIcon className="size-[17px]" />
+    </span>
+  )
+}
+
+function IconAction({
+  label,
+  onClick,
+  children,
+}: {
+  label: string
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  children: React.ReactNode
+}) {
   return (
     <button
       type="button"

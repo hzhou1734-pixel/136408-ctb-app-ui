@@ -172,8 +172,22 @@
   animation: loading-dot 1.4s infinite;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .loading-dot {
+  @keyframes counter-pulse {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.45); color: #f59e0b; }
+  100% { transform: scale(1); }
+  }
+
+  .counter-pulse {
+  display: inline-block;
+  animation: counter-pulse 0.45s ease-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+  .counter-pulse {
+  animation: none;
+  }
+.loading-dot {
     animation: none;
     opacity: 1;
   }
