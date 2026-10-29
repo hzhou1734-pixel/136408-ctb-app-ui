@@ -35,13 +35,16 @@ export function StudentSheet({
   onConfirm,
   title = '选择学生，导出错题本',
   subtitle,
+  answerOption = false,
 }: {
   initial: string[]
-  onConfirm: (selected: string[]) => void
+  onConfirm: (selected: string[], withAnswer: boolean) => void
   title?: string
   subtitle?: React.ReactNode
+  answerOption?: boolean
 }) {
   const [selected, setSelected] = useState<string[]>(initial)
+  const [withAnswer, setWithAnswer] = useState(true)
   const toggle = (name: string) =>
     setSelected((prev) => (prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]))
 
@@ -49,6 +52,38 @@ export function StudentSheet({
     <Sheet label={title}>
       <h2 className="text-center text-[16px] font-bold text-[#1F2937]">{title}</h2>
       {subtitle && <p className="mt-1 text-center text-[12px] text-[#8A93A6]">{subtitle}</p>}
+      {answerOption && (
+        <div role="radiogroup" aria-label="是否含答案" className="mt-4 flex items-center gap-3">
+          <span aria-hidden="true" className="shrink-0 text-[14px] font-medium text-[#374151]">
+            是否含答案：
+          </span>
+          <div className="flex flex-1 gap-2">
+            {[
+              { value: true, label: '含答案' },
+              { value: false, label: '不含答案' },
+            ].map((opt) => {
+              const active = withAnswer === opt.value
+              return (
+                <button
+                  key={opt.label}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => setWithAnswer(opt.value)}
+                  className={cn(
+                    'h-9 flex-1 rounded-full border text-[13px] font-medium transition-colors',
+                    active
+                      ? 'border-[#1E88F5] bg-[#EAF4FF] text-[#1E88F5]'
+                      : 'border-[#E3E7EF] bg-[#F7F8FC] text-[#374151] hover:border-[#C9D6EA]',
+                  )}
+                >
+                  {opt.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
       <div className="mt-4 grid max-h-[260px] grid-cols-3 gap-2.5 overflow-y-auto [scrollbar-width:none]">
         {students.map((name) => {
           const active = selected.includes(name)
@@ -82,7 +117,7 @@ export function StudentSheet({
       <button
         type="button"
         disabled={selected.length === 0}
-        onClick={() => onConfirm(selected)}
+        onClick={() => onConfirm(selected, withAnswer)}
         className="mt-5 h-12 w-full rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
       >
         {'确认导出（'}

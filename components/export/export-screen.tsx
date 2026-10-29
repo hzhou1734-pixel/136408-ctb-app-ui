@@ -174,6 +174,7 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
       {step === 'students' && (
         <StudentSheet
           initial={targets}
+          answerOption={initialPush !== null}
           onConfirm={(selected) => {
             setTargets(selected)
             setStep('filename')
