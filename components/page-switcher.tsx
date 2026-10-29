@@ -14,15 +14,20 @@ const groups: PageGroup[] = [
   },
   {
     title: '错题采集',
-    pages: [{ href: '/capture', label: '错题拍收' }],
+    pages: [
+      { href: '/capture', label: '错题拍收' },
+      { href: '/capture?mode=cross', label: '跨页拍题' },
+    ],
   },
   {
     title: '错题整理与导出',
     pages: [
       { href: '/organize', label: '错题整理' },
+      { href: '/organize?sheet=filter', label: '筛选弹窗' },
       { href: '/export', label: '设置及排版' },
       { href: '/export?sheet=students', label: '选择学生导出' },
       { href: '/export?sheet=filename', label: '导出PDF' },
+      { href: '/export?sheet=done', label: '导出成功' },
     ],
   },
 ]
@@ -39,8 +44,10 @@ export function PageSwitcher() {
 
 function PageSwitcherContent() {
   const pathname = usePathname()
-  const sheet = useSearchParams().get('sheet')
-  const current = sheet ? `${pathname}?sheet=${sheet}` : pathname
+  const params = useSearchParams()
+  const sheet = params.get('sheet')
+  const mode = params.get('mode')
+  const current = sheet ? `${pathname}?sheet=${sheet}` : mode ? `${pathname}?mode=${mode}` : pathname
 
   return (
     <aside

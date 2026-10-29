@@ -13,8 +13,8 @@ const modes: { value: Mode; label: string }[] = [
   { value: 'cross', label: '跨页拍题' },
 ]
 
-export function CaptureScreen() {
-  const [mode, setMode] = useState<Mode>('whole')
+export function CaptureScreen({ initialMode = 'whole' }: { initialMode?: Mode }) {
+  const [mode, setMode] = useState<Mode>(initialMode)
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">

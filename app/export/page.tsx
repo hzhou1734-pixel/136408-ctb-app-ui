@@ -27,7 +27,7 @@ export default async function ExportPage({
       <div className="relative flex h-dvh w-full max-w-[400px] flex-col overflow-hidden bg-[linear-gradient(180deg,#E6EDFC_0%,#ECF0FC_20%,#EFF1FD_100%)] sm:h-[860px] sm:rounded-[44px] sm:border-[10px] sm:border-[#1E2433] sm:shadow-2xl">
         <StatusBar />
         <ExportScreen student={student} subject={subject} date="2026-10-17" questions={questions}
-          initialStep={params.sheet === 'students' || params.sheet === 'filename' ? params.sheet : null}
+          initialStep={params.sheet === 'students' || params.sheet === 'filename' || params.sheet === 'done' ? params.sheet : null}
           key={params.sheet ?? 'none'}
         />
       </div>

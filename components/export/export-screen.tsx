@@ -13,7 +13,7 @@ type Props = {
   subject: string
   date: string
   questions: Question[]
-  initialStep?: 'students' | 'filename' | null
+  initialStep?: 'students' | 'filename' | 'done' | null
 }
 
 export function ExportScreen({ student, subject, date, questions, initialStep = null }: Props) {

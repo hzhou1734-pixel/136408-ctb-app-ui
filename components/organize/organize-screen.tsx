@@ -11,7 +11,7 @@ import { SelectCircle } from './select-circle'
 
 const classes = ['星辰班', '启明班', '晨曦班']
 
-export function OrganizeScreen() {
+export function OrganizeScreen({ initialFilterOpen = false }: { initialFilterOpen?: boolean }) {
   const [className, setClassName] = useState(classes[0])
   const [classOpen, setClassOpen] = useState(false)
   const [subject, setSubject] = useState<Subject>('数学')
@@ -22,7 +22,7 @@ export function OrganizeScreen() {
 
   const router = useRouter()
   const [filters, setFilters] = useState<Filters>(emptyFilters)
-  const [filterOpen, setFilterOpen] = useState(false)
+  const [filterOpen, setFilterOpen] = useState(initialFilterOpen)
   const filterCount = countFilters(filters)
 
   const toggleResolved = (id: string, current: boolean) =>

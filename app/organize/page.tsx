@@ -7,14 +7,15 @@ export const metadata: Metadata = {
   description: '按班级、科目、学生整理错题并导出错题本',
 }
 
-export default function OrganizePage() {
+export default async function OrganizePage({ searchParams }: { searchParams: Promise<{ sheet?: string }> }) {
+  const { sheet } = await searchParams
   return (
     <div className="flex min-h-dvh items-center justify-center bg-[#E9ECF3] sm:py-8">
       <div className="relative flex h-dvh w-full max-w-[400px] flex-col overflow-hidden bg-[linear-gradient(180deg,#E6EDFC_0%,#ECF0FC_20%,#EFF1FD_100%)] sm:h-[860px] sm:rounded-[44px] sm:border-[10px] sm:border-[#1E2433] sm:shadow-2xl">
         <div aria-hidden="true" className="pointer-events-none absolute -right-20 top-40 size-64 rounded-full bg-[#CDE6FF]/60 blur-3xl" />
         <div aria-hidden="true" className="pointer-events-none absolute -left-24 top-[420px] size-56 rounded-full bg-[#CCE6FF]/70 blur-3xl" />
         <StatusBar />
-        <OrganizeScreen />
+        <OrganizeScreen initialFilterOpen={sheet === 'filter'} key={sheet ?? 'none'} />
       </div>
     </div>
   )
