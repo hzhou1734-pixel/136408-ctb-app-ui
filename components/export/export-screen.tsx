@@ -14,9 +14,15 @@ type Props = {
   date: string
   questions: Question[]
   initialStep?: 'students' | 'filename' | 'done' | null
+  initialPush?: PushMode | null
 }
 
-export function ExportScreen({ student, subject, date, questions, initialStep = null }: Props) {
+type PushMode = 'bank' | 'ai'
+const pushLabels: Record<PushMode, string> = { bank: '题库推送', ai: 'AI推送' }
+
+export function ExportScreen({ student, subject, date, questions, initialStep = null, initialPush = null }: Props) {
+  const [push, setPush] = useState<PushMode | null>(initialPush)
+  const [pushedCount, setPushedCount] = useState(initialPush ? 4 : 0)
   const [items, setItems] = useState(() => questions.map((q) => ({ ...q, lines: 4 })))
   const [layout, setLayout] = useState<Layout>('double')
   const [numbered, setNumbered] = useState(true)
@@ -34,8 +40,8 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
     <div className="relative flex min-h-0 flex-1 flex-col">
       <header className="relative flex h-12 shrink-0 items-center justify-center px-4">
         <a
-          href="/organize"
-          aria-label="返回错题整理"
+          href={initialPush ? '/practice' : '/organize'}
+          aria-label={initialPush ? '返回举一反三' : '返回错题整理'}
           className="absolute left-3 flex size-9 items-center justify-center rounded-full text-[#1F2937] transition-colors hover:bg-white/60"
         >
           <ChevronLeft className="size-6" strokeWidth={2.2} />
@@ -160,7 +166,10 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
         <button
           type="button"
           disabled={items.length === 0}
-          onClick={() => setStep('students')}
+          onClick={() => {
+            setPush(null)
+            setStep('students')
+          }}
           className="mt-5 h-12 w-full rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
         >
           导出生成PDF文件
@@ -168,7 +177,38 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
       </section>
 
       {step && <Mask onClick={() => setStep(null)} />}
-      {step === 'students' && (
+      {step === 'students' && push && (
+        <StudentSheet
+          title={`选择学生，${pushLabels[push]}举一反三`}
+          subtitle={
+            push === 'ai'
+              ? `将基于这 ${items.length} 道题目由 AI 生成同类题，推送给所选学生`
+              : `将从题库匹配这 ${items.length} 道题目的同类题，推送给所选学生`
+          }
+          initial={[]}
+          onConfirm={(selected) => {
+            setPushedCount(selected.length)
+            setStep('done')
+          }}
+        />
+      )}
+      {step === 'done' && push && (
+        <SuccessDialog
+          count={pushedCount}
+          onBack={() => setStep(null)}
+          title="推送成功"
+          message={
+            <>
+              {`已通过${pushLabels[push]}将 `}
+              <span className="font-bold text-[#1E88F5]">{items.length}</span>
+              {' 道题目的举一反三练习推送给 '}
+              <span className="font-bold text-[#1E88F5]">{pushedCount}</span>
+              {' 位同学！'}
+            </>
+          }
+        />
+      )}
+      {step === 'students' && !push && (
         <StudentSheet
           initial={targets}
           onConfirm={(selected) => {
@@ -180,7 +220,7 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
       {step === 'filename' && (
         <ProgressSheet names={targets} onComplete={() => setStep('done')} />
       )}
-      {step === 'done' && <SuccessDialog count={targets.length} onBack={() => setStep(null)} />}
+      {step === 'done' && !push && <SuccessDialog count={targets.length} onBack={() => setStep(null)} />}
     </div>
   )
 }

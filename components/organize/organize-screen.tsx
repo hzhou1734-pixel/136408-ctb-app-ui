@@ -102,6 +102,16 @@ export function OrganizeScreen({
 
   const count = selected.size
 
+  const openExport = (push?: PushMode) => {
+    const params = new URLSearchParams({
+      student: student ?? students[0],
+      subject,
+      ids: [...selected].join(','),
+    })
+    if (push) params.set('sheet', push)
+    router.push(`/export?${params}`)
+  }
+
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
       <header className="relative flex h-12 shrink-0 items-center justify-center px-4">
@@ -293,10 +303,7 @@ export function OrganizeScreen({
                 <button
                   type="button"
                   disabled={count === 0}
-                  onClick={() => {
-                    setPushMode('bank')
-                    setAssignStep('students')
-                  }}
+                  onClick={() => openExport('bank')}
                   className="pointer-events-auto h-11 min-w-0 flex-1 whitespace-nowrap rounded-full border border-[#1E88F5] bg-white px-1 text-[13px] tracking-tight font-bold text-[#1E88F5] transition-opacity disabled:opacity-50"
                 >
                   题库推送（已选 {count}）
@@ -304,10 +311,7 @@ export function OrganizeScreen({
                 <button
                   type="button"
                   disabled={count === 0}
-                  onClick={() => {
-                    setPushMode('ai')
-                    setAssignStep('students')
-                  }}
+                  onClick={() => openExport('ai')}
                   className="pointer-events-auto h-11 min-w-0 flex-1 whitespace-nowrap rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-1 text-[13px] tracking-tight font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
                 >
                   AI推送（已选 {count}）
@@ -326,14 +330,7 @@ export function OrganizeScreen({
             <button
               type="button"
               disabled={count === 0}
-              onClick={() => {
-                const params = new URLSearchParams({
-                  student: student ?? students[0],
-                  subject,
-                  ids: [...selected].join(','),
-                })
-                router.push(`/export?${params}`)
-              }}
+              onClick={() => openExport()}
               className="pointer-events-auto h-11 min-w-0 flex-1 truncate rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-4 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
             >
               导出错题本（已选 {count}）

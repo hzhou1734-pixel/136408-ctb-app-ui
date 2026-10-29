@@ -11,9 +11,19 @@ export const metadata: Metadata = {
 export default async function ExportPage({
   searchParams,
 }: {
-  searchParams: Promise<{ student?: string; subject?: string; ids?: string; sheet?: string }>
+  searchParams: Promise<{ student?: string; subject?: string; ids?: string; sheet?: string; push?: string }>
 }) {
   const params = await searchParams
+  const sheet = params.sheet
+  const push = sheet === 'bank' || sheet === 'ai' ? sheet : sheet === 'pushed' ? (params.push === 'ai' ? 'ai' : 'bank') : null
+  const initialStep =
+    sheet === 'students' || sheet === 'filename' || sheet === 'done'
+      ? sheet
+      : sheet === 'bank' || sheet === 'ai'
+        ? 'students'
+        : sheet === 'pushed'
+          ? 'done'
+          : null
   const student: Student = students.includes(params.student as Student) ? (params.student as Student) : students[0]
   const subject: Subject = subjects.includes(params.subject as Subject) ? (params.subject as Subject) : '数学'
 
@@ -27,8 +37,9 @@ export default async function ExportPage({
       <div className="relative flex h-dvh w-full max-w-[400px] flex-col overflow-hidden bg-[linear-gradient(180deg,#E6EDFC_0%,#ECF0FC_20%,#EFF1FD_100%)] sm:h-[860px] sm:rounded-[44px] sm:border-[10px] sm:border-[#1E2433] sm:shadow-2xl">
         <StatusBar />
         <ExportScreen student={student} subject={subject} date="2026-10-17" questions={questions}
-          initialStep={params.sheet === 'students' || params.sheet === 'filename' || params.sheet === 'done' ? params.sheet : null}
-          key={params.sheet ?? 'none'}
+          initialStep={initialStep}
+          initialPush={push}
+          key={sheet ?? 'none'}
         />
       </div>
     </div>

@@ -36,9 +36,9 @@ const groups: PageGroup[] = [
     title: '举一反三',
     pages: [
       { href: '/practice', label: '举一反三' },
-      { href: '/practice?sheet=bank', label: '题库推送' },
-      { href: '/practice?sheet=ai', label: 'AI推送' },
-      { href: '/practice?sheet=pushed', label: '推送成功' },
+      { href: '/export?sheet=bank', label: '题库推送' },
+      { href: '/export?sheet=ai', label: 'AI推送' },
+      { href: '/export?sheet=pushed', label: '推送成功' },
     ],
   },
 ]
