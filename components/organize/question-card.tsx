@@ -26,7 +26,7 @@ export function QuestionCard({ question, selected, onToggle, onDelete, resolved,
       className={cn(
         'relative rounded-[14px] px-3 pb-3 pt-2.5 transition-all',
         selected
-          ? 'bg-[#EEF6FF] shadow-[0_6px_16px_rgba(30,136,245,0.16)] ring-2 ring-[#1E88F5]'
+          ? 'bg-[#F3F8FF] shadow-[0_6px_16px_rgba(30,136,245,0.12)] ring-1 ring-[#1E88F5]/40'
           : 'bg-white shadow-[0_4px_12px_rgba(70,90,160,0.06)] ring-1 ring-transparent',
       )}
     >

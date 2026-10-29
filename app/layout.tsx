@@ -1,5 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
+import { PageSwitcher } from '@/components/page-switcher'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -37,8 +38,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body className="antialiased">
-        {children}
+      <body className="bg-[#E9ECF3] antialiased">
+        <div className="lg:flex lg:min-h-dvh lg:items-start lg:justify-center lg:gap-16 lg:px-10">
+          <div className="lg:sticky lg:top-0 lg:w-[400px] lg:shrink-0">{children}</div>
+          <PageSwitcher />
+        </div>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
