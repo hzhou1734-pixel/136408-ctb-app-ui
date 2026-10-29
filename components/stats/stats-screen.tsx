@@ -283,10 +283,6 @@ export function StatsScreen({ initialFilterOpen = false }: { initialFilterOpen?:
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 flex items-center gap-1 text-[11px] text-[#A0A8B8]">
-                <BookOpen className="size-3" aria-hidden="true" />
-                分析依据：AI教材 · 班级错题 · 学校考试试卷
-              </p>
             </Card>
           </div>
         ) : (
