@@ -6,7 +6,7 @@ import { getReport } from '@/lib/report-data'
 
 export const metadata: Metadata = {
   title: '错题清零报告详情 - Max AI错题宝',
-  description: '分科目查看错题数量、原题重练与举一反三解决情况及 AI 结论',
+  description: '分科目查看错题数量、原题重练与举一反三掌握情况及 AI 结论',
 }
 
 export default async function ReportDetailPage({ params }: { params: Promise<{ id: string }> }) {

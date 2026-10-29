@@ -4,7 +4,7 @@ export type QuestionType = (typeof questionTypes)[number]
 export const difficulties = ['简单', '中等', '困难', '超难'] as const
 export type Difficulty = (typeof difficulties)[number]
 
-export const resolveStatuses = ['待解决', '已解决'] as const
+export const resolveStatuses = ['待掌握', '已掌握'] as const
 export type ResolveStatus = (typeof resolveStatuses)[number]
 
 export type Question = {

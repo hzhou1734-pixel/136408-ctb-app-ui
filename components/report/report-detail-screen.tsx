@@ -73,7 +73,7 @@ export function ReportDetailScreen({ report }: { report: ClearReport }) {
 
   const items = [
     { label: `${periodWord}错题数量`, value: stats.total, color: '#1F2937' },
-    { label: '原题重练解决', value: stats.retrained, color: '#1E88F5' },
+    { label: '原题重练掌握', value: stats.retrained, color: '#1E88F5' },
     { label: '举一反三强化', value: stats.extended, color: '#7B61FF' },
     { label: '剩余错题数量', value: stats.remaining, color: '#E5533D' },
   ]

@@ -106,7 +106,7 @@ export function FilterSheet({ value, onApply, onClose }: Props) {
         </div>
 
         <OptionGroup
-          title="解决状态"
+          title="掌握状态"
           options={resolveStatuses}
           selected={draft.statuses}
           onToggle={(s) => setDraft((d) => ({ ...d, statuses: toggleItem(d.statuses, s) }))}

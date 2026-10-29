@@ -64,7 +64,7 @@ export function OrganizeScreen({
             if (filters.difficulties.length && !filters.difficulties.includes(q.difficulty)) return false
             if (filters.statuses.length) {
               const resolved = resolvedOverrides[q.id] ?? q.resolved
-              if (!filters.statuses.includes(resolved ? '已解决' : '待解决')) return false
+              if (!filters.statuses.includes(resolved ? '已掌握' : '待掌握')) return false
             }
             return true
           }),

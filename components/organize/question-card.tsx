@@ -76,7 +76,7 @@ export function QuestionCard({ question, selected, onToggle, onDelete, resolved,
           <button
             type="button"
             aria-pressed={resolved}
-            aria-label={`第 ${question.no} 题状态：${resolved ? '已解决' : '待解决'}，点击切换`}
+            aria-label={`第 ${question.no} 题状态：${resolved ? '已掌握' : '待掌握'}，点击切换`}
             onClick={onToggleResolved}
             className={cn(
               'pointer-events-auto inline-flex h-6 items-center gap-1 rounded-full px-2.5 text-[11px] font-semibold ring-1 transition-colors',
@@ -89,7 +89,7 @@ export function QuestionCard({ question, selected, onToggle, onDelete, resolved,
               aria-hidden="true"
               className={cn('size-1.5 rounded-full', resolved ? 'bg-[#16A34A]' : 'bg-[#F59E0B]')}
             />
-            {resolved ? '已解决' : '待解决'}
+            {resolved ? '已掌握' : '待掌握'}
           </button>
         )}
       </div>

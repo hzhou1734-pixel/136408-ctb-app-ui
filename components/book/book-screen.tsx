@@ -327,13 +327,13 @@ function ResolveStatus({ total, solved }: { total: number; solved: number }) {
     return (
       <span className="flex min-w-0 items-center gap-1 rounded-full bg-[#E8F8F0] px-2 py-0.5 text-[11px] font-medium text-[#16A34A]">
         <CircleCheck className="size-3 shrink-0" strokeWidth={2.4} aria-hidden="true" />
-        <span className="truncate">已全部解决</span>
+        <span className="truncate">已全部掌握</span>
       </span>
     )
   }
   return (
     <span className="min-w-0 truncate rounded-full bg-[#F3F5F9] px-2 py-0.5 text-[11px] tabular-nums text-[#8A93A6]">
-      已解决 {solved}/{total}
+      已掌握 {solved}/{total}
     </span>
   )
 }
