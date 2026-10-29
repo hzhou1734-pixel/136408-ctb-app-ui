@@ -13,10 +13,6 @@ const groups: PageGroup[] = [
     pages: [{ href: '/', label: '首页' }],
   },
   {
-    title: '底部菜单',
-    pages: [{ href: '/book', label: '错题本' }],
-  },
-  {
     title: '错题采集',
     pages: [
       { href: '/capture', label: '错题拍收' },
@@ -79,9 +75,16 @@ const groups: PageGroup[] = [
       { href: '/report/r1', label: '清零报告详情' },
     ],
   },
+  {
+    title: '底部菜单',
+    pages: [{ href: '/book', label: '错题本' }],
+  },
 ]
 
 const totalPages = groups.reduce((sum, group) => sum + group.pages.length, 0)
+
+const rightColumnStart = groups.findIndex((group) => group.title === '错题统计')
+const columns = [groups.slice(0, rightColumnStart), groups.slice(rightColumnStart)]
 
 export function PageSwitcher() {
   return (
@@ -109,7 +112,7 @@ function PageSwitcherContent() {
   return (
     <aside
       aria-label="全部页面"
-      className="hidden w-[520px] shrink-0 flex-col gap-8 py-10 lg:flex"
+      className="hidden w-[520px] shrink-0 flex-col gap-8 py-10 lg:flex xl:w-auto"
     >
       <header className="flex flex-col items-start gap-4">
         <span className="rounded-full bg-[#DCEBFF] px-3.5 py-1.5 text-sm font-semibold text-[#1E5FB8]">
@@ -121,8 +124,10 @@ function PageSwitcherContent() {
         </p>
       </header>
 
-      <nav aria-label="页面目录" className="flex flex-col gap-7">
-        {groups.map((group) => (
+      <nav aria-label="页面目录" className="flex flex-col gap-7 xl:flex-row xl:items-start xl:gap-12">
+        {columns.map((column, columnIndex) => (
+          <div key={columnIndex} className="flex flex-col gap-7 xl:w-[520px] xl:shrink-0">
+        {column.map((group) => (
           <section key={group.title} className="flex flex-col gap-3.5">
             <h2 className="flex items-center gap-2.5 text-lg font-bold text-[#1E2433]">
               <span aria-hidden="true" className="h-4 w-1 rounded-full bg-[#1E88F2]" />
@@ -150,6 +155,8 @@ function PageSwitcherContent() {
               })}
             </ul>
           </section>
+        ))}
+          </div>
         ))}
       </nav>
     </aside>
