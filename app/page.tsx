@@ -1,47 +1,27 @@
+import { BottomNav } from '@/components/home/bottom-nav'
+import { HeroCarousel } from '@/components/home/hero-carousel'
+import { HomeHeader } from '@/components/home/home-header'
+import { NoticeBar } from '@/components/home/notice-bar'
+import { OtherSection } from '@/components/home/other-section'
+import { StatusBar } from '@/components/home/status-bar'
+import { ToolboxGrid } from '@/components/home/toolbox-grid'
+
 export default function Page() {
   return (
-    <main
-      style={{
-        colorScheme: 'light dark',
-        position: 'relative',
-        display: 'flex',
-        minHeight: '100vh',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'light-dark(#fff, #000)',
-        color: 'light-dark(#000, #fff)',
-      }}
-    >
-      <svg
-        aria-hidden="true"
-        style={{ width: 80, height: 80 }}
-        width={80}
-        height={80}
-        fill="none"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      >
-        <path
-          d="M14.2 14.2H17V6.9375C17 4.76288 15.2371 3 13.0625 3H5.8V5.8M14.2 14.2V7.79063L7.79062 14.2H14.2ZM14.2 14.2V17H6.9375C4.76288 17 3 15.2371 3 13.0625V5.8H5.8M5.8 5.8V12.2313L12.2313 5.8H5.8Z"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <p
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 'calc(50% + 56px)',
-          transform: 'translateX(-50%)',
-          whiteSpace: 'nowrap',
-          fontSize: '14px',
-          fontWeight: 500,
-          color: 'light-dark(#71717a, #a1a1aa)',
-        }}
-      >
-        Your v0 generation will show here.
-      </p>
-    </main>
+    <div className="flex min-h-dvh items-center justify-center bg-[#E9ECF3] sm:py-8">
+      <div className="relative flex h-dvh w-full max-w-[400px] flex-col overflow-hidden bg-[linear-gradient(180deg,#E6EDFC_0%,#ECF0FC_20%,#EFF1FD_100%)] sm:h-[860px] sm:rounded-[44px] sm:border-[10px] sm:border-[#1E2433] sm:shadow-2xl">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-20 top-40 size-64 rounded-full bg-[#CDE6FF]/60 blur-3xl" />
+        <div aria-hidden="true" className="pointer-events-none absolute -left-24 top-[420px] size-56 rounded-full bg-[#CCE6FF]/70 blur-3xl" />
+        <StatusBar />
+        <main className="relative flex flex-1 flex-col gap-6 overflow-y-auto pb-28 [scrollbar-width:none]">
+          <HomeHeader />
+          <HeroCarousel />
+          <NoticeBar />
+          <ToolboxGrid />
+          <OtherSection />
+        </main>
+        <BottomNav />
+      </div>
+    </div>
   )
 }
