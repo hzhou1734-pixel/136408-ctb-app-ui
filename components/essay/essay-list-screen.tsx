@@ -119,14 +119,13 @@ export function EssayListScreen({ initialClassOpen = false }: { initialClassOpen
         )}
       </div>
 
-      <button
-        type="button"
+      <a
+        href="/essay/new"
         aria-label="新建作文批阅"
-        onClick={() => showTip('打开相机拍摄')}
         className="absolute bottom-8 right-5 flex size-14 items-center justify-center rounded-full bg-[linear-gradient(135deg,#3DA9FF_0%,#1E88F2_100%)] text-white shadow-[0_8px_20px_rgba(30,136,242,0.35)] transition-transform active:scale-95"
       >
         <Plus className="size-7" strokeWidth={2.4} />
-      </button>
+      </a>
 
       <div
         role="status"
