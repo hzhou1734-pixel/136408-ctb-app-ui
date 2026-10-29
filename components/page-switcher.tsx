@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 
-type PageLink = { href: string; label: string }
+type PageLink = { href: string; label: string; newRow?: boolean }
 type PageGroup = { title: string; pages: PageLink[] }
 
 const groups: PageGroup[] = [
@@ -80,7 +80,7 @@ const groups: PageGroup[] = [
     pages: [
       { href: '/book', label: '错题本' },
       { href: '/book/0-0-1', label: '错题详情' },
-      { href: '/apps', label: '应用' },
+      { href: '/apps', label: '应用', newRow: true },
     ],
   },
 ]
@@ -142,7 +142,7 @@ function PageSwitcherContent() {
               {group.pages.map((page) => {
                 const active = current === page.href
                 return (
-                  <li key={page.href}>
+                  <li key={page.href} className={page.newRow ? 'basis-full' : undefined}>
                     <Link
                       href={page.href}
                       aria-current={active ? 'page' : undefined}
