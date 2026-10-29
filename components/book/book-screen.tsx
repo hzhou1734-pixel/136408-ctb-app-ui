@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronDown, Download, Forward, Lightbulb, ListFilter, Search, Trash2 } from 'lucide-react'
+import { ChevronDown, Download, ListFilter, Search, Trash2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -19,9 +19,9 @@ const subjectCounts: Record<string, Record<Subject, number>> = {
 }
 
 const typeMeta: Record<BookType, { badge: string[]; name: string; className: string }> = {
-  origin: { badge: ['原题'], name: '原题错题本', className: 'bg-[linear-gradient(135deg,#FFB4A6_0%,#FF8F7D_100%)]' },
-  ai: { badge: ['AI', '推送'], name: 'AI推送本', className: 'bg-[linear-gradient(135deg,#9CD0FF_0%,#6BB2F7_100%)]' },
-  bank: { badge: ['题库', '推送'], name: '题库推送本', className: 'bg-[linear-gradient(135deg,#8EE3C0_0%,#52CC9A_100%)]' },
+  origin: { badge: ['原题'], name: '原题错题本', className: 'bg-[linear-gradient(135deg,#FFC2B6_0%,#FF9E8E_100%)]' },
+  ai: { badge: ['AI', '推送'], name: 'AI推送本', className: 'bg-[linear-gradient(135deg,#B5DCFF_0%,#80BDF6_100%)]' },
+  bank: { badge: ['题库', '推送'], name: '题库推送本', className: 'bg-[linear-gradient(135deg,#9BE8C8_0%,#5ED1A1_100%)]' },
 }
 
 const timeline: { type: BookType; time: string; practiced?: boolean }[] = [
@@ -66,49 +66,49 @@ export function BookScreen() {
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
-      <header className="flex h-12 shrink-0 items-center justify-center">
+      <header className="flex h-11 shrink-0 items-center justify-center">
         <h1 className="text-[17px] font-bold text-[#1F2937]">错题本</h1>
       </header>
 
-      <div className="flex items-center gap-3 px-4 pb-4 pt-2">
-        <label className="flex h-11 flex-1 items-center gap-2 rounded-full bg-white px-4 shadow-[0_4px_14px_rgba(30,64,140,0.05)]">
-          <Search className="size-5 shrink-0 text-[#4B5563]" aria-hidden="true" />
+      <div className="flex items-center gap-4 pb-3 pl-4 pr-4 pt-1.5">
+        <label className="flex h-10 flex-1 items-center gap-2 rounded-full bg-white px-3.5 shadow-[0_4px_14px_rgba(30,64,140,0.05)]">
+          <Search className="size-[18px] shrink-0 text-[#3A4256]" strokeWidth={2.2} aria-hidden="true" />
           <span className="sr-only">搜索错题本</span>
           <input
             value={keyword}
             onChange={(event) => setKeyword(event.target.value)}
             placeholder="请输入姓名或科目"
-            className="min-w-0 flex-1 bg-transparent text-[15px] text-[#1F2937] outline-none placeholder:text-[#A0A8B8]"
+            className="min-w-0 flex-1 bg-transparent text-[14px] text-[#1F2937] outline-none placeholder:text-[#A0A8B8]"
           />
         </label>
         <button
           type="button"
           onClick={() => notify('打开筛选')}
-          className="flex items-center gap-1.5 text-[15px] text-[#3A4256]"
+          className="flex items-center gap-1 text-[14px] text-[#3A4256]"
         >
           筛选
-          <ListFilter className="size-5" aria-hidden="true" />
+          <ListFilter className="size-[18px]" aria-hidden="true" />
         </button>
       </div>
 
-      <div className="flex min-h-0 flex-1 rounded-t-3xl bg-white">
-        <aside aria-label="学生列表" className="flex w-[30%] shrink-0 flex-col">
+      <div className="flex min-h-0 flex-1 rounded-t-[20px] bg-white">
+        <aside aria-label="学生列表" className="flex w-[24%] shrink-0 flex-col">
           <div className="relative">
             <button
               type="button"
               aria-haspopup="listbox"
               aria-expanded={classOpen}
               onClick={() => setClassOpen((open) => !open)}
-              className="flex h-14 w-full items-center justify-center gap-2 text-[15px] text-[#1F2937]"
+              className="flex h-12 w-full items-center justify-center gap-2.5 text-[14px] text-[#1F2937]"
             >
               {className}
               <ChevronDown
-                className={cn('size-4 text-[#1E88F5] transition-transform', classOpen && 'rotate-180')}
+                className={cn('size-3.5 text-[#1E88F5] transition-transform', classOpen && 'rotate-180')}
                 aria-hidden="true"
               />
             </button>
             {classOpen && (
-              <ul role="listbox" aria-label="选择班级" className="absolute inset-x-2 top-12 z-30 rounded-xl bg-white py-1 shadow-[0_8px_24px_rgba(30,36,51,0.14)]">
+              <ul role="listbox" aria-label="选择班级" className="absolute inset-x-1 top-11 z-30 rounded-xl bg-white py-1 shadow-[0_8px_24px_rgba(30,36,51,0.14)]">
                 {classes.map((item) => (
                   <li key={item}>
                     <button
@@ -120,7 +120,7 @@ export function BookScreen() {
                         setClassOpen(false)
                       }}
                       className={cn(
-                        'h-10 w-full text-[14px]',
+                        'h-9 w-full text-[13px]',
                         item === className ? 'font-semibold text-[#1E88F5]' : 'text-[#3A4256]',
                       )}
                     >
@@ -131,7 +131,7 @@ export function BookScreen() {
               </ul>
             )}
           </div>
-          <ul className="flex flex-col bg-[#F3F6FB]">
+          <ul className="flex flex-col bg-[#F5F7FB]">
             {students.map((name) => {
               const active = name === student && !keyword
               return (
@@ -144,8 +144,10 @@ export function BookScreen() {
                       setKeyword('')
                     }}
                     className={cn(
-                      'h-[72px] w-full text-[15px] transition-colors',
-                      active ? 'bg-[#E3F1FF] text-[#1E88F5]' : 'text-[#4B5563] hover:text-[#1E88F5]',
+                      'h-12 w-full border-l-[3px] text-[14px] transition-colors',
+                      active
+                        ? 'border-[#1E88F5] bg-[#E3F1FF] text-[#1E88F5]'
+                        : 'border-transparent text-[#5B6478] hover:text-[#1E88F5]',
                     )}
                   >
                     {name}
@@ -157,12 +159,12 @@ export function BookScreen() {
         </aside>
 
         <section aria-label="错题本列表" className="flex min-w-0 flex-1 flex-col">
-          <p className="flex h-14 shrink-0 items-center justify-between pl-3 pr-4 text-[15px] font-bold text-[#1F2937]">
+          <p className="flex h-12 shrink-0 items-center justify-between gap-2 whitespace-nowrap pl-3 pr-3 text-[13px] font-bold text-[#1F2937]">
             <span>错题总计：1109题</span>
             <span>错题本总计：322本</span>
           </p>
 
-          <div role="tablist" aria-label="科目" className="flex shrink-0 gap-6 px-3 pb-3">
+          <div role="tablist" aria-label="科目" className="flex shrink-0 gap-7 px-3 pb-2.5">
             {subjects.map((item) => {
               const active = item === subject && !keyword
               return (
@@ -175,54 +177,58 @@ export function BookScreen() {
                     setSubject(item)
                     setKeyword('')
                   }}
-                  className="flex flex-col items-center gap-0.5"
+                  className="flex flex-col items-center"
                 >
-                  <span className={cn('text-[17px]', active ? 'font-bold text-[#1E88F5]' : 'text-[#3A4256]')}>{item}</span>
-                  <span className={cn('text-[12px]', active ? 'text-[#1E88F5]' : 'text-[#8A93A6]')}>
+                  <span className={cn('text-[15px] leading-6', active ? 'font-bold text-[#1E88F5]' : 'text-[#3A4256]')}>{item}</span>
+                  <span className={cn('text-[11px] leading-4', active ? 'text-[#1E88F5]' : 'text-[#8A93A6]')}>
                     ({subjectCounts[student][item]})
                   </span>
-                  <span aria-hidden="true" className={cn('h-1 w-4 rounded-b-full border-b-2', active ? 'border-[#1E88F5]' : 'border-transparent')} />
+                  <span
+                    aria-hidden="true"
+                    className={cn('h-1 w-3 rounded-b-full border-b-2', active ? 'border-[#1E88F5]' : 'border-transparent')}
+                  />
                 </button>
               )
             })}
           </div>
 
-          <ul className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pb-28 pl-1 pr-4 [scrollbar-width:none]">
+          <ul className="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto pb-28 pl-1.5 pr-3 [scrollbar-width:none]">
             {visibleBooks.length === 0 && (
               <li className="pt-16 text-center text-[14px] text-[#A0A8B8]">暂无错题本</li>
             )}
             {visibleBooks.map((book) => {
               const meta = typeMeta[book.type]
               return (
-                <li key={book.id} className="flex flex-col gap-2 rounded-2xl border border-[#EEF1F6] bg-white px-3 pb-2.5 pt-3.5">
-                  <div className="flex items-center gap-3">
+                <li key={book.id} className="flex flex-col gap-1 rounded-2xl border border-[#EDF0F5] bg-white px-2.5 pb-2 pt-3">
+                  <div className="flex items-center gap-2.5">
                     <span
                       aria-hidden="true"
                       className={cn(
-                        'flex size-[52px] shrink-0 flex-col items-center justify-center rounded-xl text-[13px] font-medium leading-tight text-white',
+                        'relative flex size-10 shrink-0 flex-col items-center justify-center overflow-hidden rounded-[10px] text-[11px] font-medium leading-[13px] text-white',
                         meta.className,
                       )}
                     >
                       {meta.badge.map((line) => (
-                        <span key={line}>{line}</span>
+                        <span key={line} className="relative">{line}</span>
                       ))}
+                      <span className="absolute -bottom-0.5 right-0.5 text-[14px] font-bold leading-none opacity-40">×</span>
                     </span>
-                    <div className="flex min-w-0 flex-col gap-1">
-                      <h2 className="truncate text-[16px] font-bold text-[#1F2937]">
+                    <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <h2 className="truncate text-[14px] font-bold text-[#1F2937]">
                         {meta.name}-{book.subject}-{book.student}-学生错题
                       </h2>
-                      <p className="text-[13px] text-[#A0A8B8]">{book.time}</p>
+                      <p className="text-[11px] text-[#A0A8B8]">{book.time}</p>
                     </div>
                   </div>
-                  <div className="flex justify-end gap-4">
+                  <div className="flex justify-end gap-3 pr-0.5">
                     <IconAction label="举一反三" onClick={() => notify('已生成举一反三练习')}>
-                      <Lightbulb className={cn('size-5', book.practiced ? 'text-[#F59E0B]' : 'text-[#6B7280]')} />
+                      <BulbIcon className={book.practiced ? 'text-[#F59E0B]' : 'text-[#4B5563]'} />
                     </IconAction>
                     <IconAction label="下载" onClick={() => notify('开始下载 PDF')}>
-                      <Download className="size-5 text-[#1E88F5]" />
+                      <Download className="size-[18px] text-[#1E88F5]" strokeWidth={1.8} />
                     </IconAction>
                     <IconAction label="分享" onClick={() => notify('已复制分享链接')}>
-                      <Forward className="size-5 text-[#9AA3B8]" />
+                      <ShareIcon className="text-[#A0A8B8]" />
                     </IconAction>
                     <IconAction
                       label="删除"
@@ -231,7 +237,7 @@ export function BookScreen() {
                         notify('已删除')
                       }}
                     >
-                      <Trash2 className="size-5 text-[#9AA3B8]" />
+                      <Trash2 className="size-[18px] text-[#A0A8B8]" strokeWidth={1.6} />
                     </IconAction>
                   </div>
                 </li>
@@ -252,13 +258,31 @@ export function BookScreen() {
   )
 }
 
+function BulbIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className={cn('size-[19px]', className)} aria-hidden="true">
+      <path d="M8.5 15.5c-1.8-1.3-3-3.4-3-5.8a6.5 6.5 0 0 1 13 0c0 2.4-1.2 4.5-3 5.8V18h-7v-2.5Z" />
+      <path d="M9.5 21h5" />
+      <path d="m12.6 7.5-2 3h2.8l-2 3" />
+    </svg>
+  )
+}
+
+function ShareIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinejoin="round" className={cn('size-[19px]', className)} aria-hidden="true">
+      <path d="M13.5 5v3.6C7.6 9.2 4.5 12.8 4 19c1.9-3 4.8-4.4 9.5-4.5V18l6.5-6.5L13.5 5Z" />
+    </svg>
+  )
+}
+
 function IconAction({ label, onClick, children }: { label: string; onClick: () => void; children: React.ReactNode }) {
   return (
     <button
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="flex size-9 items-center justify-center rounded-full transition-colors hover:bg-[#F3F6FB]"
+      className="flex size-8 items-center justify-center rounded-full transition-colors hover:bg-[#F3F6FB]"
     >
       {children}
     </button>

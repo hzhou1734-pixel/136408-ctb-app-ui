@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ClipboardPlus, House } from 'lucide-react'
+import { ClipboardPlus } from 'lucide-react'
 
 type NavKey = 'home' | 'book'
 
@@ -48,7 +48,13 @@ export function BottomNav({ active = 'home' }: { active?: NavKey }) {
                 ) : tab.icon ? (
                   <Image src={tab.icon} alt="" width={32} height={32} className="size-5" />
                 ) : (
-                  <House className="size-5 text-[#9AA3B8]" strokeWidth={2} aria-hidden="true" />
+                  <svg viewBox="0 0 24 24" className="size-5" aria-hidden="true">
+                    <path
+                      d="M10.2 2.7a3 3 0 0 1 3.6 0l6.4 4.8A3 3 0 0 1 21.4 10v7.5a4 4 0 0 1-4 4H6.6a4 4 0 0 1-4-4V10a3 3 0 0 1 1.2-2.4l6.4-4.9Z"
+                      fill="#7F8AA3"
+                    />
+                    <path d="M8.8 14.6c1.8 1.6 4.6 1.6 6.4 0" fill="none" stroke="#2E394F" strokeWidth="1.8" strokeLinecap="round" />
+                  </svg>
                 )}
                 <span className={`text-[10px] ${isActive ? 'text-[#1E88F5]' : 'text-[#9AA3B8]'}`}>{tab.label}</span>
               </Link>
