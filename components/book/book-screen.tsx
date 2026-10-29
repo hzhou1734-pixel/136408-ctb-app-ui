@@ -430,22 +430,21 @@ function FlyingBulb({ flight, onLand }: { flight: Flight; onLand: () => void }) 
             trailRefs.current[i] = el
           }}
           aria-hidden="true"
-          className="pointer-events-none absolute left-0 top-0 z-40 rounded-full bg-[#FDBA3B] opacity-0"
+          className="pointer-events-none absolute left-0 top-0 z-40 rounded-full bg-[#6AB4FA] opacity-0"
           style={{ width: 8 - i * 2, height: 8 - i * 2 }}
         />
       ))}
       <span
         ref={ringRef}
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-0 z-40 size-6 rounded-full border-2 border-[#F59E0B] opacity-0"
+        className="pointer-events-none absolute left-0 top-0 z-40 size-7 rounded-full border-2 border-[#1E88F5] opacity-0"
       />
       <span
         ref={badgeRef}
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-0 z-50 flex h-6 items-center gap-0.5 rounded-full bg-[#F59E0B] px-2 text-[12px] font-bold text-white opacity-0 shadow-[0_4px_12px_rgba(245,158,11,0.45)]"
+        className="pointer-events-none absolute left-0 top-0 z-50 flex size-7 items-center justify-center rounded-full bg-[#1E88F5] text-white opacity-0 shadow-[0_4px_12px_rgba(30,136,245,0.45)]"
       >
-        <BulbIcon className="size-[13px]" />
-        +1
+        <BulbIcon className="size-4" />
       </span>
     </>
   )
