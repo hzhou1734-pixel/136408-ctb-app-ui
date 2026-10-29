@@ -68,6 +68,13 @@ const groups: PageGroup[] = [
       { href: '/stats?sheet=filter', label: '统计·筛选' },
     ],
   },
+  {
+    title: '清零报告',
+    pages: [
+      { href: '/report', label: '清零报告列表' },
+      { href: '/report/r1', label: '清零报告详情' },
+    ],
+  },
 ]
 
 const totalPages = groups.reduce((sum, group) => sum + group.pages.length, 0)

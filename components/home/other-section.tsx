@@ -11,7 +11,7 @@ const posters = [
   {
     title: '清零报告',
     src: '/images/home/report-card.png',
-    href: '#',
+    href: '/report',
     card: 'from-[#E6F3FF] to-white',
   },
 ]
