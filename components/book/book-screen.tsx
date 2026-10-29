@@ -66,9 +66,13 @@ export function BookScreen() {
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
-      <header className="flex h-11 shrink-0 items-center justify-center">
-        <h1 className="text-[17px] font-bold text-[#1F2937]">错题本</h1>
-      </header>
+  <header className="relative flex h-11 shrink-0 items-center justify-center">
+  <h1 className="text-[17px] font-bold text-[#1F2937]">错题本</h1>
+  <p role="status" className="absolute right-4 top-1/2 flex -translate-y-1/2 flex-col items-end text-right leading-tight">
+  <span className="text-[13px] font-semibold tabular-nums text-[#2F80ED]">0/3</span>
+  <span className="text-[11px] text-[#6B7280]">AI解析生成中</span>
+  </p>
+  </header>
 
       <div className="flex items-center gap-4 pb-3 pl-4 pr-4 pt-1.5">
         <label className="flex h-10 flex-1 items-center gap-2 rounded-full bg-white px-3.5 shadow-[0_4px_14px_rgba(30,64,140,0.05)]">
