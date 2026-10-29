@@ -13,6 +13,10 @@ const groups: PageGroup[] = [
     pages: [{ href: '/', label: '首页' }],
   },
   {
+    title: '底部菜单',
+    pages: [{ href: '/book', label: '错题本' }],
+  },
+  {
     title: '错题采集',
     pages: [
       { href: '/capture', label: '错题拍收' },
