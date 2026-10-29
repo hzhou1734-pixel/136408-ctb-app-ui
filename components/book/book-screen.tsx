@@ -62,6 +62,8 @@ export function BookScreen() {
   const [taskTotal, setTaskTotal] = useState(2)
   const [counterPulse, setCounterPulse] = useState(0)
   const [flyers, setFlyers] = useState<Flight[]>([])
+  const [confirmId, setConfirmId] = useState<string | null>(null)
+  const confirmBook = books.find((book) => book.id === confirmId)
   const containerRef = useRef<HTMLDivElement>(null)
   const counterRef = useRef<HTMLSpanElement>(null)
 
@@ -277,7 +279,7 @@ export function BookScreen() {
                   </div>
                   <div className="flex items-center justify-between gap-1.5 pl-0.5">
                     <div className="flex min-w-0 flex-1">
-                      <ResolveStatus total={book.total} solved={book.solved} />
+                      <ResolveStatus total={book.total} solved={book.solved} onMasterAll={() => setConfirmId(book.id)} />
                     </div>
                     <div className="grid shrink-0 grid-cols-4 gap-1.5">
                     <IconAction label="举一反三" onClick={(event) => launchPractice(event.currentTarget)}>
@@ -311,6 +313,46 @@ export function BookScreen() {
         <FlyingBulb key={flight.id} flight={flight} onLand={() => landFlight(flight.id)} />
       ))}
 
+      {confirmBook && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-[rgba(17,24,39,0.45)] px-8">
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="master-all-title"
+            aria-describedby="master-all-desc"
+            className="flex w-full flex-col overflow-hidden rounded-2xl bg-white"
+          >
+            <div className="flex flex-col items-center gap-2 px-5 pb-5 pt-6 text-center">
+              <h2 id="master-all-title" className="text-[16px] font-bold text-[#1F2937]">全部标记为已掌握</h2>
+              <p id="master-all-desc" className="text-pretty text-[13px] leading-relaxed text-[#6B7280]">
+                {`将该错题本中剩余 ${confirmBook.total - confirmBook.solved} 道错题标记为已掌握，共 ${confirmBook.total} 道。`}
+              </p>
+            </div>
+            <div className="flex border-t border-[#EDF0F5]">
+              <button
+                type="button"
+                onClick={() => setConfirmId(null)}
+                className="h-12 flex-1 text-[15px] text-[#5B6478]"
+              >
+                取消
+              </button>
+              <button
+                type="button"
+                autoFocus
+                onClick={() => {
+                  setBooks((list) => list.map((item) => (item.id === confirmBook.id ? { ...item, solved: item.total } : item)))
+                  setConfirmId(null)
+                  notify('已全部掌握')
+                }}
+                className="h-12 flex-1 border-l border-[#EDF0F5] text-[15px] font-semibold text-[#1E88F5]"
+              >
+                全部掌握
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div role="status" aria-live="polite" className="pointer-events-none absolute inset-x-0 top-1/2 z-40 flex justify-center">
         {toast && (
           <span className="rounded-xl bg-[rgba(17,24,39,0.82)] px-4 py-2.5 text-[14px] font-medium text-white shadow-lg">
@@ -322,7 +364,7 @@ export function BookScreen() {
   )
 }
 
-function ResolveStatus({ total, solved }: { total: number; solved: number }) {
+function ResolveStatus({ total, solved, onMasterAll }: { total: number; solved: number; onMasterAll: () => void }) {
   if (solved >= total) {
     return (
       <span className="flex min-w-0 items-center gap-1 rounded-full bg-[#E8F8F0] px-2 py-0.5 text-[11px] font-medium text-[#16A34A]">
@@ -332,9 +374,15 @@ function ResolveStatus({ total, solved }: { total: number; solved: number }) {
     )
   }
   return (
-    <span className="min-w-0 truncate rounded-full bg-[#F3F5F9] px-2 py-0.5 text-[11px] tabular-nums text-[#8A93A6]">
-      已掌握 {solved}/{total}
-    </span>
+    <button
+      type="button"
+      onClick={onMasterAll}
+      aria-label={`已掌握 ${solved}/${total}，点击全部掌握`}
+      className="flex min-w-0 items-center gap-1 rounded-full bg-[#EAF4FF] py-0.5 pl-2 pr-1.5 text-[11px] tabular-nums text-[#1E88F5] transition-colors hover:bg-[#DCEDFF] active:bg-[#CFE6FF]"
+    >
+      <span className="truncate">已掌握 {solved}/{total}</span>
+      <CircleCheck className="size-3 shrink-0" strokeWidth={2.4} aria-hidden="true" />
+    </button>
   )
 }
 
