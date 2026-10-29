@@ -184,7 +184,13 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
       {step === 'filename' && (
         <ProgressSheet names={targets} onComplete={() => setStep('done')} />
       )}
-      {step === 'done' && <SuccessDialog count={targets.length} onBack={() => setStep(null)} />}
+      {step === 'done' && (
+        <SuccessDialog
+          count={targets.length}
+          bookName={initialPush === 'bank' ? '题库推送本' : initialPush === 'ai' ? 'AI推送本' : '错题本'}
+          onBack={() => setStep(null)}
+        />
+      )}
     </div>
   )
 }

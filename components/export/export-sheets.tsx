@@ -136,8 +136,10 @@ export function SuccessDialog({
   onBack,
   message,
   title = '导出成功',
+  bookName = '错题本',
 }: {
   count: number
+  bookName?: string
   onBack: () => void
   message?: React.ReactNode
   title?: string
@@ -162,7 +164,7 @@ export function SuccessDialog({
             <>
               {'已完成 '}
               <span className="font-bold text-[#1E88F5]">{count}</span>
-              {' 位同学的错题本导出！'}
+              {` 位同学的${bookName}导出！`}
             </>
           )}
         </p>
