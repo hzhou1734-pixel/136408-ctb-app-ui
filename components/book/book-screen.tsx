@@ -242,9 +242,9 @@ export function BookScreen() {
                       <p className="text-[11px] text-[#A0A8B8]">{book.time}</p>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between gap-2 pl-0.5 pr-0.5">
+                  <div className="flex items-center gap-2 pl-0.5">
                     <ResolveStatus total={book.total} solved={book.solved} />
-                    <div className="flex gap-3">
+                    <div className="ml-auto flex shrink-0 items-center gap-3">
                     <IconAction label="举一反三" onClick={() => notify('已生成举一反三练习')}>
                       <BulbIcon className={book.practiced ? 'text-[#F59E0B]' : 'text-[#4B5563]'} />
                     </IconAction>
