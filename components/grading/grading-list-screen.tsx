@@ -1,7 +1,7 @@
 'use client'
 
-import { ArrowLeftRight, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
-import { useState } from 'react'
+import { ArrowLeftRight, Camera, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { classes, gradingRecords, groupByDate } from '@/lib/grading-data'
 import { ClassFilterSheet, type GradingFilter } from '@/components/grading/class-filter-sheet'
 
@@ -16,6 +16,16 @@ export function GradingListScreen({ initialClassOpen = false }: { initialClassOp
     startDate: "",
     endDate: "",
   })
+  const [tipVisible, setTipVisible] = useState(false)
+  const tipTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+  useEffect(() => () => clearTimeout(tipTimer.current), [])
+
+  function showCameraTip() {
+    clearTimeout(tipTimer.current)
+    setTipVisible(true)
+    tipTimer.current = setTimeout(() => setTipVisible(false), 1800)
+  }
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
@@ -83,13 +93,27 @@ export function GradingListScreen({ initialClassOpen = false }: { initialClassOp
         ))}
       </div>
 
-      <a
-        href="/capture"
+      <button
+        type="button"
         aria-label="新建批改"
+        onClick={showCameraTip}
         className="absolute bottom-8 right-5 flex size-14 items-center justify-center rounded-full bg-[linear-gradient(135deg,#3DA9FF_0%,#1E88F2_100%)] text-white shadow-[0_8px_20px_rgba(30,136,242,0.35)] transition-transform active:scale-95"
       >
         <Plus className="size-7" strokeWidth={2.4} />
-      </a>
+      </button>
+
+      <div
+        role="status"
+        aria-live="polite"
+        className="pointer-events-none absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 justify-center"
+      >
+        {tipVisible && (
+          <span className="flex items-center gap-2 rounded-xl bg-[rgba(17,24,39,0.82)] px-4 py-2.5 text-[14px] font-medium text-white shadow-lg animate-in fade-in zoom-in-95 duration-200">
+            <Camera className="size-4" aria-hidden="true" />
+            打开相机拍摄
+          </span>
+        )}
+      </div>
 
       {classOpen && (
         <ClassFilterSheet
