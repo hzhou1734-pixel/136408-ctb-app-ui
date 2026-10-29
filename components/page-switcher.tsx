@@ -55,7 +55,10 @@ const groups: PageGroup[] = [
   },
   {
     title: '作文批阅',
-    pages: [{ href: '/essay', label: '作文列表' }],
+    pages: [
+      { href: '/essay', label: '作文列表' },
+      { href: '/essay?sheet=class', label: '作文·切换班级' },
+    ],
   },
 ]
 

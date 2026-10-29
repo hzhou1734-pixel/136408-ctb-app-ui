@@ -1,15 +1,18 @@
 'use client'
 
-import { Camera, ChevronDown, ChevronLeft, ChevronRight, FileText, Plus, Search, Trash2 } from 'lucide-react'
+import { ArrowLeftRight, Camera, ChevronLeft, ChevronRight, FileText, Plus, Search, Trash2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { essayClasses, essayRecords } from '@/lib/essay-data'
+import { EssayClassSheet } from '@/components/essay/essay-class-sheet'
 
 const ALL_CLASSES = '所有班级'
+const classOptions = [...essayClasses, ALL_CLASSES]
 
-export function EssayListScreen() {
+export function EssayListScreen({ initialClassOpen = false }: { initialClassOpen?: boolean }) {
   const [records, setRecords] = useState(essayRecords)
   const [keyword, setKeyword] = useState('')
-  const [className, setClassName] = useState(ALL_CLASSES)
+  const [className, setClassName] = useState(essayClasses[0])
+  const [classOpen, setClassOpen] = useState(initialClassOpen)
   const [tip, setTip] = useState<string | null>(null)
   const tipTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
@@ -53,30 +56,22 @@ export function EssayListScreen() {
             className="min-w-0 flex-1 bg-transparent text-[14px] text-[#1F2937] outline-none placeholder:text-[#A0A8B8]"
           />
         </label>
-        <div className="flex shrink-0 items-center gap-1.5 text-[14px]">
-          <span className="text-[#5B6478]" id="essay-class-label">
-            班级
-          </span>
-          <div className="relative">
-            <select
-              aria-labelledby="essay-class-label"
-              value={className}
-              onChange={(e) => setClassName(e.target.value)}
-              className="appearance-none bg-transparent pr-5 font-medium text-[#1F2937] outline-none"
-            >
-              <option value={ALL_CLASSES}>{ALL_CLASSES}</option>
-              {essayClasses.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              className="pointer-events-none absolute right-0 top-1/2 size-4 -translate-y-1/2 text-[#5B6478]"
-              aria-hidden="true"
-            />
-          </div>
-        </div>
+      </div>
+
+      <div className="mx-4 mt-3 flex items-center justify-between rounded-xl bg-white/70 px-3.5 py-2.5">
+        <p className="text-[13px] text-[#8A93A6]">
+          当前班级：<span className="font-semibold text-[#1E88F5]">{className}</span>
+        </p>
+        <button
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded={classOpen}
+          onClick={() => setClassOpen(true)}
+          className="flex items-center gap-1 rounded-full bg-[#EEF6FF] px-3 py-1 text-[13px] font-semibold text-[#1E88F5] transition-colors hover:bg-[#E0EEFF]"
+        >
+          <ArrowLeftRight className="size-3.5" aria-hidden="true" />
+          切换班级
+        </button>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-28 pt-4 [scrollbar-width:none]">
@@ -145,6 +140,18 @@ export function EssayListScreen() {
           </span>
         )}
       </div>
+
+      {classOpen && (
+        <EssayClassSheet
+          options={classOptions}
+          value={className}
+          onClose={() => setClassOpen(false)}
+          onConfirm={(next) => {
+            setClassName(next)
+            setClassOpen(false)
+          }}
+        />
+      )}
     </div>
   )
 }

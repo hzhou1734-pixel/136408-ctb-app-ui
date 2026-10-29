@@ -7,12 +7,13 @@ export const metadata: Metadata = {
   description: '查看学生语文作文批阅记录，支持搜索与按班级筛选',
 }
 
-export default function EssayPage() {
+export default async function EssayPage({ searchParams }: { searchParams: Promise<{ sheet?: string }> }) {
+  const { sheet } = await searchParams
   return (
     <div className="flex min-h-dvh items-center justify-center bg-[#E9ECF3] sm:py-8">
       <div className="relative flex h-dvh w-full max-w-[400px] flex-col overflow-hidden bg-[linear-gradient(180deg,#E6EDFC_0%,#ECF0FC_20%,#EFF1FD_100%)] sm:h-[860px] sm:rounded-[44px] sm:border-[10px] sm:border-[#1E2433] sm:shadow-2xl">
         <StatusBar />
-        <EssayListScreen />
+        <EssayListScreen initialClassOpen={sheet === 'class'} key={sheet ?? 'none'} />
       </div>
     </div>
   )
