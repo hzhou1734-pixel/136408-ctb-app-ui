@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, CircleCheck, User } from 'lucide-react'
+import { Check, CircleCheck } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { students } from '@/lib/organize-data'
@@ -100,7 +100,6 @@ export function StudentSheet({
                   : 'border-[#E3E7EF] bg-[#F7F8FC] text-[#374151] hover:border-[#C9D6EA]',
               )}
             >
-              <User className="size-4" strokeWidth={2} aria-hidden="true" />
               {name}
               {active && (
                 <span
@@ -222,7 +221,6 @@ export function ProgressSheet({ names, onComplete }: { names: string[]; onComple
             <li key={name} className="flex flex-col gap-2">
               <div className="flex items-center justify-between text-[14px]">
                 <span className="flex items-center gap-1.5 font-medium text-[#1F2937]">
-                  <User className="size-4 text-[#9AA3B2]" strokeWidth={2} aria-hidden="true" />
                   {name}
                 </span>
                 {done ? (
