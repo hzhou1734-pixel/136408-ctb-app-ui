@@ -77,7 +77,10 @@ const groups: PageGroup[] = [
   },
   {
     title: '底部菜单',
-    pages: [{ href: '/book', label: '错题本' }],
+    pages: [
+      { href: '/book', label: '错题本' },
+      { href: '/book/0-0-1', label: '错题详情' },
+    ],
   },
 ]
 

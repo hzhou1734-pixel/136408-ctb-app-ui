@@ -1,55 +1,10 @@
 'use client'
 
 import { ChevronDown, CircleCheck, Download, ListFilter, Search, Trash2 } from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
-
-type BookType = 'origin' | 'ai' | 'bank'
-type Subject = '数学' | '语文' | '英语'
-type Book = {
-  id: string
-  type: BookType
-  subject: Subject
-  student: string
-  time: string
-  practiced?: boolean
-  total: number
-  solved: number
-}
-
-const classes = ['星辰班', '启航班', '晨曦班']
-const students = ['曹小明', '园园', '贺泽轩']
-const subjects: Subject[] = ['数学', '语文', '英语']
-
-const subjectCounts: Record<string, Record<Subject, number>> = {
-  曹小明: { 数学: 282, 语文: 40, 英语: 0 },
-  园园: { 数学: 156, 语文: 63, 英语: 21 },
-  贺泽轩: { 数学: 98, 语文: 12, 英语: 35 },
-}
-
-const typeMeta: Record<BookType, { badge: string[]; name: string; className: string }> = {
-  origin: { badge: ['原题'], name: '原题错题本', className: 'bg-[linear-gradient(135deg,#FFC2B6_0%,#FF9E8E_100%)]' },
-  ai: { badge: ['AI', '推送'], name: 'AI推送本', className: 'bg-[linear-gradient(135deg,#B5DCFF_0%,#80BDF6_100%)]' },
-  bank: { badge: ['题库', '推送'], name: '题库推送本', className: 'bg-[linear-gradient(135deg,#9BE8C8_0%,#5ED1A1_100%)]' },
-}
-
-const timeline: { type: BookType; time: string; practiced?: boolean; total: number; solved: number }[] = [
-  { type: 'origin', time: '2026-10-17 11:11:42', practiced: true, total: 12, solved: 12 },
-  { type: 'origin', time: '2026-09-11 16:16:39', total: 8, solved: 5 },
-  { type: 'origin', time: '2026-09-02 16:58:58', total: 10, solved: 10 },
-  { type: 'ai', time: '2026-08-28 15:23:19', total: 6, solved: 2 },
-  { type: 'bank', time: '2026-08-28 15:14:46', total: 9, solved: 9 },
-  { type: 'origin', time: '2026-08-20 09:32:05', total: 7, solved: 0 },
-  { type: 'ai', time: '2026-08-12 18:04:51', total: 5, solved: 5 },
-]
-
-const initialBooks: Book[] = students.flatMap((student) =>
-  subjects.flatMap((subject) =>
-    subjectCounts[student][subject] === 0
-      ? []
-      : timeline.map((entry, index) => ({ ...entry, id: `${student}-${subject}-${index}`, student, subject })),
-  ),
-)
+import { bookTitle, classes, initialBooks, students, subjectCounts, subjects, typeMeta, type Subject } from './book-data'
 
 export function BookScreen() {
   const [className, setClassName] = useState(classes[0])
@@ -257,7 +212,11 @@ export function BookScreen() {
               const meta = typeMeta[book.type]
               return (
                 <li key={book.id} className="flex flex-col gap-1 rounded-2xl border border-[#EDF0F5] bg-white px-2.5 pb-2 pt-3">
-                  <div className="flex items-center gap-2.5">
+                  <Link
+                    href={`/book/${book.id}`}
+                    aria-label={`查看${bookTitle(book)}的全部错题`}
+                    className="-m-1 flex items-center gap-2.5 rounded-xl p-1 transition-colors hover:bg-[#F5F8FD] active:bg-[#EEF3FB]"
+                  >
                     <span
                       aria-hidden="true"
                       className={cn(
@@ -271,12 +230,10 @@ export function BookScreen() {
                       <span className="absolute -bottom-0.5 right-0.5 text-[14px] font-bold leading-none opacity-40">×</span>
                     </span>
                     <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                      <h2 className="truncate text-[14px] font-bold text-[#1F2937]">
-                        {meta.name}-{book.subject}-{book.student}-学生错题
-                      </h2>
+                      <h2 className="truncate text-[14px] font-bold text-[#1F2937]">{bookTitle(book)}</h2>
                       <p className="text-[11px] text-[#A0A8B8]">{book.time}</p>
                     </div>
-                  </div>
+                  </Link>
                   <div className="flex items-center justify-between gap-1.5 pl-0.5">
                     <div className="flex min-w-0 flex-1">
                       <ResolveStatus total={book.total} solved={book.solved} onMasterAll={() => setConfirmId(book.id)} />
