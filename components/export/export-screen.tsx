@@ -4,7 +4,7 @@ import { ChevronDown, ChevronLeft, Minus, Plus, Sparkles, Trash2 } from 'lucide-
 import { useState } from 'react'
 import { students, type Question } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
-import { Mask, ProgressSheet, StudentSheet } from './export-sheets'
+import { Mask, ProgressSheet, StudentSheet, SuccessDialog } from './export-sheets'
 
 type Layout = 'single' | 'double'
 
@@ -21,7 +21,7 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
   const [layout, setLayout] = useState<Layout>('double')
   const [numbered, setNumbered] = useState(true)
   const [panelOpen, setPanelOpen] = useState(true)
-  const [step, setStep] = useState<'students' | 'filename' | null>(initialStep)
+  const [step, setStep] = useState<'students' | 'filename' | 'done' | null>(initialStep)
   const [targets, setTargets] = useState<string[]>(() => [student, ...students.filter((n) => n !== student).slice(0, 3)])
 
   const setLines = (id: string, delta: number) =>
@@ -178,8 +178,9 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
         />
       )}
       {step === 'filename' && (
-        <ProgressSheet names={targets} onClose={() => setStep(null)} />
+        <ProgressSheet names={targets} onComplete={() => setStep('done')} />
       )}
+      {step === 'done' && <SuccessDialog count={targets.length} onBack={() => setStep(null)} />}
     </div>
   )
 }

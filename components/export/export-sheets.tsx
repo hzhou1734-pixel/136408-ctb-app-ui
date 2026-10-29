@@ -1,6 +1,7 @@
 'use client'
 
-import { Check, CircleCheck, User, X } from 'lucide-react'
+import { Check, CircleCheck, User } from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { students } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
@@ -87,11 +88,59 @@ export function StudentSheet({
   )
 }
 
-const TICK_MS = 250
+export function SuccessDialog({ count, onBack }: { count: number; onBack: () => void }) {
+  return (
+    <div className="absolute inset-x-0 bottom-0 top-12 z-50 flex items-center justify-center px-6">
+      <section
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="export-success-title"
+        aria-describedby="export-success-desc"
+        className="w-full animate-in zoom-in-95 fade-in rounded-3xl bg-white px-5 pb-5 pt-6 text-center shadow-[0_16px_40px_rgba(15,23,42,0.18)] duration-200"
+      >
+        <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-[#E8F8EE]">
+          <CircleCheck className="size-7 text-[#16A34A]" strokeWidth={2.2} aria-hidden="true" />
+        </span>
+        <h2 id="export-success-title" className="mt-3 text-[17px] font-bold text-[#1F2937]">
+          导出成功
+        </h2>
+        <p id="export-success-desc" className="mt-2 text-[14px] text-[#4B5563]">
+          {'已完成 '}
+          <span className="font-bold text-[#1E88F5]">{count}</span>
+          {' 位同学的错题本导出！'}
+        </p>
+        <div className="mt-6 flex gap-3">
+          <button
+            type="button"
+            onClick={onBack}
+            className="h-11 flex-1 rounded-full border border-[#D6DCE6] bg-white text-[15px] font-semibold text-[#374151] transition-colors hover:bg-[#F7F8FC]"
+          >
+            返回
+          </button>
+          <Link
+            href="/"
+            className="flex h-11 flex-1 items-center justify-center rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)]"
+          >
+            回到首页
+          </Link>
+        </div>
+      </section>
+    </div>
+  )
+}
 
-export function ProgressSheet({ names, onClose }: { names: string[]; onClose: () => void }) {
+const TICK_MS = 250
+const COMPLETE_DELAY_MS = 600
+
+export function ProgressSheet({ names, onComplete }: { names: string[]; onComplete: () => void }) {
   const [progress, setProgress] = useState<number[]>(() => names.map(() => 0))
   const allDone = progress.every((p) => p >= 100)
+
+  useEffect(() => {
+    if (!allDone) return
+    const timer = setTimeout(onComplete, COMPLETE_DELAY_MS)
+    return () => clearTimeout(timer)
+  }, [allDone, onComplete])
 
   useEffect(() => {
     if (allDone) return
@@ -106,17 +155,7 @@ export function ProgressSheet({ names, onClose }: { names: string[]; onClose: ()
 
   return (
     <Sheet label="导出PDF">
-      <div className="flex items-center justify-between">
-        <h2 className="text-[17px] font-bold text-[#1F2937]">导出PDF</h2>
-        <button
-          type="button"
-          aria-label="关闭"
-          onClick={onClose}
-          className="flex size-8 items-center justify-center rounded-full text-[#9AA3B2] hover:bg-[#F3F5F9]"
-        >
-          <X className="size-5" />
-        </button>
-      </div>
+      <h2 className="text-[17px] font-bold text-[#1F2937]">导出PDF</h2>
       <p className="mt-1 text-[12px] text-[#9AA3B2]" aria-live="polite">
         {allDone ? `全部生成完成，共 ${names.length} 份` : `正在生成错题本 ${doneCount}/${names.length}`}
       </p>
@@ -167,7 +206,7 @@ export function ProgressSheet({ names, onClose }: { names: string[]; onClose: ()
       <button
         type="button"
         disabled={!allDone}
-        onClick={onClose}
+        onClick={onComplete}
         className="mt-6 h-12 w-full rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
       >
         {allDone ? '完成' : '生成中…'}
