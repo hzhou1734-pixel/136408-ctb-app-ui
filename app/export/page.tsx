@@ -15,15 +15,8 @@ export default async function ExportPage({
 }) {
   const params = await searchParams
   const sheet = params.sheet
-  const push = sheet === 'bank' || sheet === 'ai' ? sheet : sheet === 'pushed' ? (params.push === 'ai' ? 'ai' : 'bank') : null
-  const initialStep =
-    sheet === 'students' || sheet === 'filename' || sheet === 'done'
-      ? sheet
-      : sheet === 'bank' || sheet === 'ai'
-        ? 'students'
-        : sheet === 'pushed'
-          ? 'done'
-          : null
+  const push = sheet === 'bank' || sheet === 'ai' ? sheet : params.push === 'bank' || params.push === 'ai' ? params.push : null
+  const initialStep = sheet === 'students' || sheet === 'filename' || sheet === 'done' ? sheet : null
   const student: Student = students.includes(params.student as Student) ? (params.student as Student) : students[0]
   const subject: Subject = subjects.includes(params.subject as Subject) ? (params.subject as Subject) : '数学'
 

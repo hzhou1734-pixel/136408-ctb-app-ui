@@ -18,11 +18,8 @@ type Props = {
 }
 
 type PushMode = 'bank' | 'ai'
-const pushLabels: Record<PushMode, string> = { bank: '题库推送', ai: 'AI推送' }
 
 export function ExportScreen({ student, subject, date, questions, initialStep = null, initialPush = null }: Props) {
-  const [push, setPush] = useState<PushMode | null>(initialPush)
-  const [pushedCount, setPushedCount] = useState(initialPush ? 4 : 0)
   const [items, setItems] = useState(() => questions.map((q) => ({ ...q, lines: 4 })))
   const [layout, setLayout] = useState<Layout>('double')
   const [numbered, setNumbered] = useState(true)
@@ -166,10 +163,7 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
         <button
           type="button"
           disabled={items.length === 0}
-          onClick={() => {
-            setPush(null)
-            setStep('students')
-          }}
+          onClick={() => setStep('students')}
           className="mt-5 h-12 w-full rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
         >
           导出生成PDF文件
@@ -177,38 +171,7 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
       </section>
 
       {step && <Mask onClick={() => setStep(null)} />}
-      {step === 'students' && push && (
-        <StudentSheet
-          title={`选择学生，${pushLabels[push]}举一反三`}
-          subtitle={
-            push === 'ai'
-              ? `将基于这 ${items.length} 道题目由 AI 生成同类题，推送给所选学生`
-              : `将从题库匹配这 ${items.length} 道题目的同类题，推送给所选学生`
-          }
-          initial={[]}
-          onConfirm={(selected) => {
-            setPushedCount(selected.length)
-            setStep('done')
-          }}
-        />
-      )}
-      {step === 'done' && push && (
-        <SuccessDialog
-          count={pushedCount}
-          onBack={() => setStep(null)}
-          title="推送成功"
-          message={
-            <>
-              {`已通过${pushLabels[push]}将 `}
-              <span className="font-bold text-[#1E88F5]">{items.length}</span>
-              {' 道题目的举一反三练习推送给 '}
-              <span className="font-bold text-[#1E88F5]">{pushedCount}</span>
-              {' 位同学！'}
-            </>
-          }
-        />
-      )}
-      {step === 'students' && !push && (
+      {step === 'students' && (
         <StudentSheet
           initial={targets}
           onConfirm={(selected) => {
@@ -220,7 +183,7 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
       {step === 'filename' && (
         <ProgressSheet names={targets} onComplete={() => setStep('done')} />
       )}
-      {step === 'done' && !push && <SuccessDialog count={targets.length} onBack={() => setStep(null)} />}
+      {step === 'done' && <SuccessDialog count={targets.length} onBack={() => setStep(null)} />}
     </div>
   )
 }
