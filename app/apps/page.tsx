@@ -15,7 +15,7 @@ export default function AppsPage() {
         <div className="absolute inset-x-0 top-0 z-10">
           <StatusBar />
         </div>
-        <div className="flex flex-1 flex-col overflow-hidden pt-11">
+        <div className="flex flex-1 flex-col overflow-hidden">
           <AppScreen />
         </div>
         <BottomNav active="app" />

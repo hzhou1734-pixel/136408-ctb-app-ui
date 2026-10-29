@@ -52,10 +52,10 @@ export function AppScreen() {
   }, [toast])
 
   return (
-    <div className="relative flex flex-1 flex-col overflow-y-auto pb-28">
+    <div className="relative flex flex-1 flex-col overflow-y-auto pb-28 pt-11 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[300px] bg-[linear-gradient(180deg,#C9D8FB_0%,#E3EBFD_45%,#FFFFFF_100%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[344px] bg-[linear-gradient(180deg,#C9D8FB_0%,#E3EBFD_45%,#FFFFFF_100%)]"
       />
 
       <header className="relative flex h-12 items-center justify-between px-5">
