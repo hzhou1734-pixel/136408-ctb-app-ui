@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 
 type PageLink = { href: string; label: string }
 type PageGroup = { title: string; pages: PageLink[] }
@@ -20,6 +21,8 @@ const groups: PageGroup[] = [
     pages: [
       { href: '/organize', label: '错题整理' },
       { href: '/export', label: '设置及排版' },
+      { href: '/export?sheet=students', label: '选择学生导出' },
+      { href: '/export?sheet=filename', label: '导出PDF' },
     ],
   },
 ]
@@ -27,7 +30,17 @@ const groups: PageGroup[] = [
 const totalPages = groups.reduce((sum, group) => sum + group.pages.length, 0)
 
 export function PageSwitcher() {
+  return (
+    <Suspense fallback={null}>
+      <PageSwitcherContent />
+    </Suspense>
+  )
+}
+
+function PageSwitcherContent() {
   const pathname = usePathname()
+  const sheet = useSearchParams().get('sheet')
+  const current = sheet ? `${pathname}?sheet=${sheet}` : pathname
 
   return (
     <aside
@@ -54,7 +67,7 @@ export function PageSwitcher() {
             </h2>
             <ul className="flex flex-wrap gap-2.5">
               {group.pages.map((page) => {
-                const active = pathname === page.href
+                const active = current === page.href
                 return (
                   <li key={page.href}>
                     <Link

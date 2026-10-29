@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default async function ExportPage({
   searchParams,
 }: {
-  searchParams: Promise<{ student?: string; subject?: string; ids?: string }>
+  searchParams: Promise<{ student?: string; subject?: string; ids?: string; sheet?: string }>
 }) {
   const params = await searchParams
   const student: Student = students.includes(params.student as Student) ? (params.student as Student) : students[0]
@@ -26,7 +26,10 @@ export default async function ExportPage({
     <div className="flex min-h-dvh items-center justify-center bg-[#E9ECF3] sm:py-8">
       <div className="relative flex h-dvh w-full max-w-[400px] flex-col overflow-hidden bg-[linear-gradient(180deg,#E6EDFC_0%,#ECF0FC_20%,#EFF1FD_100%)] sm:h-[860px] sm:rounded-[44px] sm:border-[10px] sm:border-[#1E2433] sm:shadow-2xl">
         <StatusBar />
-        <ExportScreen student={student} subject={subject} date="2026-10-17" questions={questions} />
+        <ExportScreen student={student} subject={subject} date="2026-10-17" questions={questions}
+          initialStep={params.sheet === 'students' || params.sheet === 'filename' ? params.sheet : null}
+          key={params.sheet ?? 'none'}
+        />
       </div>
     </div>
   )

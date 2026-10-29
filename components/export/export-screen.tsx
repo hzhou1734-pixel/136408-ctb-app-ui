@@ -13,14 +13,15 @@ type Props = {
   subject: string
   date: string
   questions: Question[]
+  initialStep?: 'students' | 'filename' | null
 }
 
-export function ExportScreen({ student, subject, date, questions }: Props) {
+export function ExportScreen({ student, subject, date, questions, initialStep = null }: Props) {
   const [items, setItems] = useState(() => questions.map((q) => ({ ...q, lines: 4 })))
   const [layout, setLayout] = useState<Layout>('double')
   const [numbered, setNumbered] = useState(true)
   const [panelOpen, setPanelOpen] = useState(true)
-  const [step, setStep] = useState<'students' | 'filename' | null>(null)
+  const [step, setStep] = useState<'students' | 'filename' | null>(initialStep)
   const [targets, setTargets] = useState<string[]>([student])
 
   const setLines = (id: string, delta: number) =>
