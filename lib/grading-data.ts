@@ -8,6 +8,19 @@ export type GradingRecord = {
 
 export const classes = ['三年级（1）班', '三年级（2）班', '四年级（1）班', '四年级（3）班']
 
+export const studentsByClass: Record<string, string[]> = {
+  '三年级（1）班': ['曹小明', '园园', '贺泽轩'],
+  '三年级（2）班': ['大帆', '李若溪', '王子涵'],
+  '四年级（1）班': ['陈一鸣', '张可欣', '刘浩然'],
+  '四年级（3）班': ['赵思琪', '周博文', '吴雨桐'],
+}
+
+export const gradingSubjects = [
+  { name: '数学', image: '/images/grading/subject-math.png', color: '#1E88F5' },
+  { name: '语文', image: '/images/grading/subject-chinese.png', color: '#F26B1D' },
+  { name: '英语', image: '/images/grading/subject-english.png', color: '#8B4FD8' },
+]
+
 export const gradingRecords: GradingRecord[] = [
   { id: 'r1', subject: '数学', student: '曹小明', date: '2026-10-10', pages: 1 },
   { id: 'r2', subject: '数学', student: '曹小明', date: '2026-10-10', pages: 1 },

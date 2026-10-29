@@ -1,14 +1,21 @@
 'use client'
 
-import { Check, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
+import { ArrowLeftRight, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { classes, gradingRecords, groupByDate } from '@/lib/grading-data'
+import { ClassFilterSheet, type GradingFilter } from '@/components/grading/class-filter-sheet'
 
 const groups = groupByDate(gradingRecords)
 
 export function GradingListScreen({ initialClassOpen = false }: { initialClassOpen?: boolean }) {
   const [classOpen, setClassOpen] = useState(initialClassOpen)
-  const [currentClass, setCurrentClass] = useState(classes[0])
+  const [filter, setFilter] = useState<GradingFilter>({
+    className: classes[0],
+    student: null,
+    subject: null,
+    startDate: "",
+    endDate: "",
+  })
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
@@ -21,20 +28,23 @@ export function GradingListScreen({ initialClassOpen = false }: { initialClassOp
           <ChevronLeft className="size-6" strokeWidth={2.2} />
         </a>
         <h1 className="text-[17px] font-bold text-[#1F2937]">批改列表</h1>
+      </header>
+
+      <div className="mx-4 mt-1 flex items-center justify-between rounded-xl bg-white/70 px-3.5 py-2.5">
+        <p className="text-[13px] text-[#8A93A6]">
+          当前班级：<span className="font-semibold text-[#1E88F5]">{filter.className}</span>
+        </p>
         <button
           type="button"
           aria-haspopup="dialog"
           aria-expanded={classOpen}
           onClick={() => setClassOpen(true)}
-          className="absolute right-4 text-[14px] font-semibold text-[#1E88F5]"
+          className="flex items-center gap-1 rounded-full bg-[#EEF6FF] px-3 py-1 text-[13px] font-semibold text-[#1E88F5] transition-colors hover:bg-[#E0EEFF]"
         >
+          <ArrowLeftRight className="size-3.5" aria-hidden="true" />
           切换班级
         </button>
-      </header>
-
-      <p className="px-5 pt-1 text-[12px] text-[#8A93A6]">
-        当前班级：<span className="font-medium text-[#3A4256]">{currentClass}</span>
-      </p>
+      </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-28 [scrollbar-width:none]">
         {groups.map((group) => (
@@ -82,48 +92,14 @@ export function GradingListScreen({ initialClassOpen = false }: { initialClassOp
       </a>
 
       {classOpen && (
-        <div className="absolute inset-0 z-30 flex items-end">
-          <button
-            type="button"
-            aria-label="关闭"
-            onClick={() => setClassOpen(false)}
-            className="absolute inset-0 bg-black/40"
-          />
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="class-sheet-title"
-            className="relative w-full rounded-t-3xl bg-white px-5 pb-8 pt-5"
-          >
-            <h2 id="class-sheet-title" className="text-center text-[17px] font-bold text-[#1F2937]">
-              切换班级
-            </h2>
-            <ul role="radiogroup" aria-label="班级" className="mt-4 flex flex-col">
-              {classes.map((name) => {
-                const active = name === currentClass
-                return (
-                  <li key={name}>
-                    <button
-                      type="button"
-                      role="radio"
-                      aria-checked={active}
-                      onClick={() => {
-                        setCurrentClass(name)
-                        setClassOpen(false)
-                      }}
-                      className={`flex h-12 w-full items-center justify-between border-b border-[#F0F2F6] px-1 text-[15px] ${
-                        active ? 'font-semibold text-[#1E88F5]' : 'text-[#3A4256]'
-                      }`}
-                    >
-                      {name}
-                      {active && <Check className="size-5" aria-hidden="true" />}
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        </div>
+        <ClassFilterSheet
+          value={filter}
+          onClose={() => setClassOpen(false)}
+          onConfirm={(next) => {
+            setFilter(next)
+            setClassOpen(false)
+          }}
+        />
       )}
     </div>
   )
