@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Camera, ChevronLeft, FileClock } from 'lucide-react'
+import { StatusBar } from '@/components/home/status-bar'
 
 const tools = [
   { title: '未来的我', desc: '上传你的照片，和职业梦想', icon: '/images/app/future.png' },
@@ -30,7 +31,7 @@ function Squiggle({ className }: { className?: string }) {
 
 function SectionTitle({ before, marked, after }: { before: string; marked: string; after: string }) {
   return (
-    <h2 className="text-[20px] text-[#1F2533]">
+    <h2 className="text-[18px] text-[#1F2533]">
       {before}
       <span className="relative inline-block">
         {marked}
@@ -52,13 +53,15 @@ export function AppScreen() {
   }, [toast])
 
   return (
-    <div className="relative flex flex-1 flex-col overflow-y-auto pb-28 pt-11 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="relative flex flex-1 flex-col overflow-hidden">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[344px] bg-[linear-gradient(180deg,#C9D8FB_0%,#E3EBFD_45%,#FFFFFF_100%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[400px] bg-[linear-gradient(180deg,#C9D8FB_0%,#E3EBFD_50%,#FFFFFF_100%)]"
       />
 
-      <header className="relative flex h-12 items-center justify-between px-5">
+      <StatusBar />
+
+      <header className="relative flex h-11 shrink-0 items-center justify-between px-5">
         <Link href="/" aria-label="返回" className="-ml-1 flex size-8 items-center justify-center text-[#1F2533]">
           <ChevronLeft className="size-6" strokeWidth={2} />
         </Link>
@@ -73,8 +76,9 @@ export function AppScreen() {
         </button>
       </header>
 
-      <section className="relative flex h-[150px] items-center justify-between pl-6">
-        <p className="text-[18px] text-[#1F2533]">Hi，有什么能为你解答？</p>
+      <div className="relative flex flex-1 flex-col overflow-y-auto pb-28 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <section className="relative flex h-[130px] items-center justify-between pl-6">
+        <p className="whitespace-nowrap text-[16px] text-[#1F2533]">Hi，有什么能为你解答？</p>
         <Image
           src="/images/app/robot.png"
           alt="AI素养盒助手机器人"
@@ -119,34 +123,35 @@ export function AppScreen() {
         </button>
       </form>
 
-      <div className="relative flex flex-col gap-5 px-5 pt-10">
+      <div className="relative flex flex-col gap-4 px-4 pt-8">
         <button type="button" onClick={() => setToast('暂无历史会话')} className="self-start text-left">
           <SectionTitle before="历" marked="史会" after="话" />
         </button>
 
         <SectionTitle before="打开" marked="AI素" after="养盒" />
 
-        <ul className="grid grid-cols-2 gap-x-4 gap-y-4 pt-1">
+        <ul className="grid grid-cols-2 gap-3">
           {tools.map((tool) => (
             <li key={tool.title}>
               <button
                 type="button"
                 onClick={() => setToast(`${tool.title} 即将上线`)}
-                className="flex h-[110px] w-full flex-col items-start gap-2 rounded-xl bg-[#F5F8FD] px-4 pt-4 text-left transition-colors active:bg-[#EAF0FB]"
+                className="flex h-[84px] w-full flex-col items-start gap-1.5 rounded-lg bg-[#F5F8FD] px-3 pt-3.5 text-left transition-colors active:bg-[#EAF0FB]"
               >
-                <span className="flex items-center gap-2">
-                  <Image src={tool.icon} alt="" width={64} height={64} className="size-7 rounded object-cover mix-blend-multiply" />
-                  <span className="text-[18px] text-[#1F2533]">{tool.title}</span>
+                <span className="flex items-center gap-1.5">
+                  <Image src={tool.icon} alt="" width={64} height={64} className="size-5 rounded object-cover mix-blend-multiply" />
+                  <span className="whitespace-nowrap text-[16px] text-[#1F2533]">{tool.title}</span>
                 </span>
-                <span className="text-[13px] leading-relaxed text-[#8A92A3]">{tool.desc}</span>
+                <span className="whitespace-nowrap text-[12px] leading-relaxed text-[#8A92A3]">{tool.desc}</span>
               </button>
             </li>
           ))}
         </ul>
 
-        <div className="flex justify-center pt-2" aria-hidden="true">
+        <div className="flex justify-center pt-1" aria-hidden="true">
           <span className="h-1.5 w-6 rounded-full bg-[#1E88F5]" />
         </div>
+      </div>
       </div>
 
       {toast && (
