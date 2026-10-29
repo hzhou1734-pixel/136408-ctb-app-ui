@@ -61,6 +61,13 @@ const groups: PageGroup[] = [
       { href: '/essay/new', label: '作文批阅' },
     ],
   },
+  {
+    title: '错题统计',
+    pages: [
+      { href: '/stats', label: '班级错题统计' },
+      { href: '/stats?sheet=filter', label: '统计·筛选' },
+    ],
+  },
 ]
 
 const totalPages = groups.reduce((sum, group) => sum + group.pages.length, 0)
