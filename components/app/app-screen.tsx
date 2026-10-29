@@ -36,18 +36,7 @@ export function AppScreen() {
       </header>
 
       <div className="relative flex flex-1 flex-col overflow-y-auto pb-28 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <section className="relative flex h-[130px] items-center justify-end">
-          <Image
-            src="/images/app/robot.png"
-            alt="AI素养盒助手机器人"
-            width={1408}
-            height={768}
-            priority
-            className="h-[160px] w-[150px] shrink-0 object-cover mix-blend-multiply [mask-image:radial-gradient(ellipse_48%_55%_at_50%_50%,#000_65%,transparent_100%)]"
-          />
-        </section>
-
-        <div className="relative flex flex-col gap-4 px-4 pt-4">
+        <div className="relative flex flex-col gap-4 px-4 pt-3">
           <ul className="grid grid-cols-2 gap-3">
             {tools.map((tool) => (
               <li key={tool.title}>
