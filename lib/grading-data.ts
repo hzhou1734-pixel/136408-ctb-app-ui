@@ -6,13 +6,10 @@ export type GradingRecord = {
   pages: number
 }
 
-export const classes = ['三年级（1）班', '三年级（2）班', '四年级（1）班', '四年级（3）班']
+export const classes = ['星辰班']
 
 export const studentsByClass: Record<string, string[]> = {
-  '三年级（1）班': ['曹小明', '园园', '贺泽轩'],
-  '三年级（2）班': ['大帆', '李若溪', '王子涵'],
-  '四年级（1）班': ['陈一鸣', '张可欣', '刘浩然'],
-  '四年级（3）班': ['赵思琪', '周博文', '吴雨桐'],
+  星辰班: ['曹小明', '园园', '贺泽轩'],
 }
 
 export const gradingSubjects = [

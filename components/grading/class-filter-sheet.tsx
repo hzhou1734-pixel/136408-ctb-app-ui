@@ -13,11 +13,13 @@ export type GradingFilter = {
   endDate: string
 }
 
+const PRIMARY = '#2196F3'
+
 function CornerCheck() {
   return (
     <span
       aria-hidden="true"
-      className="absolute bottom-0 right-0 flex size-5 items-end justify-end rounded-tl-xl bg-[#1E88F5] pb-0.5 pr-0.5 text-white"
+      className="absolute bottom-0 right-0 flex size-[18px] items-end justify-end rounded-tl-[10px] bg-[#2196F3] pb-px pr-px text-white"
     >
       <Check className="size-3" strokeWidth={3} />
     </span>
@@ -31,10 +33,8 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
       role="radio"
       aria-checked={active}
       onClick={onClick}
-      className={`relative h-11 min-w-24 overflow-hidden rounded-xl border px-5 text-[15px] transition-colors ${
-        active
-          ? 'border-[#1E88F5] bg-[#EEF6FF] font-semibold text-[#1E88F5]'
-          : 'border-transparent bg-[#F5F7FA] text-[#3A4256]'
+      className={`relative h-11 min-w-[100px] overflow-hidden rounded-lg border px-6 text-[15px] text-[#333] transition-colors ${
+        active ? 'border-[#2196F3] bg-[#F2F8FD]' : 'border-transparent bg-[#F6F7F9]'
       }`}
     >
       {children}
@@ -43,12 +43,39 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
   )
 }
 
-function Field({ label, children }: { label: string; children: ReactNode }) {
+function Field({ label, children }: { label?: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-3">
-      <h3 className="text-[15px] font-bold text-[#1F2937]">{label}</h3>
+      {label && <h3 className="text-[15px] font-bold text-[#222]">{label}</h3>}
       {children}
     </div>
+  )
+}
+
+function DateSlot({
+  label,
+  value,
+  min,
+  onChange,
+}: {
+  label: string
+  value: string
+  min?: string
+  onChange: (value: string) => void
+}) {
+  return (
+    <label className="relative flex min-w-0 flex-1 cursor-pointer items-center justify-center">
+      <span className={`text-[15px] ${value ? 'text-[#333]' : 'text-[#666]'}`}>{value || label}</span>
+      <input
+        type="date"
+        aria-label={label}
+        value={value}
+        min={min}
+        onChange={(e) => onChange(e.target.value)}
+        onClick={(e) => e.currentTarget.showPicker?.()}
+        className="absolute inset-0 cursor-pointer opacity-0"
+      />
+    </label>
   )
 }
 
@@ -74,25 +101,25 @@ export function ClassFilterSheet({
         role="dialog"
         aria-modal="true"
         aria-labelledby="class-sheet-title"
-        className="relative flex max-h-[88%] w-full flex-col rounded-t-3xl bg-white"
+        className="relative flex max-h-[88%] w-full flex-col rounded-t-2xl bg-white"
       >
-        <div className="flex items-center justify-between px-5 pb-2 pt-5">
-          <h2 id="class-sheet-title" className="text-[18px] font-bold text-[#1F2937]">
+        <div className="flex items-start justify-between px-5 pt-4">
+          <h2 id="class-sheet-title" className="pt-1 text-[19px] font-normal text-[#222]">
             选择学生
           </h2>
           <button
             type="button"
             aria-label="关闭"
             onClick={onClose}
-            className="flex size-8 items-center justify-center rounded-full text-[#8A93A6] hover:bg-[#F5F7FA]"
+            className="-mr-1 flex size-7 items-center justify-center text-[#666]"
           >
-            <X className="size-5" />
+            <X className="size-3.5" strokeWidth={1.8} />
           </button>
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-5 pb-4 pt-2 [scrollbar-width:none]">
+        <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-5 pb-4 pt-5 [scrollbar-width:none]">
           <Field label="班级">
-            <div role="radiogroup" aria-label="班级" className="flex flex-wrap gap-2.5">
+            <div role="radiogroup" aria-label="班级" className="flex flex-wrap gap-4">
               {classes.map((name) => (
                 <Chip
                   key={name}
@@ -105,22 +132,22 @@ export function ClassFilterSheet({
             </div>
           </Field>
 
-          <Field label="姓名">
-            <div role="radiogroup" aria-label="姓名" className="flex flex-wrap gap-2.5">
-              {students.map((name) => (
-                <Chip
-                  key={name}
-                  active={draft.student === name}
-                  onClick={() => setDraft((d) => ({ ...d, student: d.student === name ? null : name }))}
-                >
-                  {name}
-                </Chip>
-              ))}
-            </div>
-          </Field>
+          <div className="flex flex-col gap-5">
+            <Field label="姓名">
+              <div role="radiogroup" aria-label="姓名" className="flex flex-wrap gap-4">
+                {students.map((name) => (
+                  <Chip
+                    key={name}
+                    active={draft.student === name}
+                    onClick={() => setDraft((d) => ({ ...d, student: d.student === name ? null : name }))}
+                  >
+                    {name}
+                  </Chip>
+                ))}
+              </div>
+            </Field>
 
-          <Field label="学科">
-            <div role="radiogroup" aria-label="学科" className="grid grid-cols-3 gap-2.5">
+            <div role="radiogroup" aria-label="学科" className="grid grid-cols-3 gap-5">
               {gradingSubjects.map((subject) => {
                 const active = draft.subject === subject.name
                 return (
@@ -132,13 +159,13 @@ export function ClassFilterSheet({
                     onClick={() =>
                       setDraft((d) => ({ ...d, subject: d.subject === subject.name ? null : subject.name }))
                     }
-                    className={`relative aspect-[2/1] overflow-hidden rounded-xl border-2 transition-all ${
-                      active ? 'border-[#1E88F5]' : 'border-transparent opacity-90'
+                    className={`relative aspect-[1.85/1] overflow-hidden rounded-lg border ${
+                      active ? 'border-[#2196F3]' : 'border-transparent'
                     }`}
                   >
                     <Image src={subject.image} alt="" fill sizes="120px" className="object-cover" />
                     <span
-                      className="absolute left-2 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-white/90 text-[14px] font-black"
+                      className="absolute left-2 top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-white/90 text-[14px] font-black"
                       style={{ color: subject.color }}
                     >
                       {subject.name}
@@ -148,45 +175,43 @@ export function ClassFilterSheet({
                 )
               })}
             </div>
-          </Field>
+          </div>
 
           <Field label="提交日期">
-            <div className="flex h-12 items-center gap-2 rounded-xl border border-[#E3E7EE] px-3">
-              <CalendarCheck className="size-5 shrink-0 text-[#8A93A6]" aria-hidden="true" />
-              <input
-                type="date"
-                aria-label="开始日期"
+            <div className="flex h-11 items-center gap-2 rounded border border-[#DCDFE6] px-2.5">
+              <CalendarCheck className="size-5 shrink-0 text-[#B0B5BF]" strokeWidth={1.6} aria-hidden="true" />
+              <DateSlot
+                label="开始日期"
                 value={draft.startDate}
-                onChange={(e) => setDraft((d) => ({ ...d, startDate: e.target.value }))}
-                className="min-w-0 flex-1 bg-transparent text-center text-[14px] text-[#3A4256] outline-none"
+                onChange={(startDate) => setDraft((d) => ({ ...d, startDate }))}
               />
-              <span aria-hidden="true" className="text-[#8A93A6]">
+              <span aria-hidden="true" className="text-[#666]">
                 –
               </span>
-              <input
-                type="date"
-                aria-label="结束日期"
+              <DateSlot
+                label="结束日期"
                 value={draft.endDate}
                 min={draft.startDate || undefined}
-                onChange={(e) => setDraft((d) => ({ ...d, endDate: e.target.value }))}
-                className="min-w-0 flex-1 bg-transparent text-center text-[14px] text-[#3A4256] outline-none"
+                onChange={(endDate) => setDraft((d) => ({ ...d, endDate }))}
               />
             </div>
           </Field>
         </div>
 
-        <div className="flex gap-3 px-5 pb-8 pt-3">
+        <div className="flex gap-6 px-5 pb-8 pt-4">
           <button
             type="button"
             onClick={reset}
-            className="h-12 flex-1 rounded-full border border-[#1E88F5] text-[16px] font-semibold text-[#1E88F5]"
+            className="h-12 flex-1 rounded-full border text-[17px]"
+            style={{ borderColor: PRIMARY, color: PRIMARY }}
           >
             重置
           </button>
           <button
             type="button"
             onClick={() => onConfirm(draft)}
-            className="h-12 flex-[2] rounded-full bg-[linear-gradient(135deg,#3DA9FF_0%,#1E88F2_100%)] text-[16px] font-semibold text-white shadow-[0_6px_16px_rgba(30,136,242,0.3)]"
+            className="h-12 flex-[2.1] rounded-full text-[17px] text-white"
+            style={{ backgroundColor: PRIMARY }}
           >
             确认选择
           </button>

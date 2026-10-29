@@ -11,8 +11,8 @@ export function GradingListScreen({ initialClassOpen = false }: { initialClassOp
   const [classOpen, setClassOpen] = useState(initialClassOpen)
   const [filter, setFilter] = useState<GradingFilter>({
     className: classes[0],
-    student: null,
-    subject: null,
+    student: '曹小明',
+    subject: '数学',
     startDate: "",
     endDate: "",
   })
