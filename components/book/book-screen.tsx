@@ -358,38 +358,96 @@ function ShareIcon({ className }: { className?: string }) {
 
 type Flight = { id: number; from: { x: number; y: number }; to: { x: number; y: number } }
 
+const FLIGHT_MS = 620
+const TRAIL_DELAYS = [50, 100, 150]
+
 function FlyingBulb({ flight, onLand }: { flight: Flight; onLand: () => void }) {
-  const ref = useRef<HTMLSpanElement>(null)
+  const badgeRef = useRef<HTMLSpanElement>(null)
+  const trailRefs = useRef<(HTMLSpanElement | null)[]>([])
+  const ringRef = useRef<HTMLSpanElement>(null)
   const landRef = useRef(onLand)
   landRef.current = onLand
 
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
+    const badge = badgeRef.current
+    const ring = ringRef.current
+    if (!badge || !ring) return
     const { from, to } = flight
-    const peakX = from.x + (to.x - from.x) * 0.35
-    const peakY = Math.min(from.y, to.y) - 60
-    const animation = el.animate(
-      [
-        { transform: `translate(${from.x}px, ${from.y}px) translate(-50%, -50%) scale(0.6)`, opacity: 0 },
-        { transform: `translate(${from.x}px, ${from.y - 16}px) translate(-50%, -50%) scale(1.15)`, opacity: 1, offset: 0.12 },
-        { transform: `translate(${peakX}px, ${peakY}px) translate(-50%, -50%) scale(1)`, opacity: 1, offset: 0.55 },
-        { transform: `translate(${to.x}px, ${to.y}px) translate(-50%, -50%) scale(0.35)`, opacity: 0.2 },
-      ],
-      { duration: 850, easing: 'cubic-bezier(0.45, 0, 0.25, 1)', fill: 'forwards' },
+    const at = (x: number, y: number, scale: number) => `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${scale})`
+    const easing = 'cubic-bezier(0.55, 0, 0.75, 0.3)'
+    const animations: Animation[] = []
+
+    animations.push(
+      badge.animate(
+        [
+          { transform: at(from.x, from.y, 0.4), opacity: 0 },
+          { transform: at(from.x, from.y - 10, 1.25), opacity: 1, offset: 0.2 },
+          { transform: at(to.x, to.y, 0.5), opacity: 1 },
+        ],
+        { duration: FLIGHT_MS, easing, fill: 'forwards' },
+      ),
     )
-    animation.onfinish = () => landRef.current()
-    return () => animation.cancel()
+
+    trailRefs.current.forEach((dot, i) => {
+      if (!dot) return
+      animations.push(
+        dot.animate(
+          [
+            { transform: at(from.x, from.y, 1), opacity: 0 },
+            { transform: at(from.x, from.y - 10, 1), opacity: 0.7, offset: 0.2 },
+            { transform: at(to.x, to.y, 0.3), opacity: 0 },
+          ],
+          { duration: FLIGHT_MS, delay: TRAIL_DELAYS[i], easing, fill: 'both' },
+        ),
+      )
+    })
+
+    let ringAnimation: Animation | undefined
+    animations[0].onfinish = () => {
+      badge.style.visibility = 'hidden'
+      landRef.current()
+      ringAnimation = ring.animate(
+        [
+          { transform: at(to.x, to.y, 0.4), opacity: 0.9 },
+          { transform: at(to.x, to.y, 2.2), opacity: 0 },
+        ],
+        { duration: 420, easing: 'ease-out', fill: 'forwards' },
+      )
+    }
+
+    return () => {
+      animations.forEach((animation) => animation.cancel())
+      ringAnimation?.cancel()
+    }
   }, [flight])
 
   return (
-    <span
-      ref={ref}
-      aria-hidden="true"
-      className="pointer-events-none absolute left-0 top-0 z-50 flex size-8 items-center justify-center rounded-full bg-[#1E88F5] text-white opacity-0 shadow-[0_6px_16px_rgba(30,136,245,0.45)]"
-    >
-      <BulbIcon className="size-[17px]" />
-    </span>
+    <>
+      {TRAIL_DELAYS.map((_, i) => (
+        <span
+          key={i}
+          ref={(el) => {
+            trailRefs.current[i] = el
+          }}
+          aria-hidden="true"
+          className="pointer-events-none absolute left-0 top-0 z-40 rounded-full bg-[#FDBA3B] opacity-0"
+          style={{ width: 8 - i * 2, height: 8 - i * 2 }}
+        />
+      ))}
+      <span
+        ref={ringRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-0 z-40 size-6 rounded-full border-2 border-[#F59E0B] opacity-0"
+      />
+      <span
+        ref={badgeRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-0 z-50 flex h-6 items-center gap-0.5 rounded-full bg-[#F59E0B] px-2 text-[12px] font-bold text-white opacity-0 shadow-[0_4px_12px_rgba(245,158,11,0.45)]"
+      >
+        <BulbIcon className="size-[13px]" />
+        +1
+      </span>
+    </>
   )
 }
 
