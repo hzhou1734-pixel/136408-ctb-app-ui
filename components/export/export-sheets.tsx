@@ -1,7 +1,7 @@
 'use client'
 
-import { Check, User, X } from 'lucide-react'
-import { useState } from 'react'
+import { Check, CircleCheck, User, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { students } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
 
@@ -87,16 +87,22 @@ export function StudentSheet({
   )
 }
 
-export function FileNameSheet({
-  defaultName,
-  onClose,
-  onConfirm,
-}: {
-  defaultName: string
-  onClose: () => void
-  onConfirm: (name: string) => void
-}) {
-  const [name, setName] = useState(defaultName)
+const TICK_MS = 250
+
+export function ProgressSheet({ names, onClose }: { names: string[]; onClose: () => void }) {
+  const [progress, setProgress] = useState<number[]>(() => names.map(() => 0))
+  const allDone = progress.every((p) => p >= 100)
+
+  useEffect(() => {
+    if (allDone) return
+    const speeds = names.map((_, i) => 4 + ((i * 7) % 9))
+    const timer = setInterval(() => {
+      setProgress((prev) => prev.map((p, i) => (i > 0 && prev[i - 1] < 30 ? p : Math.min(100, p + speeds[i]))))
+    }, TICK_MS)
+    return () => clearInterval(timer)
+  }, [allDone, names])
+
+  const doneCount = progress.filter((p) => p >= 100).length
 
   return (
     <Sheet label="导出PDF">
@@ -111,22 +117,60 @@ export function FileNameSheet({
           <X className="size-5" />
         </button>
       </div>
-      <label htmlFor="pdf-file-name" className="mt-5 block text-[14px] text-[#374151]">
-        文件名
-      </label>
-      <input
-        id="pdf-file-name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="mt-2.5 h-11 w-full rounded-xl border border-[#E3E7EF] bg-white px-3.5 text-[14px] text-[#1F2937] outline-none transition-colors focus:border-[#1E88F5] focus:ring-2 focus:ring-[#1E88F5]/15"
-      />
+      <p className="mt-1 text-[12px] text-[#9AA3B2]" aria-live="polite">
+        {allDone ? `全部生成完成，共 ${names.length} 份` : `正在生成错题本 ${doneCount}/${names.length}`}
+      </p>
+
+      <ul className="mt-4 flex max-h-[260px] flex-col gap-4 overflow-y-auto [scrollbar-width:none]">
+        {names.map((name, i) => {
+          const value = Math.round(progress[i])
+          const done = value >= 100
+          return (
+            <li key={name} className="flex flex-col gap-2">
+              <div className="flex items-center justify-between text-[14px]">
+                <span className="flex items-center gap-1.5 font-medium text-[#1F2937]">
+                  <User className="size-4 text-[#9AA3B2]" strokeWidth={2} aria-hidden="true" />
+                  {name}
+                </span>
+                {done ? (
+                  <span className="flex items-center gap-1 text-[13px] font-semibold text-[#16A34A]">
+                    <CircleCheck className="size-4" strokeWidth={2.4} aria-hidden="true" />
+                    生成成功
+                  </span>
+                ) : (
+                  <span className="text-[13px] font-semibold tabular-nums text-[#1E88F5]">
+                    {value === 0 ? '等待中' : `${value}%`}
+                  </span>
+                )}
+              </div>
+              <div
+                role="progressbar"
+                aria-label={`${name}的生成进度`}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={value}
+                className="h-2 overflow-hidden rounded-full bg-[#EEF1F7]"
+              >
+                <div
+                  className={cn(
+                    'h-full rounded-full transition-[width] duration-300 ease-out',
+                    done ? 'bg-[#22C55E]' : 'bg-[linear-gradient(90deg,#3FA9FF,#1E88F5)]',
+                  )}
+                  style={{ width: `${value}%` }}
+                />
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+
       <button
         type="button"
-        disabled={name.trim().length === 0}
-        onClick={() => onConfirm(name.trim())}
-        className="mt-8 h-12 w-full rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
+        disabled={!allDone}
+        onClick={onClose}
+        className="mt-6 h-12 w-full rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
       >
-        确定
+        {allDone ? '完成' : '生成中…'}
       </button>
     </Sheet>
   )

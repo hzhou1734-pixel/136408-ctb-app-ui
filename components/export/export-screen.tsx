@@ -4,7 +4,7 @@ import { ChevronDown, ChevronLeft, Minus, Plus, Sparkles, Trash2 } from 'lucide-
 import { useState } from 'react'
 import type { Question } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
-import { FileNameSheet, Mask, StudentSheet } from './export-sheets'
+import { Mask, ProgressSheet, StudentSheet } from './export-sheets'
 
 type Layout = 'single' | 'double'
 
@@ -178,17 +178,7 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
         />
       )}
       {step === 'filename' && (
-        <FileNameSheet
-          defaultName={`原题错题本-${subject}-${targets.length > 1 ? `${targets[0]}等${targets.length}人` : targets[0]}-${date.replaceAll('-', '')}`}
-          onClose={() => setStep(null)}
-          onConfirm={(fileName) => {
-            setStep(null)
-            const prevTitle = document.title
-            document.title = fileName
-            window.print()
-            document.title = prevTitle
-          }}
-        />
+        <ProgressSheet names={targets} onClose={() => setStep(null)} />
       )}
     </div>
   )
