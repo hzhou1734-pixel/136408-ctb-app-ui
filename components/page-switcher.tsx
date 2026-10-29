@@ -80,6 +80,7 @@ const groups: PageGroup[] = [
     pages: [
       { href: '/book', label: '错题本' },
       { href: '/book/0-0-1', label: '错题详情' },
+      { href: '/apps', label: '应用' },
     ],
   },
 ]

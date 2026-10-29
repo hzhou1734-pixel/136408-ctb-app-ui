@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ClipboardPlus } from 'lucide-react'
+import { Box, ClipboardPlus } from 'lucide-react'
 
-type NavKey = 'home' | 'book'
+type NavKey = 'home' | 'book' | 'app'
 
 function RaisedIcon({ tab }: { tab: NavKey }) {
   if (tab === 'home') {
@@ -16,6 +16,13 @@ function RaisedIcon({ tab }: { tab: NavKey }) {
       />
     )
   }
+  if (tab === 'app') {
+    return (
+      <span className="absolute -top-[52px] flex size-[48px] items-center justify-center rounded-full bg-[linear-gradient(135deg,#3DA9FF_0%,#1E88F2_100%)] text-white shadow-[0_6px_16px_rgba(30,136,245,0.45)] ring-[3px] ring-white">
+        <Box className="size-6" strokeWidth={2} aria-hidden="true" />
+      </span>
+    )
+  }
   return (
     <span className="absolute -top-[52px] flex size-[48px] items-center justify-center rounded-full bg-[linear-gradient(135deg,#3DA9FF_0%,#1E88F2_100%)] text-white shadow-[0_6px_16px_rgba(30,136,245,0.45)] ring-[3px] ring-white">
       <ClipboardPlus className="size-6" strokeWidth={2} aria-hidden="true" />
@@ -27,7 +34,7 @@ export function BottomNav({ active = 'home' }: { active?: NavKey }) {
   const tabs = [
     { key: 'home' as const, label: '首页', href: '/' },
     { key: 'book' as const, label: '错题本', href: '/book', icon: '/images/home/nav-2.png' },
-    { key: 'app', label: '应用', href: '#', icon: '/images/home/nav-3.png' },
+    { key: 'app' as const, label: '应用', href: '/apps', icon: '/images/home/nav-3.png' },
     { key: 'me', label: '我的', href: '#', icon: '/images/home/nav-4.png' },
   ]
 
