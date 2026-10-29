@@ -37,7 +37,13 @@ const groups: PageGroup[] = [
     pages: [
       { href: '/practice', label: '举一反三' },
       { href: '/export?sheet=bank', label: '题库推送' },
+      { href: '/export?push=bank&sheet=students', label: '题库推送·选择学生' },
+      { href: '/export?push=bank&sheet=filename', label: '题库推送·导出PDF' },
+      { href: '/export?push=bank&sheet=done', label: '题库推送·导出成功' },
       { href: '/export?sheet=ai', label: 'AI推送' },
+      { href: '/export?push=ai&sheet=students', label: 'AI推送·选择学生' },
+      { href: '/export?push=ai&sheet=filename', label: 'AI推送·导出PDF' },
+      { href: '/export?push=ai&sheet=done', label: 'AI推送·导出成功' },
     ],
   },
 ]
@@ -57,7 +63,15 @@ function PageSwitcherContent() {
   const params = useSearchParams()
   const sheet = params.get('sheet')
   const mode = params.get('mode')
-  const current = sheet ? `${pathname}?sheet=${sheet}` : mode ? `${pathname}?mode=${mode}` : pathname
+  const push = params.get('push')
+  const current =
+    push && sheet
+      ? `${pathname}?push=${push}&sheet=${sheet}`
+      : sheet
+        ? `${pathname}?sheet=${sheet}`
+        : mode
+          ? `${pathname}?mode=${mode}`
+          : pathname
 
   return (
     <aside
