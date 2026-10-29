@@ -97,10 +97,12 @@ export function SuccessDialog({
   count,
   onBack,
   message,
+  title = '导出成功',
 }: {
   count: number
   onBack: () => void
   message?: React.ReactNode
+  title?: string
 }) {
   return (
     <div className="absolute inset-x-0 bottom-0 top-12 z-50 flex items-center justify-center px-6">
@@ -115,7 +117,7 @@ export function SuccessDialog({
           <CircleCheck className="size-7 text-[#16A34A]" strokeWidth={2.2} aria-hidden="true" />
         </span>
         <h2 id="export-success-title" className="mt-3 text-[17px] font-bold text-[#1F2937]">
-          导出成功
+          {title}
         </h2>
         <p id="export-success-desc" className="mt-2 text-[14px] text-[#4B5563]">
           {message ?? (

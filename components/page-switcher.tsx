@@ -32,6 +32,15 @@ const groups: PageGroup[] = [
       { href: '/export?sheet=done', label: '导出成功' },
     ],
   },
+  {
+    title: '举一反三',
+    pages: [
+      { href: '/practice', label: '举一反三' },
+      { href: '/practice?sheet=bank', label: '题库推送' },
+      { href: '/practice?sheet=ai', label: 'AI推送' },
+      { href: '/practice?sheet=pushed', label: '推送成功' },
+    ],
+  },
 ]
 
 const totalPages = groups.reduce((sum, group) => sum + group.pages.length, 0)

@@ -13,6 +13,9 @@ import { SelectCircle } from './select-circle'
 const classes = ['星辰班', '启明班', '晨曦班']
 
 type AssignStep = 'none' | 'students' | 'done'
+type PushMode = 'bank' | 'ai'
+
+const pushLabels: Record<PushMode, string> = { bank: '题库推送', ai: 'AI推送' }
 
 const previewSelection = () =>
   new Set(buildGroups(students[0], '数学')[0]?.questions.slice(0, 3).map((q) => q.id) ?? [])
@@ -20,10 +23,16 @@ const previewSelection = () =>
 export function OrganizeScreen({
   initialFilterOpen = false,
   initialAssignStep = 'none',
+  variant = 'organize',
+  initialPushMode = 'bank',
 }: {
   initialFilterOpen?: boolean
   initialAssignStep?: AssignStep
+  variant?: 'organize' | 'practice'
+  initialPushMode?: PushMode
 }) {
+  const isPractice = variant === 'practice'
+  const [pushMode, setPushMode] = useState<PushMode>(initialPushMode)
   const [className, setClassName] = useState(classes[0])
   const [classOpen, setClassOpen] = useState(false)
   const [subject, setSubject] = useState<Subject>('数学')
@@ -103,7 +112,7 @@ export function OrganizeScreen({
         >
           <ChevronLeft className="size-6" strokeWidth={2.2} />
         </a>
-        <h1 className="text-[17px] font-bold text-[#1F2937]">错题整理</h1>
+        <h1 className="text-[17px] font-bold text-[#1F2937]">{isPractice ? '举一反三' : '错题整理'}</h1>
         <button
           type="button"
           aria-haspopup="dialog"
@@ -279,6 +288,33 @@ export function OrganizeScreen({
         </div>
 
           <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex items-center gap-2.5 bg-[linear-gradient(180deg,rgba(239,241,253,0)_0%,#EFF1FD_50%)] pt-10">
+            {isPractice ? (
+              <>
+                <button
+                  type="button"
+                  disabled={count === 0}
+                  onClick={() => {
+                    setPushMode('bank')
+                    setAssignStep('students')
+                  }}
+                  className="pointer-events-auto h-11 min-w-0 flex-1 truncate rounded-full border border-[#1E88F5] bg-white px-2 text-[14px] font-bold text-[#1E88F5] transition-opacity disabled:opacity-50"
+                >
+                  题库推送（已选 {count}）
+                </button>
+                <button
+                  type="button"
+                  disabled={count === 0}
+                  onClick={() => {
+                    setPushMode('ai')
+                    setAssignStep('students')
+                  }}
+                  className="pointer-events-auto h-11 min-w-0 flex-1 truncate rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-2 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
+                >
+                  AI推送（已选 {count}）
+                </button>
+              </>
+            ) : (
+            <>
             <button
               type="button"
               disabled={count === 0}
@@ -302,6 +338,8 @@ export function OrganizeScreen({
             >
               导出错题本（已选 {count}）
             </button>
+            </>
+            )}
           </div>
         </div>
       </div>
@@ -321,8 +359,14 @@ export function OrganizeScreen({
         <>
           <Mask onClick={() => setAssignStep('none')} />
           <StudentSheet
-            title="选择学生，导出到错题库"
-            subtitle={`已选 ${count} 道题目，将加入所选学生的错题库`}
+            title={isPractice ? `选择学生，${pushLabels[pushMode]}举一反三` : '选择学生，导出到错题库'}
+            subtitle={
+              isPractice
+                ? pushMode === 'ai'
+                  ? `将基于已选 ${count} 道题目由 AI 生成同类题，推送给所选学生`
+                  : `将从题库匹配已选 ${count} 道题目的同类题，推送给所选学生`
+                : `已选 ${count} 道题目，将加入所选学生的错题库`
+            }
             initial={[]}
             onConfirm={(names) => {
               setAssignedStudents(names.length)
@@ -340,7 +384,17 @@ export function OrganizeScreen({
               setAssignStep('none')
               setSelected(new Set())
             }}
+            title={isPractice ? '推送成功' : undefined}
             message={
+              isPractice ? (
+                <>
+                  {`已通过${pushLabels[pushMode]}将 `}
+                  <span className="font-bold text-[#1E88F5]">{count}</span>
+                  {' 道题目的举一反三练习推送给 '}
+                  <span className="font-bold text-[#1E88F5]">{assignedStudents}</span>
+                  {' 位同学！'}
+                </>
+              ) : (
               <>
                 {'已将 '}
                 <span className="font-bold text-[#1E88F5]">{count}</span>
@@ -348,6 +402,7 @@ export function OrganizeScreen({
                 <span className="font-bold text-[#1E88F5]">{assignedStudents}</span>
                 {' 位同学的错题库！'}
               </>
+              )
             }
           />
         </>

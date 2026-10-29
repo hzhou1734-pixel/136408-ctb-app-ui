@@ -4,7 +4,7 @@ import { SectionTitle } from './section-title'
 const tools = [
   { label: '错题拍收', icon: 'tool-1.png', href: '/capture' },
   { label: '错题整理', icon: 'tool-2.png', href: '/organize' },
-  { label: '举一反三', icon: 'tool-3.png', href: '#' },
+  { label: '举一反三', icon: 'tool-3.png', href: '/practice' },
   { label: '作业批改', icon: 'tool-5.png', href: '#' },
   { label: '作文批阅', icon: 'tool-6.png', href: '#' },
   { label: '智能组卷', icon: 'tool-7.png', href: '#' },
