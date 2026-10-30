@@ -1,6 +1,6 @@
 'use client'
 
-import { ImageIcon, RotateCw, X, Zap } from 'lucide-react'
+import { ChevronLeft, ImageIcon, RotateCw } from 'lucide-react'
 
 type CameraViewProps = {
   title: string
@@ -27,14 +27,6 @@ export function CameraView({ title, onClose, onShoot }: CameraViewProps) {
         }}
       >
         <header className="relative flex h-12 shrink-0 items-center justify-center px-4">
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="关闭拍摄"
-            className="absolute left-4 flex size-9 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
-          >
-            <X className="size-5" />
-          </button>
           <h2 className="text-[16px] font-semibold">{title}</h2>
         </header>
 
@@ -73,9 +65,14 @@ export function CameraView({ title, onClose, onShoot }: CameraViewProps) {
           </div>
 
           <div className="flex w-24 shrink-0 flex-col items-center justify-between py-2">
-            <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-full bg-white/10">
-              <Zap className="size-[18px]" />
-            </span>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="返回"
+              className="flex size-10 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
+            >
+              <ChevronLeft aria-hidden="true" className="size-5" />
+            </button>
             <button
               type="button"
               onClick={onShoot}
