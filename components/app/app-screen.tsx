@@ -28,7 +28,7 @@ export function AppScreen() {
     return () => clearTimeout(timer)
   }, [toast])
 
-  const open = (title: string) => setToast(`${title} 即将上线`)
+  const open = (title: string) => setToast("打开AI素养盒")
 
   return (
     <div className="relative flex flex-1 flex-col overflow-hidden bg-[#F5F7FB]">
