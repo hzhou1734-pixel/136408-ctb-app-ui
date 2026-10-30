@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 
 import { ChevronLeft, Plus, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -114,13 +115,13 @@ export function EssayReviewScreen() {
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
       <header className="relative flex h-12 shrink-0 items-center justify-center px-4">
-        <a
+        <Link
           href="/essay"
           aria-label="返回作文列表"
           className="absolute left-3 flex size-9 items-center justify-center rounded-full text-[#1F2937] transition-colors hover:bg-white/60"
         >
           <ChevronLeft className="size-6" strokeWidth={2.2} />
-        </a>
+        </Link>
         <h1 className="text-[17px] font-bold text-[#1F2937]">作文批阅</h1>
       </header>
 

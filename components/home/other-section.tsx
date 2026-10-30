@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { SectionTitle } from '@/components/home/section-title'
 
 const posters = [
@@ -22,7 +23,7 @@ export function OtherSection() {
       <SectionTitle id="other-title">其他</SectionTitle>
       <div className="grid grid-cols-2 gap-3 px-5">
         {posters.map((poster) => (
-          <a
+          <Link
             key={poster.title}
             href={poster.href}
             className={`flex h-[84px] items-center justify-between overflow-hidden rounded-[16px] bg-gradient-to-br ${poster.card} pl-4 pr-2 text-left shadow-[0_4px_16px_rgba(80,110,200,0.08)] transition-transform active:scale-[0.97]`}
@@ -35,7 +36,7 @@ export function OtherSection() {
               height={64}
               className="size-16 shrink-0 object-contain"
             />
-          </a>
+          </Link>
         ))}
       </div>
     </section>

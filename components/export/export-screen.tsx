@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 
 import { ChevronDown, ChevronLeft, Minus, Plus, Sparkles, Trash2 } from 'lucide-react'
 import { useState } from 'react'
@@ -36,13 +37,13 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
       <header className="relative flex h-12 shrink-0 items-center justify-center px-4">
-        <a
+        <Link
           href={initialPush ? '/practice' : '/organize'}
           aria-label={initialPush ? '返回举一反三' : '返回错题整理'}
           className="absolute left-3 flex size-9 items-center justify-center rounded-full text-[#1F2937] transition-colors hover:bg-white/60"
         >
           <ChevronLeft className="size-6" strokeWidth={2.2} />
-        </a>
+        </Link>
         <h1 className="text-[17px] font-bold text-[#1F2937]">设置及排版</h1>
       </header>
 

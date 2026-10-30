@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 export function SectionTitle({
   id,
@@ -16,9 +17,9 @@ export function SectionTitle({
         {children}
       </h2>
       {moreHref && (
-        <a href={moreHref} className="text-[13px] text-[#1E88F5]">
+        <Link href={moreHref} className="text-[13px] text-[#1E88F5]">
           {'更多>'}
-        </a>
+        </Link>
       )}
     </div>
   )

@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 
 import { ArrowLeftRight, Camera, ChevronLeft, ChevronRight, FileText, Plus, Search, Trash2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
@@ -34,13 +35,13 @@ export function EssayListScreen({ initialClassOpen = false }: { initialClassOpen
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
       <header className="relative flex h-12 shrink-0 items-center justify-center px-4">
-        <a
+        <Link
           href="/"
           aria-label="返回首页"
           className="absolute left-3 flex size-9 items-center justify-center rounded-full text-[#1F2937] transition-colors hover:bg-white/60"
         >
           <ChevronLeft className="size-6" strokeWidth={2.2} />
-        </a>
+        </Link>
         <h1 className="text-[17px] font-bold text-[#1F2937]">语文作文</h1>
       </header>
 
@@ -84,7 +85,7 @@ export function EssayListScreen({ initialClassOpen = false }: { initialClassOpen
                 key={record.id}
                 className="flex items-stretch rounded-2xl bg-white shadow-[0_4px_14px_rgba(30,64,140,0.05)] transition-colors hover:bg-[#F8FAFF]"
               >
-                <a href="#" className="flex min-w-0 flex-1 flex-col gap-3 py-3.5 pl-4 pr-2">
+                <Link href="#" className="flex min-w-0 flex-1 flex-col gap-3 py-3.5 pl-4 pr-2">
                   <div className="flex items-center gap-2">
                     <span className="flex size-5 shrink-0 items-center justify-center rounded-[5px] bg-[#3DA9FF] text-white">
                       <FileText className="size-3.5" aria-hidden="true" />
@@ -101,7 +102,7 @@ export function EssayListScreen({ initialClassOpen = false }: { initialClassOpen
                     </span>
                     <time className="shrink-0 tabular-nums">{record.submittedAt}</time>
                   </div>
-                </a>
+                </Link>
                 <button
                   type="button"
                   aria-label={`删除作文：${record.title}`}
@@ -119,13 +120,13 @@ export function EssayListScreen({ initialClassOpen = false }: { initialClassOpen
         )}
       </div>
 
-      <a
+      <Link
         href="/essay/new"
         aria-label="新建作文批阅"
         className="absolute bottom-8 right-5 flex size-14 items-center justify-center rounded-full bg-[linear-gradient(135deg,#3DA9FF_0%,#1E88F2_100%)] text-white shadow-[0_8px_20px_rgba(30,136,242,0.35)] transition-transform active:scale-95"
       >
         <Plus className="size-7" strokeWidth={2.4} />
-      </a>
+      </Link>
 
       <div
         role="status"

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { SectionTitle } from './section-title'
 
 const tools = [
@@ -17,13 +18,13 @@ export function ToolboxGrid() {
       <ul className="grid grid-cols-3 gap-x-3.5 gap-y-3 px-5">
         {tools.map(({ label, icon, href }) => (
           <li key={label}>
-            <a
+            <Link
               href={href}
               className="flex aspect-square flex-col items-center justify-center gap-2.5 rounded-[15px] bg-white transition-transform active:scale-95"
             >
               <Image src={`/images/home/${icon}`} alt="" width={62} height={62} className="size-[46px]" />
               <span className="text-[13px] font-semibold text-[#1F2937]">{label}</span>
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

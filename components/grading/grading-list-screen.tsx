@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 
 import { ArrowLeftRight, Camera, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
@@ -30,13 +31,13 @@ export function GradingListScreen({ initialClassOpen = false }: { initialClassOp
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
       <header className="relative flex h-12 shrink-0 items-center justify-center px-4">
-        <a
+        <Link
           href="/"
           aria-label="返回首页"
           className="absolute left-3 flex size-9 items-center justify-center rounded-full text-[#1F2937] transition-colors hover:bg-white/60"
         >
           <ChevronLeft className="size-6" strokeWidth={2.2} />
-        </a>
+        </Link>
         <h1 className="text-[17px] font-bold text-[#1F2937]">批改列表</h1>
       </header>
 
@@ -65,7 +66,7 @@ export function GradingListScreen({ initialClassOpen = false }: { initialClassOp
             <ul className="flex flex-col gap-2.5">
               {group.items.map((record) => (
                 <li key={record.id}>
-                  <a
+                  <Link
                     href="#"
                     className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3.5 shadow-[0_4px_14px_rgba(30,64,140,0.05)] transition-colors hover:bg-[#F8FAFF]"
                   >
@@ -85,7 +86,7 @@ export function GradingListScreen({ initialClassOpen = false }: { initialClassOp
                       </p>
                     </div>
                     <ChevronRight className="size-5 shrink-0 text-[#B4BBC8]" aria-hidden="true" />
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

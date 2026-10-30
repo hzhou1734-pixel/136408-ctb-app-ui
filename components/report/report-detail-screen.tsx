@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 
 import { ChevronLeft, Download } from 'lucide-react'
 import { useCallback, useState } from 'react'
@@ -83,13 +84,13 @@ export function ReportDetailScreen({ report }: { report: ClearReport }) {
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
       <header className="relative flex h-12 shrink-0 items-center justify-center px-12">
-        <a
+        <Link
           href="/report"
           aria-label="返回报告列表"
           className="absolute left-3 flex size-9 items-center justify-center rounded-full text-[#1F2937] transition-colors hover:bg-white/60"
         >
           <ChevronLeft className="size-6" strokeWidth={2.2} />
-        </a>
+        </Link>
         <h1 className="truncate text-[17px] font-bold text-[#1F2937]">{report.student}的错题清零报告</h1>
       </header>
 
