@@ -86,6 +86,15 @@ const groups: PageGroup[] = [
   title: '应用',
   pages: [{ href: '/apps', label: '应用' }],
   },
+  {
+    title: '我的',
+    pages: [
+      { href: '/me', label: '个人中心' },
+      { href: '/me/feedback', label: '意见反馈' },
+      { href: '/me/about', label: '关于错题宝' },
+      { href: '/me/settings', label: '设置' },
+    ],
+  },
 ]
 
 const totalPages = groups.reduce((sum, group) => sum + group.pages.length, 0)
