@@ -1,8 +1,8 @@
 'use client'
 
-import Link from 'next/link'
 import { ChevronLeft, Download } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+import { Mask, ProgressSheet, SuccessDialog } from '@/components/export/export-sheets'
 import { periods, type Period } from '@/lib/stats-data'
 import {
   getSubjectStats,
@@ -66,6 +66,8 @@ export function ReportDetailScreen({ report }: { report: ClearReport }) {
   const [period, setPeriod] = useState<Period>(report.period)
   const subjects = stageSubjects[report.stage]
   const [subject, setSubject] = useState(subjects[0])
+  const [exportStep, setExportStep] = useState<'progress' | 'done' | null>(null)
+  const handleExportComplete = useCallback(() => setExportStep('done'), [])
   const stats = getSubjectStats(report.student, period, subject)
   const trend = getTrend(report.student, period, subject)
   const unit = period.endsWith('周') ? '周' : '月'
@@ -166,14 +168,33 @@ export function ReportDetailScreen({ report }: { report: ClearReport }) {
       </div>
 
       <div className="shrink-0 px-4 pb-5 pt-2">
-        <Link
-          href="/export?sheet=filename"
+        <button
+          type="button"
+          onClick={() => setExportStep('progress')}
           className="flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-[linear-gradient(90deg,#3DA9FF,#1E6FF2)] text-[16px] font-bold text-white shadow-[0_8px_20px_rgba(30,111,242,0.3)] transition-transform active:scale-[0.98]"
         >
           <Download className="size-[18px]" aria-hidden="true" />
           下载{period}错题本
-        </Link>
+        </button>
       </div>
+
+      {exportStep && <Mask onClick={() => exportStep === 'done' && setExportStep(null)} />}
+      {exportStep === 'progress' && (
+        <ProgressSheet names={[report.student]} onComplete={handleExportComplete} />
+      )}
+      {exportStep === 'done' && (
+        <SuccessDialog
+          count={1}
+          onBack={() => setExportStep(null)}
+          message={
+            <>
+              {'已完成 '}
+              <span className="font-bold text-[#1E88F5]">{report.student}</span>
+              {` 的${period}错题本导出！`}
+            </>
+          }
+        />
+      )}
     </div>
   )
 }
