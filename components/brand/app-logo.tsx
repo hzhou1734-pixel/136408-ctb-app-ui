@@ -7,30 +7,20 @@ export function AppLogo({ className }: { className?: string }) {
       role="img"
       aria-label="Max AI错题宝图标"
       className={cn('block', className)}
+      shapeRendering="geometricPrecision"
     >
       <rect width="100" height="100" rx="24" fill="#FFFFFF" />
-      <g transform="translate(50 50) scale(0.88) translate(-51.5 -47.5)">
+      <path d="M57 50 L15.3 65 A38 38 0 0 1 67.1 17.6 Z" fill="#4E86E8" />
       <path
-        d="M25.7 55.6 A28 28 0 0 1 52 18"
-        fill="none"
-        stroke="#4F7FE6"
-        strokeWidth="22"
-        strokeLinecap="round"
+        d="M60.8 15.3 A38 38 0 0 1 72.8 83.1 A11 11 0 0 1 60.2 65.1 Q62.5 55 61.8 41 Q56.5 30 60.8 15.3 Z"
+        fill="#3456D4"
       />
       <path
-        d="M52 18 A28 28 0 0 1 61.6 72.3"
-        fill="none"
-        stroke="#2F55D4"
-        strokeWidth="22"
-        strokeLinecap="round"
+        d="M53 68 C54 60 56 54 54 46 L46 38 C40 44 36 47 32 47 A21 21 0 1 0 53 68 Z"
+        fill="#74E6C6"
       />
-      <path
-        d="M51 34 C45 34 41 38 40 43 C27 41 12 50 12 66 C12 79 22 88 34 88 C47 88 56 79 55 67 C54 59 61 52 61 44 C61 38 57 34 51 34 Z"
-        fill="#74E3C4"
-      />
-      <circle cx="51" cy="42" r="10" fill="#FFFFFF" />
-      <circle cx="51" cy="42" r="4.8" fill="#F4A62A" />
-      </g>
+      <circle cx="51" cy="44" r="11" fill="#FFFFFF" />
+      <circle cx="52" cy="45" r="5" fill="#F4A62A" />
     </svg>
   )
 }
