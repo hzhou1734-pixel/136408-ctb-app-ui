@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { ChevronRight, CircleMinus, LockKeyhole } from 'lucide-react'
 
 export function SettingsScreen() {
@@ -17,7 +18,31 @@ export function SettingsScreen() {
 
   return (
     <div className="relative flex flex-1 flex-col">
-      <ul className="mx-4 mt-2 flex flex-col divide-y divide-[#EEF1F6] overflow-hidden rounded-xl bg-[#FFFFFF]">
+      <section
+        aria-label="个人资料"
+        className="mx-4 mt-2 flex flex-col divide-y divide-[#EEF1F6] overflow-hidden rounded-xl bg-[#FFFFFF]"
+      >
+        <div className="flex h-[72px] items-center gap-3 px-4">
+          <span className="flex-1 text-[15px] text-[#1F2533]">头像</span>
+          <Image
+            src="/images/me/avatar.png"
+            alt="谭亮的头像"
+            width={96}
+            height={96}
+            className="size-12 rounded-full object-cover"
+          />
+        </div>
+        <div className="flex h-14 items-center gap-3 px-4">
+          <span className="flex-1 text-[15px] text-[#1F2533]">昵称</span>
+          <span className="text-[15px] text-[#8A92A3]">谭亮</span>
+        </div>
+        <div className="flex h-14 items-center gap-3 px-4">
+          <span className="flex-1 text-[15px] text-[#1F2533]">账号</span>
+          <span className="text-[15px] tabular-nums text-[#8A92A3]">0014</span>
+        </div>
+      </section>
+
+      <ul className="mx-4 mt-3 flex flex-col divide-y divide-[#EEF1F6] overflow-hidden rounded-xl bg-[#FFFFFF]">
         <li>
           <button type="button" onClick={() => setToast('打开修改密码')} className={rowClass}>
             <span className="flex size-8 items-center justify-center rounded-lg bg-[#EEF4FE] text-[#1E88F2]">
