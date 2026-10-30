@@ -1,6 +1,6 @@
 'use client'
 
-import { Camera, Check, Info, RotateCcw, X } from 'lucide-react'
+import { Camera, Check, RotateCcw, X } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { CameraView } from './camera-view'
@@ -32,11 +32,6 @@ export function CrossPageCapture() {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-4 pt-5 [scrollbar-width:none]">
-        <p className="flex items-start gap-2 rounded-[12px] bg-white/70 px-3.5 py-2.5 text-[13px] leading-relaxed text-[#5B6478]">
-          <Info aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-[#1E88F5]" />
-          题目跨页时，按顺序分段拍摄，AI 会自动拼接成完整题目
-        </p>
-
         <ol className="flex flex-col">
           {parts.map((part, index) => {
             const done = captured[index]
