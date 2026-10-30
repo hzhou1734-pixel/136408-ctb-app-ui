@@ -305,17 +305,19 @@ export function OrganizeScreen({
                   type="button"
                   disabled={count === 0}
                   onClick={() => openExport('bank')}
-                  className="pointer-events-auto h-11 min-w-0 flex-1 whitespace-nowrap rounded-full border border-[#1E88F5] bg-white px-1 text-[13px] tracking-tight font-bold text-[#1E88F5] transition-opacity disabled:opacity-50"
+                  className="pointer-events-auto flex h-12 min-w-0 flex-1 flex-col items-center justify-center whitespace-nowrap rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-2 font-bold leading-tight text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
                 >
-                  题库推送（已选 {count}）
+                  <span className="text-[14px]">题库推送</span>
+                  <span className="text-[11px] font-medium opacity-90">（已选 {count}）</span>
                 </button>
                 <button
                   type="button"
                   disabled={count === 0}
                   onClick={() => openExport('ai')}
-                  className="pointer-events-auto h-11 min-w-0 flex-1 whitespace-nowrap rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-1 text-[13px] tracking-tight font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
+                  className="pointer-events-auto flex h-12 min-w-0 flex-1 flex-col items-center justify-center whitespace-nowrap rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-2 font-bold leading-tight text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
                 >
-                  AI推送（已选 {count}）
+                  <span className="text-[14px]">AI推送</span>
+                  <span className="text-[11px] font-medium opacity-90">（已选 {count}）</span>
                 </button>
               </>
             ) : (
