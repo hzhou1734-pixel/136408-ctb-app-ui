@@ -128,7 +128,7 @@ function PageSwitcherContent() {
   return (
     <aside
       aria-label="全部页面"
-      className="hidden w-[520px] shrink-0 flex-col gap-8 py-10 lg:flex xl:w-auto"
+      className="hidden w-[520px] shrink-0 flex-col gap-8 overflow-y-auto overscroll-contain py-10 [scrollbar-width:none] lg:flex lg:h-dvh xl:w-auto [&::-webkit-scrollbar]:hidden"
     >
       <header className="flex flex-col items-start gap-4">
         <span className="rounded-full bg-[#DCEBFF] px-3.5 py-1.5 text-sm font-semibold text-[#1E5FB8]">
@@ -157,6 +157,7 @@ function PageSwitcherContent() {
                   <li key={page.href} className={page.newRow ? 'basis-full' : undefined}>
                     <Link
                       href={page.href}
+                      scroll={false}
                       aria-current={active ? 'page' : undefined}
                       className={`inline-flex h-10 items-center rounded-full px-4 text-[15px] font-medium transition-colors ${
                         active
