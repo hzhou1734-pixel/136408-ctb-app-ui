@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
+import { AppLogo } from '@/components/brand/app-logo'
 import { ChevronRight, FileText, ShieldCheck, X } from 'lucide-react'
 
 const docs = {
@@ -38,13 +38,7 @@ export function AboutScreen() {
   return (
     <div className="relative flex flex-1 flex-col">
       <div className="flex flex-col items-center gap-2 pb-8 pt-8">
-        <Image
-          src="/images/home/home.png"
-          alt="Max AI错题宝图标"
-          width={152}
-          height={152}
-          className="size-[76px] rounded-[22px] bg-[#FFFFFF] shadow-[0_8px_20px_-8px_rgba(30,136,245,0.5)]"
-        />
+        <AppLogo className="size-[84px] rounded-[22px] shadow-[0_10px_24px_-10px_rgba(47,85,212,0.45)] ring-1 ring-[#EEF1F6]" />
         <h2 className="mt-2 text-[18px] font-semibold text-[#1F2533]">Max AI错题宝</h2>
         <p className="text-[13px] text-[#8A92A3]">版本号 V2.5.8</p>
       </div>
