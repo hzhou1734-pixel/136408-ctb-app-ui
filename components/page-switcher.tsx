@@ -76,12 +76,15 @@ const groups: PageGroup[] = [
     ],
   },
   {
-    title: '底部菜单',
-    pages: [
-      { href: '/book', label: '错题本' },
-      { href: '/book/0-0-1', label: '错题详情' },
-      { href: '/apps', label: '应用', newRow: true },
-    ],
+  title: '错题本',
+  pages: [
+  { href: '/book', label: '错题本' },
+  { href: '/book/0-0-1', label: '错题详情' },
+  ],
+  },
+  {
+  title: '应用',
+  pages: [{ href: '/apps', label: '应用' }],
   },
 ]
 
