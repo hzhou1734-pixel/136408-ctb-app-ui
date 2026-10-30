@@ -70,7 +70,7 @@ export function FeedbackScreen() {
           href="/me"
           className="mt-4 flex h-11 w-full items-center justify-center rounded-full bg-[linear-gradient(135deg,#3DA9FF_0%,#1E88F2_100%)] text-[15px] font-semibold text-[#FFFFFF]"
         >
-          返回我的
+          返回个人中心
         </Link>
       </div>
     )
