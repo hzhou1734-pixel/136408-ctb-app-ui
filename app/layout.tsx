@@ -40,8 +40,10 @@ export default function RootLayout({
     <html lang="zh-CN">
       <body className="bg-[#E9ECF3] antialiased">
         <div className="lg:flex lg:h-dvh lg:items-stretch lg:justify-center lg:gap-16 lg:overflow-hidden lg:px-10">
-          <div className="lg:flex lg:h-dvh lg:w-[400px] lg:shrink-0 lg:items-center lg:overflow-hidden">
-            <div className="w-full">{children}</div>
+          <div className="flex min-h-dvh items-center justify-center sm:py-8 lg:h-dvh lg:w-[400px] lg:shrink-0 lg:overflow-hidden">
+            <div className="relative flex h-dvh w-full max-w-[400px] flex-col overflow-hidden bg-[#F5F7FB] sm:h-[860px] sm:rounded-[44px] sm:border-[10px] sm:border-[#1E2433] sm:shadow-2xl">
+              {children}
+            </div>
           </div>
           <PageSwitcher />
         </div>

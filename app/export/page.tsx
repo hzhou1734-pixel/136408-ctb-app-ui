@@ -26,8 +26,8 @@ export default async function ExportPage({
   const questions = picked.length > 0 ? picked : all.slice(0, 5)
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-[#E9ECF3] sm:py-8">
-      <div className="relative flex h-dvh w-full max-w-[400px] flex-col overflow-hidden bg-[linear-gradient(180deg,#E6EDFC_0%,#ECF0FC_20%,#EFF1FD_100%)] sm:h-[860px] sm:rounded-[44px] sm:border-[10px] sm:border-[#1E2433] sm:shadow-2xl">
+    <div className="contents">
+      <div className="relative flex h-full w-full flex-col overflow-hidden bg-[linear-gradient(180deg,#E6EDFC_0%,#ECF0FC_20%,#EFF1FD_100%)]">
         <StatusBar />
         <ExportScreen student={student} subject={subject} date="2026-10-17" questions={questions}
           initialStep={initialStep}

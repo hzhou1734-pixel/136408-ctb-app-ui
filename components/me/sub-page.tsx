@@ -4,8 +4,8 @@ import { StatusBar } from '@/components/home/status-bar'
 
 export function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-[#E9ECF3] sm:py-8">
-      <div className="relative flex h-dvh w-full max-w-[400px] flex-col overflow-hidden bg-[#F5F7FB] sm:h-[860px] sm:rounded-[44px] sm:border-[10px] sm:border-[#1E2433] sm:shadow-2xl">
+    <div className="contents">
+      <div className="relative flex h-full w-full flex-col overflow-hidden bg-[#F5F7FB]">
         {children}
       </div>
     </div>
