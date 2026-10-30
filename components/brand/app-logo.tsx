@@ -10,19 +10,16 @@ export function AppLogo({ className }: { className?: string }) {
       shapeRendering="geometricPrecision"
     >
       <rect width="100" height="100" rx="24" fill="#FFFFFF" />
-      <g transform="translate(9 9) scale(0.1139)">
-        <circle cx="370" cy="370" r="350" fill="#3A63D8" />
-        <circle cx="365" cy="288" r="118" fill="#FFFFFF" />
-        <path
-          d="M290 360 L458 360 C402 420 378 500 380 580 C382 650 396 696 446 716 L446 740 L290 740 Z"
-          fill="#FFFFFF"
-        />
-        <path
-          d="M85 195 C150 145 250 140 330 172 C252 205 240 300 262 360 C290 420 348 470 350 560 C352 650 290 700 200 695 C80 688 15 580 15 410 C15 310 40 240 85 195 Z"
-          fill="#5DF0CD"
-        />
-        <circle cx="365" cy="293" r="56" fill="#F7AE1E" />
-      </g>
+      <path
+        d="M13.6 67.8 A38.7 38.7 0 1 1 77 82 C72.5 86.5 63.5 86.5 59.5 82 C55.5 78 53 72.5 54 67 C55 60.5 59.5 54.5 62.5 48 L35 50 Z"
+        fill="#3567DE"
+      />
+      <path
+        d="M12 58 C12 38 23 26 33 26 C40 26 45 31 46 38 L44 54.5 C48 59 49.5 64 49 70 C48 78 41 84 31 84 C18 84 12 72 12 58 Z"
+        fill="#34F0CC"
+      />
+      <circle cx="50.3" cy="42.5" r="13" fill="#FFFFFF" />
+      <circle cx="50.3" cy="42.5" r="5.5" fill="#F7A81B" />
     </svg>
   )
 }
