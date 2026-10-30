@@ -191,20 +191,24 @@ export function SuccessDialog({
 const TICK_MS = 250
 const COMPLETE_DELAY_MS = 600
 
-const PROGRESS_STEP = 6
+const PROGRESS_STEP = 8
+const STAGGER = 18
+
+const defaultFileName = (name: string) => `错题本-${name}.pdf`
 
 export function ProgressSheet({
   names,
-  fileName = `错题本（${names.length}人）.pdf`,
+  getFileName = defaultFileName,
   onComplete,
 }: {
   names: string[]
-  fileName?: string
+  getFileName?: (name: string) => string
   onComplete: () => void
 }) {
-  const [progress, setProgress] = useState(0)
-  const allDone = progress >= 100
-  const value = Math.round(progress)
+  const [elapsed, setElapsed] = useState(0)
+  const rowProgress = (index: number) => Math.min(100, Math.max(0, elapsed - index * STAGGER))
+  const finishedCount = names.filter((_, i) => rowProgress(i) >= 100).length
+  const allDone = finishedCount === names.length
 
   useEffect(() => {
     if (!allDone) return
@@ -214,7 +218,7 @@ export function ProgressSheet({
 
   useEffect(() => {
     if (allDone) return
-    const timer = setInterval(() => setProgress((p) => Math.min(100, p + PROGRESS_STEP)), TICK_MS)
+    const timer = setInterval(() => setElapsed((p) => p + PROGRESS_STEP), TICK_MS)
     return () => clearInterval(timer)
   }, [allDone])
 
@@ -222,46 +226,60 @@ export function ProgressSheet({
     <Sheet label="导出PDF">
       <h2 className="text-[17px] font-bold text-[#1F2937]">导出PDF</h2>
       <p className="mt-1 text-[12px] text-[#9AA3B2]" aria-live="polite">
-        {allDone ? '文件生成完成' : `正在生成PDF文件，共 ${names.length} 位同学`}
+        {allDone
+          ? `${names.length} 个文件生成完成`
+          : `正在生成PDF文件 ${finishedCount}/${names.length}`}
       </p>
 
-      <div className="mt-4 flex items-center gap-3 rounded-2xl bg-[#F7F8FC] p-4">
-        <span
-          aria-hidden="true"
-          className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#FDECEC] text-[12px] font-bold text-[#E5484D]"
-        >
-          PDF
-        </span>
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <div className="flex items-center justify-between gap-2 text-[14px]">
-            <span className="truncate font-medium text-[#1F2937]">{fileName}</span>
-            {allDone ? (
-              <span className="flex shrink-0 items-center gap-1 text-[13px] font-semibold text-[#16A34A]">
-                <CircleCheck className="size-4" strokeWidth={2.4} aria-hidden="true" />
-                生成成功
+      <ul className="mt-4 flex max-h-[300px] flex-col gap-2.5 overflow-y-auto [scrollbar-width:none]">
+        {names.map((name, i) => {
+          const value = Math.round(rowProgress(i))
+          const done = value >= 100
+          const waiting = value === 0
+          const fileName = getFileName(name)
+          return (
+            <li key={name} className="flex items-center gap-3 rounded-2xl bg-[#F7F8FC] px-4 py-3">
+              <span
+                aria-hidden="true"
+                className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#FDECEC] text-[11px] font-bold text-[#E5484D]"
+              >
+                PDF
               </span>
-            ) : (
-              <span className="shrink-0 text-[13px] font-semibold tabular-nums text-[#1E88F5]">{`${value}%`}</span>
-            )}
-          </div>
-          <div
-            role="progressbar"
-            aria-label="PDF生成进度"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={value}
-            className="h-2 overflow-hidden rounded-full bg-[#E6EAF2]"
-          >
-            <div
-              className={cn(
-                'h-full rounded-full transition-[width] duration-300 ease-out',
-                allDone ? 'bg-[#22C55E]' : 'bg-[linear-gradient(90deg,#3FA9FF,#1E88F5)]',
-              )}
-              style={{ width: `${value}%` }}
-            />
-          </div>
-        </div>
-      </div>
+              <div className="flex min-w-0 flex-1 flex-col gap-2">
+                <div className="flex items-center justify-between gap-2 text-[14px]">
+                  <span className="truncate font-medium text-[#1F2937]">{fileName}</span>
+                  {done ? (
+                    <span className="flex shrink-0 items-center gap-1 text-[13px] font-semibold text-[#16A34A]">
+                      <CircleCheck className="size-4" strokeWidth={2.4} aria-hidden="true" />
+                      生成成功
+                    </span>
+                  ) : waiting ? (
+                    <span className="shrink-0 text-[13px] font-medium text-[#9AA3B2]">等待中</span>
+                  ) : (
+                    <span className="shrink-0 text-[13px] font-semibold tabular-nums text-[#1E88F5]">{`${value}%`}</span>
+                  )}
+                </div>
+                <div
+                  role="progressbar"
+                  aria-label={`${fileName} 生成进度`}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={value}
+                  className="h-2 overflow-hidden rounded-full bg-[#E6EAF2]"
+                >
+                  <div
+                    className={cn(
+                      'h-full rounded-full transition-[width] duration-300 ease-out',
+                      done ? 'bg-[#22C55E]' : 'bg-[linear-gradient(90deg,#3FA9FF,#1E88F5)]',
+                    )}
+                    style={{ width: `${value}%` }}
+                  />
+                </div>
+              </div>
+            </li>
+          )
+        })}
+      </ul>
 
       <button
         type="button"

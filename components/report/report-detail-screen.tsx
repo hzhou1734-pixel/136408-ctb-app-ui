@@ -183,7 +183,7 @@ export function ReportDetailScreen({ report }: { report: ClearReport }) {
       {exportStep === 'progress' && (
         <ProgressSheet
           names={[report.student]}
-          fileName="原题错题本-语文-曹小明-20260915.pdf"
+          getFileName={() => '原题错题本-语文-曹小明-20260915.pdf'}
           onComplete={handleExportComplete}
         />
       )}

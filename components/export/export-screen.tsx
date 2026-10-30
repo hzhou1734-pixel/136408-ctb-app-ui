@@ -183,7 +183,11 @@ export function ExportScreen({ student, subject, date, questions, initialStep = 
         />
       )}
       {step === 'filename' && (
-        <ProgressSheet names={targets} onComplete={() => setStep('done')} />
+        <ProgressSheet
+          names={targets}
+          getFileName={(name) => `原题错题本-${subject}-${name}-${date.replace(/\D/g, '')}.pdf`}
+          onComplete={() => setStep('done')}
+        />
       )}
       {step === 'done' && (
         <SuccessDialog
