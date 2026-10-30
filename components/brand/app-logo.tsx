@@ -15,10 +15,13 @@ export function AppLogo({ className }: { className?: string }) {
         fill="#3567DE"
       />
       <path
-        d="M12 58 C12 38 23 26 33 26 C40 26 45 31 46 38 L44 54.5 C48 59 49.5 64 49 70 C48 78 41 84 31 84 C18 84 12 72 12 58 Z"
+        d="M12 58 C12 38 23 26 33 26 C40 26 46 31 49 40 L53 62 C54.5 76 44 84 31 84 C18 84 12 72 12 58 Z"
         fill="#34F0CC"
       />
-      <circle cx="50.3" cy="42.5" r="13" fill="#FFFFFF" />
+      <path
+        d="M37.5 45.2 A13 13 0 1 1 63.2 44.6 C61 52 56 60 53 74 C50 60 43 53 37.5 45.2 Z"
+        fill="#FFFFFF"
+      />
       <circle cx="50.3" cy="42.5" r="5.5" fill="#F7A81B" />
     </svg>
   )
