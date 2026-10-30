@@ -193,11 +193,18 @@ const COMPLETE_DELAY_MS = 600
 
 const PROGRESS_STEP = 6
 
-export function ProgressSheet({ names, onComplete }: { names: string[]; onComplete: () => void }) {
+export function ProgressSheet({
+  names,
+  fileName = `错题本（${names.length}人）.pdf`,
+  onComplete,
+}: {
+  names: string[]
+  fileName?: string
+  onComplete: () => void
+}) {
   const [progress, setProgress] = useState(0)
   const allDone = progress >= 100
   const value = Math.round(progress)
-  const fileName = `错题本（${names.length}人）.pdf`
 
   useEffect(() => {
     if (!allDone) return
