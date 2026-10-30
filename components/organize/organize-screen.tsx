@@ -332,9 +332,10 @@ export function OrganizeScreen({
               type="button"
               disabled={count === 0}
               onClick={() => openExport()}
-              className="pointer-events-auto h-11 min-w-0 flex-1 truncate whitespace-nowrap rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-2.5 text-[12px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
+              className="pointer-events-auto flex h-11 min-w-0 flex-1 flex-col items-center justify-center rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-2.5 text-center font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
             >
-              导出错题本（已选 {count}）
+              <span className="text-[13px] leading-tight">导出错题本</span>
+              <span className="text-[11px] font-medium leading-tight opacity-90">（已选 {count}）</span>
             </button>
             </>
             )}
