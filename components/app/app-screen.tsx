@@ -59,14 +59,8 @@ export function AppScreen() {
                 AI素养盒
               </span>
               <p className="text-balance text-[19px] font-bold leading-tight text-[#FFFFFF]">AI助教 让教学更轻松</p>
-              <p className="text-[12px] leading-relaxed text-[#FFFFFF]/85">6款AI工具，一键开启</p>
-              <button
-                type="button"
-                onClick={() => open('AI素养盒')}
-                className="mt-1 w-fit rounded-full bg-[#FFFFFF] px-3 py-1 text-[12px] font-medium text-[#1E88F5] active:opacity-80"
-              >
-                立即体验
-              </button>
+  <p className="text-[12px] leading-relaxed text-[#FFFFFF]/85">6款AI工具，一键开启</p>
+
             </div>
           </section>
 
