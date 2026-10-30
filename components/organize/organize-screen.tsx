@@ -6,19 +6,14 @@ import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { buildGroups, students, subjects, type Student, type Subject } from '@/lib/organize-data'
 import { cn } from '@/lib/utils'
-import { Mask, ProgressSheet, StudentSheet, SuccessDialog } from '@/components/export/export-sheets'
+import { Mask, StudentSheet, SuccessDialog } from '@/components/export/export-sheets'
 import { countFilters, emptyFilters, FilterSheet, type Filters } from './filter-sheet'
 import { QuestionCard } from './question-card'
 import { SelectCircle } from './select-circle'
 
 const classes = ['星辰班', '启明班', '晨曦班']
 
-type AssignStep = 'none' | 'students' | 'progress' | 'done'
-
-const todayStamp = () => {
-  const d = new Date()
-  return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`
-}
+type AssignStep = 'none' | 'students' | 'done'
 type PushMode = 'bank' | 'ai'
 
 const pushLabels: Record<PushMode, string> = { bank: '题库推送', ai: 'AI推送' }
@@ -48,7 +43,6 @@ export function OrganizeScreen({
   )
   const [assignStep, setAssignStep] = useState<AssignStep>(initialAssignStep)
   const [assignedStudents, setAssignedStudents] = useState(initialAssignStep === 'done' ? 3 : 0)
-  const [assignedNames, setAssignedNames] = useState<string[]>([])
   const [deleted, setDeleted] = useState<Set<string>>(new Set())
   const [resolvedOverrides, setResolvedOverrides] = useState<Record<string, boolean>>({})
 
@@ -372,28 +366,13 @@ export function OrganizeScreen({
                 ? pushMode === 'ai'
                   ? `将基于已选 ${count} 道题目由 AI 生成同类题，推送给所选学生`
                   : `将从题库匹配已选 ${count} 道题目的同类题，推送给所选学生`
-                : `已选 ${count} ���题目，将加入所选学生的错题库`
+                : `已选 ${count} 道题目，将加入所选学生的错题库`
             }
             initial={[]}
             onConfirm={(names) => {
               setAssignedStudents(names.length)
-              if (isPractice) {
-                setAssignStep('done')
-              } else {
-                setAssignedNames(names)
-                setAssignStep('progress')
-              }
+              setAssignStep('done')
             }}
-          />
-        </>
-      )}
-      {assignStep === 'progress' && (
-        <>
-          <Mask onClick={() => {}} />
-          <ProgressSheet
-            names={assignedNames}
-            getFileName={(name) => `原题错题本-${subject}-${name}-${todayStamp()}.pdf`}
-            onComplete={() => setAssignStep('done')}
           />
         </>
       )}
