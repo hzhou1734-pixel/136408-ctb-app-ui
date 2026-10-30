@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {
   ChevronRight,
-  CircleHelp,
   Coins,
   Eraser,
   Info,
@@ -29,7 +28,6 @@ const menu: MenuItem[] = [
   { key: 'beans', label: '积分豆记录', icon: Coins },
   { key: 'feedback', label: '意见反馈', icon: MessageSquareText, href: '/me/feedback' },
   { key: 'cache', label: '清理缓存', icon: Eraser },
-  { key: 'faq', label: '常见问题', icon: CircleHelp },
   { key: 'about', label: '关于错题宝', icon: Info, href: '/me/about' },
   { key: 'logout', label: '退出登录', icon: Power },
 ]
