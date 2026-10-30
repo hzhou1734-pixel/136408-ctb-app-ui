@@ -6,9 +6,16 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Max AI错题宝 - 教师端',
   description: 'AI精准批改，定位薄弱环节，助力老师高效管理错题',
-  generator: 'v0.app',
+  metadataBase: new URL('http://1364-0208-app.ui.ehaiba.net'),
+  openGraph: {
+    title: 'Max AI错题宝 - 教师端',
+    description: 'AI精准批改，定位薄弱环节，助力老师高效管理错题',
+    type: 'website',
+    images: [{ url: '/share-logo.png', width: 300, height: 300, alt: 'Max AI错题宝' }],
+  },
   icons: {
     icon: [
+      { url: '/favicon.ico', sizes: 'any' },
       {
         url: '/icon-light-32x32.png',
         media: '(prefers-color-scheme: light)',
