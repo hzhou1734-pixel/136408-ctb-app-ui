@@ -326,7 +326,7 @@ export function OrganizeScreen({
               type="button"
               disabled={count === 0}
               onClick={() => setAssignStep('students')}
-              className="pointer-events-auto h-11 shrink-0 rounded-full border border-[#1E88F5] bg-white px-3 text-[12px] font-bold text-[#1E88F5] transition-opacity disabled:opacity-50"
+              className="pointer-events-auto h-11 shrink-0 rounded-full bg-[linear-gradient(135deg,#3FA9FF,#1E88F5)] px-3 text-[12px] font-bold text-white shadow-[0_8px_20px_rgba(30,136,245,0.3)] transition-opacity disabled:opacity-50 disabled:shadow-none"
             >
               导出给学生
             </button>
