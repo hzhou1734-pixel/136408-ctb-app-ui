@@ -26,11 +26,7 @@ export function CameraView({ title, onClose, onShoot }: CameraViewProps) {
           transform: 'translate(-50%, -50%) rotate(90deg)',
         }}
       >
-        <header className="relative flex h-12 shrink-0 items-center justify-center px-4">
-          <h2 className="text-[16px] font-semibold">{title}</h2>
-        </header>
-
-        <div className="flex min-h-0 flex-1 gap-3 pb-4 pl-4 pr-2">
+        <div className="flex min-h-0 flex-1 items-stretch gap-3 py-4 pl-4 pr-2">
           <div
             className="relative flex min-w-0 flex-1 items-center justify-center overflow-hidden rounded-[20px]"
             style={{ background: 'radial-gradient(circle at 50% 45%, #2A3246 0%, #171C2A 75%)' }}
