@@ -19,14 +19,6 @@ function ReportSummary({ summary, periodWord }: { summary: PeriodSummary; period
   const { total, solved, retrained, extended, remaining, solvedRate, subjects, weakPoints } = summary
   const topSubject = subjects[0]
   const topPoint = weakPoints[0]
-  const verdict =
-    total === 0
-      ? `${periodWord}暂无新增错题，继续保持！`
-      : solvedRate >= 80
-        ? '错题清零进度良好，请继续保持复习节奏。'
-        : solvedRate >= 50
-          ? '已完成过半错题清零，剩余错题建议尽快巩固。'
-          : '错题清零进度偏慢，建议优先处理剩余错题。'
 
   return (
     <section
@@ -104,7 +96,6 @@ function ReportSummary({ summary, periodWord }: { summary: PeriodSummary; period
         </ul>
       )}
 
-      <p className="mt-3 rounded-xl bg-[#FFF6EC] px-3 py-2 text-[13px] leading-relaxed text-[#B45309]">{verdict}</p>
     </section>
   )
 }
