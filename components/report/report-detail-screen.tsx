@@ -6,12 +6,108 @@ import { useCallback, useState } from 'react'
 import { Mask, ProgressSheet, SuccessDialog } from '@/components/export/export-sheets'
 import { periods, type Period } from '@/lib/stats-data'
 import {
+  getPeriodSummary,
   getSubjectStats,
   getTrend,
   reportPeriodLabels,
   stageSubjects,
   type ClearReport,
+  type PeriodSummary,
 } from '@/lib/report-data'
+
+function ReportSummary({ summary, periodWord }: { summary: PeriodSummary; periodWord: string }) {
+  const { total, solved, retrained, extended, remaining, solvedRate, subjects, weakPoints } = summary
+  const topSubject = subjects[0]
+  const topPoint = weakPoints[0]
+  const verdict =
+    total === 0
+      ? `${periodWord}暂无新增错题，继续保持！`
+      : solvedRate >= 80
+        ? '错题清零进度良好，请继续保持复习节奏。'
+        : solvedRate >= 50
+          ? '已完成过半错题清零，剩余错题建议尽快巩固。'
+          : '错题清零进度偏慢，建议优先处理剩余错题。'
+
+  return (
+    <section
+      aria-labelledby="report-summary-title"
+      className="mt-3 rounded-2xl bg-white p-4 shadow-[0_6px_18px_rgba(30,64,140,0.06)]"
+    >
+      <h2 id="report-summary-title" className="text-[15px] font-bold text-[#1F2937]">
+        {periodWord}小结
+      </h2>
+
+      <div className="mt-3 flex items-center gap-3 rounded-xl bg-[#F7F9FC] p-3">
+        <div className="flex flex-1 flex-col gap-1.5">
+          <div className="flex items-baseline justify-between text-[12px] text-[#8A93A6]">
+            <span>错题解决率</span>
+            <span className="text-[18px] font-bold tabular-nums text-[#1E88F5]">{solvedRate}%</span>
+          </div>
+          <div
+            role="progressbar"
+            aria-label="错题解决率"
+            aria-valuenow={solvedRate}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            className="h-1.5 overflow-hidden rounded-full bg-[#E4EAF3]"
+          >
+            <div className="h-full rounded-full bg-[#1E88F5]" style={{ width: `${solvedRate}%` }} />
+          </div>
+          <p className="text-[12px] tabular-nums text-[#5B6478]">
+            共 <span className="font-semibold text-[#1F2937]">{total}</span> 道 · 已解决{' '}
+            <span className="font-semibold text-[#1E88F5]">{solved}</span> 道 · 剩余{' '}
+            <span className="font-semibold text-[#E5533D]">{remaining}</span> 道
+          </p>
+        </div>
+      </div>
+
+      {total > 0 && (
+        <ul className="mt-3 flex flex-col gap-2.5 text-[13px] leading-relaxed text-[#5B6478]">
+          <li className="flex gap-2">
+            <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[#1E88F5]" aria-hidden="true" />
+            <p className="text-pretty">
+              <span className="font-semibold text-[#1F2937]">错题数量：</span>
+              {periodWord}共产生 {total} 道错题，涉及 {subjects.length} 个科目
+              {topSubject && `，其中${topSubject.subject}最多（${topSubject.total} 道）`}。
+            </p>
+          </li>
+          <li className="flex gap-2">
+            <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[#1E88F5]" aria-hidden="true" />
+            <p className="text-pretty">
+              <span className="font-semibold text-[#1F2937]">解决情况：</span>
+              已解决 {solved} 道，其中原题重练掌握 {retrained} 道、举一反三强化 {extended} 道；仍有 {remaining}{' '}
+              道待清零。
+            </p>
+          </li>
+          {topPoint && (
+            <li className="flex gap-2">
+              <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[#1E88F5]" aria-hidden="true" />
+              <div className="flex flex-1 flex-col gap-2">
+                <p className="text-pretty">
+                  <span className="font-semibold text-[#1F2937]">薄弱知识点：</span>
+                  错题主要集中在「{topPoint.subject} · {topPoint.point}」等知识点，建议重点复习。
+                </p>
+                <ul className="flex flex-wrap gap-1.5" aria-label="高频错题知识点">
+                  {weakPoints.map((p) => (
+                    <li
+                      key={`${p.subject}-${p.point}`}
+                      className="rounded-md bg-[#E8F2FF] px-2 py-0.5 text-[12px] text-[#1E88F5]"
+                    >
+                      {p.subject}·{p.point}
+                      <span className="ml-1 tabular-nums text-[#8A93A6]">{p.count}道</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          )}
+        </ul>
+      )}
+
+      <p className="mt-3 rounded-xl bg-[#FFF6EC] px-3 py-2 text-[13px] leading-relaxed text-[#B45309]">{verdict}</p>
+    </section>
+  )
+}
 
 function TrendChart({ points, labels }: { points: number[]; labels: string[] }) {
   const width = 320
@@ -71,6 +167,7 @@ export function ReportDetailScreen({ report }: { report: ClearReport }) {
   const handleExportComplete = useCallback(() => setExportStep('done'), [])
   const stats = getSubjectStats(report.student, period, subject)
   const trend = getTrend(report.student, period, subject)
+  const summary = getPeriodSummary(report.student, report.stage, period)
   const unit = period.endsWith('周') ? '周' : '月'
   const periodWord = period.slice(0, 1) === '上' ? `上${unit}` : `本${unit}`
 
@@ -166,6 +263,8 @@ export function ReportDetailScreen({ report }: { report: ClearReport }) {
             <TrendChart points={trend.points} labels={trend.labels} />
           </div>
         </section>
+
+        <ReportSummary summary={summary} periodWord={periodWord} />
       </div>
 
       <div className="shrink-0 px-4 pb-5 pt-2">

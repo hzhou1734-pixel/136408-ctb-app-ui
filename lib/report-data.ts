@@ -85,6 +85,70 @@ export function getTrend(student: string, period: Period, subject: string) {
   return { title: `${month}月份【${subject}】错题数量趋势`, labels, points }
 }
 
+const subjectKnowledgePoints: Record<string, string[]> = {
+  数学: ['有理数混合运算', '一元一次方程', '几何图形面积', '分数应用题', '函数图像'],
+  英语: ['一般过去时', '介词搭配', '阅读理解主旨', '完形填空', '名词复数'],
+  语文: ['古诗词默写', '修辞手法', '文言文实词', '病句修改', '阅读概括'],
+  物理: ['力的平衡', '光的折射', '电路分析', '压强计算'],
+  化学: ['化学方程式配平', '溶液浓度', '物质分类', '酸碱中和'],
+  生物: ['细胞结构', '光合作用', '遗传规律', '生态系统'],
+  历史: ['近代史事件', '朝代更替', '历史年代'],
+  地理: ['经纬度判读', '气候类型', '地形地势'],
+  道法: ['法律常识', '公民权利义务', '时政热点'],
+}
+
+export type PeriodSummary = {
+  total: number
+  solved: number
+  retrained: number
+  extended: number
+  remaining: number
+  solvedRate: number
+  subjects: { subject: string; total: number; remaining: number }[]
+  weakPoints: { subject: string; point: string; count: number }[]
+}
+
+export function getPeriodSummary(student: string, stage: Stage, period: Period): PeriodSummary {
+  const subjects = stageSubjects[stage].map((subject) => ({
+    subject,
+    ...getSubjectStats(student, period, subject),
+  }))
+  const sum = (key: keyof SubjectStats) => subjects.reduce((acc, s) => acc + s[key], 0)
+  const total = sum('total')
+  const retrained = sum('retrained')
+  const extended = sum('extended')
+  const solved = retrained + extended
+
+  const weakPoints = subjects
+    .filter((s) => s.total > 0)
+    .flatMap((s) => {
+      const points = subjectKnowledgePoints[s.subject] ?? []
+      const start = hash(`${student}${period}${s.subject}kp`) % points.length
+      const first = Math.max(1, Math.ceil(s.total * 0.5))
+      const second = Math.max(0, Math.floor(s.total * 0.3))
+      return [
+        { subject: s.subject, point: points[start], count: first },
+        { subject: s.subject, point: points[(start + 1) % points.length], count: second },
+      ].filter((p) => p.count > 0)
+    })
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 4)
+
+  return {
+    total,
+    solved,
+    retrained,
+    extended,
+    remaining: total - solved,
+    solvedRate: total ? Math.round((solved / total) * 100) : 0,
+    subjects: subjects
+      .filter((s) => s.total > 0)
+      .map(({ subject, total, remaining }) => ({ subject, total, remaining }))
+      .sort((a, b) => b.total - a.total),
+    weakPoints,
+  }
+}
+
 export function reportsForPeriod(period: Period) {
   if (period === '本月') return reports.filter((r) => r.period !== '上月')
   return reports.filter((r) => r.period === period)
